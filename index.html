@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Rotalink Gezi Rehberi</title>
     <!-- Tailwind CSS'i projemize dahil ediyoruz -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -63,7 +63,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 // data.json dosyasını talep et
-                const response = await fetch('./data.json');
+                const response = await fetch('data.json');
                 
                 // Eğer dosya bulunamazsa veya bir sunucu hatası olursa hata fırlat
                 if (!response.ok) {
