@@ -24,10 +24,74 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .hero h1{margin:0 0 6px;font-size:22px}
 .hero .btn-store{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a;font-weight:800}
 
-.search{margin-top:12px}
-.inputwrap{position:relative}
-input[type="text"]{width:100%;padding:12px 40px 12px 12px;border-radius:10px;border:1px solid #cbd5e1;background:#fff}
-.clearbtn{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#eef2f7;width:28px;height:28px;border-radius:8px;font-weight:900;color:#334155;cursor:pointer}
+/* --- Geliştirilmiş Arama Stilleri --- */
+.search{margin-top:12px; position: relative;}
+.inputwrap{
+  position:relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.inputwrap:focus-within {
+  border-color: var(--b1);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #94a3b8;
+  width: 20px;
+  height: 20px;
+}
+input[type="text"]{
+  width:100%;
+  padding:12px 40px 12px 42px; /* Sol padding ikona yer açmak için artırıldı */
+  border-radius:10px;
+  border:0;
+  background: transparent;
+  outline: none;
+}
+.clearbtn{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:#eef2f7;
+  width:28px;
+  height:28px;
+  border-radius:8px;
+  font-weight:900;
+  color:#334155;
+  cursor:pointer;
+}
+
+/* --- Şehir Tahmin Kutusu Stilleri --- */
+#suggestions {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--bd);
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 10;
+}
+.suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.suggestion-item:hover {
+  background-color: #f1f5f9;
+}
 
 .tabs{margin-top:14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap}
 .tab{padding:8px 14px;border:1px solid var(--bd);border-bottom:0;border-radius:10px 10px 0 0;background:#fff;color:#0f172a;cursor:pointer;font-weight:700}
@@ -37,7 +101,10 @@ input[type="text"]{width:100%;padding:12px 40px 12px 12px;border-radius:10px;bor
 
 .list{display:grid;gap:10px}
 .item{border:1px solid var(--bd);border-radius:10px;padding:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.title{font-weight:700;font-size:15px;flex:1;min-width:160px}
+.info{flex:1;min-width:160px;}
+.title{font-weight:700;font-size:15px;}
+/* --- Açıklama Stili --- */
+.desc{font-size:14px; color:var(--mut); margin-top:2px; line-height:1.4;}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:10px;border:0;font-weight:800;font-size:14px;color:#0b1320;background:#f1f5f9}
 .btn.call{background:linear-gradient(135deg,#38bdf8,#22d3ee);color:#00131a}
@@ -50,7 +117,7 @@ input[type="text"]{width:100%;padding:12px 40px 12px 12px;border-radius:10px;bor
 footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 @media(max-width:640px){
   .item{flex-direction:column;align-items:flex-start}
-  .actions{width:100%}
+  .actions{width:100%; margin-top: 8px;}
 }
 </style>
 </head>
@@ -70,10 +137,11 @@ footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var
   <section class="search" id="sehirara">
     <h2>Şehir Ara</h2>
     <div class="inputwrap">
-      <input id="q" list="iller" placeholder="örn. Düzce, Kayseri, Kocaeli" autocomplete="off" />
-      <button class="clearbtn" id="clearBtn" title="Temizle">×</button>
-      <datalist id="iller"></datalist>
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
+        <input id="q" placeholder="örn. Düzce, Kayseri, Kocaeli" autocomplete="off" />
+        <button class="clearbtn" id="clearBtn" title="Temizle">×</button>
     </div>
+    <div id="suggestions"></div>
 
     <div class="tabs" id="tabs" style="display:none">
       <div class="tab" data-tab="tesis">Tesis</div>
@@ -97,26 +165,27 @@ footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var
 <script>
 document.getElementById('yil').textContent = new Date().getFullYear();
 
-const S = {ready:false,data:[],gezi:[],yemek:[],sosyal:[],citySet:new Set()};
+const S = {ready:false,data:[],gezi:[],yemek:[],sosyal:[],citySet:new Set(), sortedCities: []};
 async function loadAll(){
   if(S.ready) return;
   const files = ['data.json','gezi.json','yemek.json','sosyal.json'];
   const [d,g,y,s] = await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[])));
   S.data=d; S.gezi=g; S.yemek=y; S.sosyal=s; S.ready=true;
-  // şehir önerileri
+  
   [...d,...g,...y,...s].forEach(it=>{ if(it && it.il) S.citySet.add(it.il.trim()); });
-  const dl = document.getElementById('iller');
-  dl.innerHTML = [...S.citySet].sort((a,b)=>a.localeCompare(b,'tr')).map(x=>`<option value="${x}">`).join('');
+  S.sortedCities = [...S.citySet].sort((a,b)=>a.localeCompare(b,'tr'));
 }
 
 const qEl = document.getElementById('q');
 const clearBtn = document.getElementById('clearBtn');
 const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
+const suggestionsEl = document.getElementById('suggestions');
 
+// Düzeltilmiş ve daha güvenilir link fonksiyonları
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 function mapsHref(il, isim, lat, lng){
-  if(lat && lng) return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  if(lat && lng) return `https://www.google.com/maps?q=${lat},${lng}`;
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((il||'')+' '+(isim||''))}`;
 }
 function googleHref(isim, il){ return `https://www.google.com/search?q=${encodeURIComponent((isim||'')+' '+(il||''))}`; }
@@ -127,20 +196,32 @@ function mountList(el, items, type){
   const list = document.createElement('div'); list.className='list';
   items.forEach(it=>{
     const row = document.createElement('div'); row.className='item';
+    
+    const info = document.createElement('div'); info.className = 'info';
     const title = document.createElement('div'); title.className='title'; title.textContent = it.isim || 'İsimsiz';
+    info.appendChild(title);
+
+    // Açıklama alanı ekleniyor (sadece gezi, yemek, sosyal için)
+    if (['gezi', 'yemek', 'sosyal'].includes(type) && it.aciklama) {
+      const desc = document.createElement('div');
+      desc.className = 'desc';
+      desc.textContent = it.aciklama;
+      info.appendChild(desc);
+    }
+
     const acts = document.createElement('div'); acts.className='actions';
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
       const maps = mapsHref(it.il, it.isim, it.latitude, it.longitude);
       acts.innerHTML =
         (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) +
-        `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'&quot;')}",url:"${maps}"}) : navigator.clipboard.writeText("${maps}")'>Paylaş</button>`+
+        `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'\\"')}",url:"${maps}"}) : navigator.clipboard.writeText("${maps}")'>Paylaş</button>`+
         `<a class="btn go" href="${maps}" target="_blank" rel="noopener">Git</a>`;
-    }else{
+    } else {
       const url = googleHref(it.isim, it.il);
       acts.innerHTML = `<a class="btn view" href="${url}" target="_blank" rel="noopener">İncele</a>`;
     }
-    row.appendChild(title); row.appendChild(acts); list.appendChild(row);
+    row.appendChild(info); row.appendChild(acts); list.appendChild(row);
   });
   el.appendChild(list);
 }
@@ -155,30 +236,85 @@ function activate(tabName){
 
 tabBtns.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
 
+function hideSuggestions() {
+  suggestionsEl.style.display = 'none';
+  suggestionsEl.innerHTML = '';
+}
+
 async function run(){
   await loadAll();
   const q = qEl.value.trim().toLowerCase();
   if(!q){
     tabsBar.style.display='none';
     ['tab-tesis','tab-gezi','tab-yemek','tab-sosyal'].forEach(id=>{
-      const el=document.getElementById(id); el.innerHTML='<div class="empty">Şehir yazın.</div>'; el.classList.remove('active');
+      const el=document.getElementById(id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
     });
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
-  const f = x => (x.il||'').toLowerCase().includes(q);
+  const f = x => (x.il||'').toLowerCase() === q; // Tam eşleşme için .includes() yerine === kullandık
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
   mountList(document.getElementById('tab-yemek'), S.yemek.filter(f), 'yemek');
   mountList(document.getElementById('tab-sosyal'), S.sosyal.filter(f), 'sosyal');
 
-  // İlk aramada sekmeler gösterilsin, varsayılan TESİS açık
-  tabsBar.style.display='';
+  tabsBar.style.display='flex';
   activate('tesis');
 }
 
-qEl.addEventListener('input', run);
-clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); run(); });
+function updateSuggestions() {
+    const value = qEl.value.trim().toLowerCase();
+    if (!value) {
+        hideSuggestions();
+        return;
+    }
+    
+    const matchedCities = S.sortedCities.filter(city => city.toLowerCase().startsWith(value)).slice(0, 10);
+    
+    if (matchedCities.length > 0) {
+        suggestionsEl.innerHTML = matchedCities.map(city => `<div class="suggestion-item">${city}</div>`).join('');
+        suggestionsEl.style.display = 'block';
+    } else {
+        hideSuggestions();
+    }
+}
+
+qEl.addEventListener('input', () => {
+    updateSuggestions();
+    // Otomatik arama yapmak isterseniz bu satırı aktif bırakın
+    // run(); 
+});
+
+// Arama kutusuna Enter basıldığında aramayı tetikle
+qEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        hideSuggestions();
+        run();
+    }
+});
+
+clearBtn.addEventListener('click', ()=>{ 
+    qEl.value=''; 
+    qEl.focus(); 
+    hideSuggestions();
+    run(); 
+});
+
+// Tahmin listesindeki bir şehre tıklandığında
+suggestionsEl.addEventListener('click', (e) => {
+    if (e.target.classList.contains('suggestion-item')) {
+        qEl.value = e.target.textContent;
+        hideSuggestions();
+        run();
+    }
+});
+
+// Dışarıya tıklandığında tahmin listesini gizle
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search')) {
+        hideSuggestions();
+    }
+});
 
 // İlk yüklemede şehir listesi
 loadAll();
