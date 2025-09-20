@@ -295,21 +295,16 @@ function isAppleDevice() {
     return /iPhone|iPad|iPod/.test(navigator.platform);
 }
 
-// --- GÜNCELLENMİŞ PAYLAŞ FONKSİYONU ---
 function handleShare(btn) {
     const isim = btn.dataset.isim;
     const il = btn.dataset.il;
     const telefon = btn.dataset.telefon;
-    
-    // Paylaşılacak metin için HER ZAMAN arama linki oluşturulur.
     const shareMapsUrl = createMapSearchUrl(`${isim || ''} ${il || ''}`);
-    
     const shareText = `${isim}\n` +
                       `${shareMapsUrl}\n\n` +
                       `Telefon Numarası: ${telefon || 'Belirtilmemiş'}\n\n` +
                       `Rotalink Gezi Rehberi'ne bu linkten ulaşabilirsiniz:\n` +
                       `https://serdarza.github.io/rotalinkgezirehberi/`;
-    
     if (navigator.share) {
         navigator.share({ text: shareText }).catch(err => console.error("Paylaşım hatası:", err));
     } else {
@@ -322,16 +317,12 @@ function handleShare(btn) {
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) {
-        return `https://www.google.com/maps?q=$2{encodeURIComponent(query)}`;
-    }
+    if (isAppleDevice()) { return `https://www.google.com/maps?q=$2{encodeURIComponent(query)}`; }
     return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`;
 }
 
 function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) {
-        return `https://www.google.com/maps?q=$3=${lat},${lng}`;
-    }
+    if (isAppleDevice()) { return `https://www.google.com/maps?q=$3=${lat},${lng}`; }
     return `https://www.google.com/maps?q=$${lat},${lng}`;
 }
 
@@ -356,7 +347,9 @@ function mountList(el, items, type){
     const acts = document.createElement('div'); acts.className='actions';
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
-      const mapsUrl = (it.latitude && it.longitude) ? createMapNavigateUrl(it.latitude, it.longitude) : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
+      // --- GÜNCELLENDİ: KONUM BUTONU ARTIK HER ZAMAN ARAMA LİNKİ KULLANIYOR ---
+      const mapsUrl = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
+      
       const shareButtonHTML = `<button class="btn share"
           data-isim="${it.isim || ''}"
           data-il="${it.il || ''}"
