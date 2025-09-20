@@ -93,7 +93,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
   display: none;
   position: absolute;
   top: calc(100% + 8px);
-  left: 0; 
+  left: 0;
   right: 0;
   text-align: left;
   background: var(--card);
@@ -152,7 +152,7 @@ textarea { resize: vertical; min-height: 120px; }
 .btn-submit:hover { opacity: 0.9; }
 .form-info { font-size: 13px; color: var(--mut); text-align: center; margin-top: 12px; }
 
-/* --- YENİ ALT BİLGİ (FOOTER) STİLLERİ --- */
+/* --- ALT BİLGİ (FOOTER) STİLLERİ --- */
 footer{
   margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);
   color:var(--mut); display:flex; justify-content:space-between;
@@ -164,14 +164,10 @@ footer{
     flex-wrap: wrap;
     justify-content: center;
 }
-.footer-links a {
-    transition: color 0.2s;
-}
-.footer-links a:hover {
-    color: var(--text);
-}
+.footer-links a { transition: color 0.2s; }
+.footer-links a:hover { color: var(--text); }
 
-/* --- YENİ "YUKARI ÇIK" BUTONU STİLİ --- */
+/* --- "YUKARI ÇIK" BUTONU STİLİ --- */
 #scrollTopBtn {
   display: none;
   position: fixed;
@@ -188,14 +184,12 @@ footer{
   width: 48px;
   height: 48px;
   font-size: 24px;
-  line-height: 48px; /* Dikey hizalama için */
+  line-height: 48px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;
 }
-#scrollTopBtn:hover {
-  background-color: var(--b2);
-}
+#scrollTopBtn:hover { background-color: var(--b2); }
 
 @media(max-width:640px){
   .item{flex-direction:column;align-items:flex-start}
@@ -226,7 +220,7 @@ footer{
         <div id="suggestions"></div>
     </div>
   </section>
-  
+
   <div class="tabs" id="tabs" style="display:none">
     <div class="tab" data-tab="tesis">Tesis</div>
     <div class="tab" data-tab="gezi">Gezi</div>
@@ -274,7 +268,7 @@ footer{
     </form>
   </section>
 
-  <footer>
+  <footer id="footer">
     <div>© <span id="yil"></span> RotaLink</div>
     <div class="footer-links">
         <a href="#" id="footerAnasayfa">Anasayfa</a>
@@ -295,8 +289,10 @@ async function loadAll(){
   const files = ['data.json','gezi.json','yemek.json','sosyal.json'];
   const [d,g,y,s] = await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[])));
   S.data=d; S.gezi=g; S.yemek=y; S.sosyal=s; S.ready=true;
-  
   [...d,...g,...y,...s].forEach(it=>{ if(it && it.il) S.citySet.add(it.il.trim()); });
+  if (typeof S.yemek === 'object' && S.yemek !== null && !Array.isArray(S.yemek)) {
+      Object.keys(S.yemek).forEach(il => S.citySet.add(il.trim()));
+  }
   S.sortedCities = [...S.citySet].sort((a,b)=>a.localeCompare(b,'tr'));
 }
 
@@ -307,8 +303,8 @@ const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
-function createMapSearchUrl(query) { return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`; }
-function createMapNavigateUrl(lat, lng) { return `https://www.google.com/maps?q=$${lat},${lng}`; }
+function createMapSearchUrl(query) { return `https://www.google.com/maps/search/?api=1&query=$$${encodeURIComponent(query)}`; }
+function createMapNavigateUrl(lat, lng) { return `https://www.google.com/maps?q=$$${lat},${lng}`; }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
@@ -328,17 +324,10 @@ function mountList(el, items, type){
       info.appendChild(desc);
     }
     const acts = document.createElement('div'); acts.className='actions';
-    
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
-      const mapsUrl = (it.latitude && it.longitude)
-        ? createMapNavigateUrl(it.latitude, it.longitude)
-        : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
-      
-      acts.innerHTML =
-        (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) +
-        `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'\\"')}",url:"${mapsUrl}"}) : navigator.clipboard.writeText("${mapsUrl}")'>Paylaş</button>`+
-        `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Git</a>`;
+      const mapsUrl = (it.latitude && it.longitude) ? createMapNavigateUrl(it.latitude, it.longitude) : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
+      acts.innerHTML = (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) + `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'\\"')}",url:"${mapsUrl}"}) : navigator.clipboard.writeText("${mapsUrl}")'>Paylaş</button>`+`<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Git</a>`;
     } else {
       let url = '';
       switch(type) {
@@ -356,10 +345,7 @@ function mountList(el, items, type){
 
 function activate(tabName){
   tabBtns.forEach(b=>b.classList.toggle('active', b.dataset.tab===tabName));
-  ['tesis','gezi','yemek','sosyal'].forEach(name=>{
-    const el = document.getElementById('tab-'+name);
-    el.classList.toggle('active', name===tabName);
-  });
+  ['tesis','gezi','yemek','sosyal'].forEach(name=>{ const el = document.getElementById('tab-'+name); el.classList.toggle('active', name===tabName); });
 }
 
 tabBtns.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
@@ -370,22 +356,32 @@ async function run(){
   const q = qEl.value.trim().toLowerCase();
   if(!q){
     tabsBar.style.display='none';
-    ['tab-tesis','tab-gezi','yemek','sosyal'].forEach(id=>{
+    ['tesis','gezi','yemek','sosyal'].forEach(id=>{
       const el=document.getElementById('tab-'+id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
     });
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
-  
   const f = x => (x.il||'').toLowerCase() === q;
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
   mountList(document.getElementById('tab-sosyal'), S.sosyal.filter(f), 'sosyal');
 
-  const cityYemekObject = S.yemek.find(f);
+  // --- YEMEK SEKMESİ İÇİN GELİŞTİRİLMİŞ VE SAĞLAMLAŞTIRILMIŞ KOD ---
   let yemekList = [];
-  if (cityYemekObject && cityYemekObject.yemekler) {
-      yemekList = cityYemekObject.yemekler.map(yemek => ({...yemek, il: cityYemekObject.il }));
+  // 1. Durum: S.yemek bir Dizi ise -> [{il: "Kayseri", yemekler: [...]}]
+  if (Array.isArray(S.yemek)) {
+    const cityYemekObject = S.yemek.find(f);
+    if (cityYemekObject && cityYemekObject.yemekler) {
+      yemekList = cityYemekObject.yemekler.map(yemek => ({...yemek, il: cityYemekObject.il}));
+    }
+  }
+  // 2. Durum: S.yemek bir Obje ise -> {"Kayseri": [...]}
+  else if (typeof S.yemek === 'object' && S.yemek !== null) {
+    const cityKey = Object.keys(S.yemek).find(key => key.toLowerCase() === q);
+    if (cityKey && Array.isArray(S.yemek[cityKey])) {
+      yemekList = S.yemek[cityKey].map(yemek => ({...yemek, il: cityKey}));
+    }
   }
   mountList(document.getElementById('tab-yemek'), yemekList, 'yemek');
   
@@ -407,34 +403,18 @@ qEl.addEventListener('input', updateSuggestions);
 qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
 clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); hideSuggestions(); run(); });
 suggestionsEl.addEventListener('click', (e) => {
-    if (e.target.classList.contains('suggestion-item')) {
-        qEl.value = e.target.textContent;
-        hideSuggestions();
-        run();
-    }
+    if (e.target.classList.contains('suggestion-item')) { qEl.value = e.target.textContent; hideSuggestions(); run(); }
 });
 document.addEventListener('click', (e) => { if (!e.target.closest('.inputwrap')) { hideSuggestions(); } });
 
-// --- YENİ: "YUKARI ÇIK" BUTONU VE FOOTER ANASAYFA LİNKİ İÇİN KOD ---
+// --- "YUKARI ÇIK" BUTONU VE FOOTER ANASAYFA LİNKİ İÇİN KOD ---
 const scrollTopBtn = document.getElementById('scrollTopBtn');
 const footerAnasayfaLink = document.getElementById('footerAnasayfa');
-
-// Butonun görünürlüğünü kontrol et
 window.onscroll = function() {
-  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-    scrollTopBtn.style.display = "block";
-  } else {
-    scrollTopBtn.style.display = "none";
-  }
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) { scrollTopBtn.style.display = "block"; }
+  else { scrollTopBtn.style.display = "none"; }
 };
-
-// Yumuşak kaydırma fonksiyonu
-function scrollToTop(e) {
-  e.preventDefault();
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-// Butonlara tıklama olaylarını ata
+function scrollToTop(e) { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }
 scrollTopBtn.addEventListener('click', scrollToTop);
 footerAnasayfaLink.addEventListener('click', scrollToTop);
 
