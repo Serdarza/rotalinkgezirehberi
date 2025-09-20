@@ -2,21 +2,174 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rotalink Gezi Rehberi</title>
+    <!-- Tailwind CSS'i projemize dahil ediyoruz -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide ikon kütüphanesini dahil ediyoruz -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            margin-top: 100px; 
-            background-color: #f4f4f4;
+        /* Sayfanın tamamına kaplama ve arka plan resmi uygulama */
+        body {
+            /* BURAYI DEĞİŞTİRİN:
+              Aşağıdaki url(...) kısmına kendi arka plan resminizin linkini ekleyin.
+              Şimdilik örnek bir resim kullanıyorum.
+            */
+            background-image: url('https://images.unsplash.com/photo-1526778548025-1db135a4424b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        h1 { 
-            color: #2c3e50; 
+
+        /* Arka plan resminin üzerine hafif karartma efekti ekleyerek yazıları okunur kılıyoruz */
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
-<body>
-    <h1>Rotalink Gezi Rehberi Siteme Hoş Geldiniz!</h1>
-    <p>Bu site yakında harika gezi içerikleriyle dolacak.</p>
+<body class="bg-gray-200">
+
+    <div class="overlay min-h-screen w-full flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl">
+            <!-- Ana Kart -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl p-6 md:p-10">
+
+                <header class="text-center mb-6">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Rotalink Gezi Rehberi</h1>
+                    <p class="text-gray-600 mt-2">Gitmek istediğiniz yeri arayın</p>
+                </header>
+
+                <!-- Arama Çubuğu -->
+                <div class="relative">
+                    <input type="search" id="searchInput" placeholder="İl veya misafirhane adı ara..." class="w-full p-4 pl-10 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                       <i data-lucide="search" class="text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- Sonuçların Gösterileceği Alan -->
+                <div id="resultsContainer" class="mt-6 space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+                    <!-- Başlangıçta yüklenme mesajı gösterilir -->
+                     <p class="text-center text-gray-500">Veriler yükleniyor...</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sayfa tamamen yüklendiğinde veriyi çek ve uygulamayı başlat.
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // data.json dosyasını, aynı dizinde olduğunu belirterek talep et
+                const response = await fetch('./data.json');
+                
+                // Eğer dosya bulunamazsa veya bir sunucu hatası olursa hata fırlat
+                if (!response.ok) {
+                    throw new Error(`Veri dosyası yüklenemedi. Durum: ${response.status}`);
+                }
+                
+                // Gelen JSON verisini işle ve uygulamayı bu veriyle başlat
+                const misafirhaneler = await response.json();
+                initializeApp(misafirhaneler);
+
+            } catch (error) {
+                // Hata durumunda kullanıcıyı bilgilendir
+                console.error('Veri yükleme hatası:', error);
+                const resultsContainer = document.getElementById('resultsContainer');
+                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-4 bg-red-100 rounded-lg"><strong>Hata:</strong> Veriler yüklenemedi. 'data.json' dosyasının doğru yerde olduğundan emin olun.</p>`;
+            }
+        });
+
+        // Arama dinleyicisini ve ilk gösterimi başlatan ana fonksiyon
+        function initializeApp(misafirhaneler) {
+            const searchInput = document.getElementById('searchInput');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            // Arama kutusuna her karakter girildiğinde filtreleme yap
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+
+                // Eğer arama kutusu boşsa, tüm listeyi göster
+                if (searchTerm === "") {
+                    displayResults(misafirhaneler, resultsContainer);
+                    return;
+                }
+                
+                // Arama terimini içeren sonuçları filtrele
+                const filteredResults = misafirhaneler.filter(item => {
+                    const ilLower = item.il.toLowerCase();
+                    const adLower = item.ad.toLowerCase();
+                    return ilLower.includes(searchTerm) || adLower.includes(searchTerm);
+                });
+
+                displayResults(filteredResults, resultsContainer);
+            });
+
+            // Sayfa ilk yüklendiğinde tüm sonuçları göster
+            displayResults(misafirhaneler, resultsContainer);
+        }
+
+        // Sonuçları ekranda göstermek için fonksiyon
+        function displayResults(results, container) {
+            container.innerHTML = ''; // Önceki sonuçları temizle
+
+            if (results.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-500 p-4 bg-gray-100 rounded-lg">Sonuç bulunamadı.</p>`;
+                return;
+            }
+
+            results.forEach(item => {
+                const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.ad + ', ' + item.il)}`;
+
+                const cardHTML = `
+                    <div class="bg-white/90 p-4 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-center sm:text-left">
+                            <h3 class="text-xl font-semibold text-gray-800">${item.ad}</h3>
+                            <p class="text-gray-500">${item.il}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="tel:${item.telefon}" class="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition transform hover:scale-110" title="Ara">
+                                <i data-lucide="phone"></i>
+                            </a>
+                            <a href="${googleMapsLink}" target="_blank" class="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition transform hover:scale-110" title="Haritada Göster">
+                                <i data-lucide="map-pin"></i>
+                            </a>
+                            <button onclick="shareLocation('${item.ad}', '${googleMapsLink}')" class="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition transform hover:scale-110" title="Paylaş">
+                                <i data-lucide="share-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+            
+            // Yeni eklenen ikonları render et
+            lucide.createIcons();
+        }
+        
+        // Paylaşma fonksiyonu
+        async function shareLocation(name, url) {
+            const shareData = {
+                title: `${name} Konumu`,
+                text: `${name} için harita linki:`,
+                url: url,
+            };
+            try {
+                // Modern paylaşım API'sini dene (mobil cihazlarda çalışır)
+                await navigator.share(shareData);
+            } catch (err) {
+                // Eğer çalışmazsa veya masaüstü ise, linki panoya kopyala
+                try {
+                    await navigator.clipboard.writeText(url);
+                    alert('Harita linki panoya kopyalandı!');
+                } catch (copyErr) {
+                    alert('Paylaşım ve kopyalama başarısız oldu.');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
+
