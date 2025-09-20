@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RotaLink – Şehir Ara</title>
+<title>RotaLink – Şehir Ara ve Öneri Gönder</title>
 <meta name="theme-color" content="#f7faff" />
 <style>
 :root{
@@ -12,7 +12,7 @@
   --share1:#a78bfa;--share2:#f472b6
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto;scroll-behavior: smooth;}
 a{text-decoration:none;color:inherit}
 .container{max-width:1100px;margin:auto;padding:18px}
 header{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd);background:#fff}
@@ -20,50 +20,67 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 .badge{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a}
 nav{display:flex;gap:14px;color:var(--mut)}
 .hero{display:grid;grid-template-columns:1fr;gap:14px;margin-top:16px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
 .hero h1{margin:0 0 6px;font-size:22px}
 .hero .btn-store{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a;font-weight:800}
 
-/* --- Geliştirilmiş Arama Stilleri --- */
-.search{margin-top:12px; position: relative;}
+/* --- Arama Kartı ve Elemanları İçin Stiller --- */
+.search-card {
+  padding: 24px;
+  position: relative;
+}
+.search-card h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+.search-desc {
+  color: var(--mut);
+  margin-top: 0;
+  margin-bottom: 20px;
+}
 .inputwrap{
   position:relative;
   display: flex;
   align-items: center;
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  background: #fff;
+  border-radius: 12px;
+  background: #f8fafc;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 .inputwrap:focus-within {
   border-color: var(--b1);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
 }
 .search-icon {
   position: absolute;
-  left: 12px;
+  left: 16px;
   color: #94a3b8;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
-input[type="text"]{
+input[type="text"], input[type="email"] {
   width:100%;
-  padding:12px 40px 12px 42px; /* Sol padding ikona yer açmak için artırıldı */
-  border-radius:10px;
+  padding: 16px 50px 16px 52px;
+  border-radius:12px;
   border:0;
   background: transparent;
   outline: none;
+  font-size: 17px;
+  color: var(--text);
 }
+input::placeholder { color: #94a3b8; }
 .clearbtn{
   position:absolute;
-  right:8px;
+  right: 12px;
   top:50%;
   transform:translateY(-50%);
   border:0;
   background:#eef2f7;
-  width:28px;
-  height:28px;
-  border-radius:8px;
+  width:32px;
+  height:32px;
+  border-radius:10px;
   font-weight:900;
   color:#334155;
   cursor:pointer;
@@ -73,37 +90,35 @@ input[type="text"]{
 #suggestions {
   display: none;
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  top: calc(100% - 20px);
+  left: 24px; 
+  right: 24px;
   background: #fff;
   border: 1px solid var(--bd);
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-height: 240px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  max-height: 250px;
   overflow-y: auto;
   z-index: 10;
+  border-top: none;
 }
 .suggestion-item {
-  padding: 10px 14px;
+  padding: 12px 18px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
 }
-.suggestion-item:hover {
-  background-color: #f1f5f9;
-}
+.suggestion-item:hover { background-color: #f1f5f9; }
 
+/* --- Sekmeler ve İçerik Listesi --- */
 .tabs{margin-top:14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap}
 .tab{padding:8px 14px;border:1px solid var(--bd);border-bottom:0;border-radius:10px 10px 0 0;background:#fff;color:#0f172a;cursor:pointer;font-weight:700}
 .tab.active{background:linear-gradient(135deg,#f8fafc,#fff)}
 .tabcontent{display:none;padding:12px;border:1px solid var(--bd);border-top:0;border-radius:0 0 12px 12px;background:#fff}
 .tabcontent.active{display:block}
-
 .list{display:grid;gap:10px}
 .item{border:1px solid var(--bd);border-radius:10px;padding:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .info{flex:1;min-width:160px;}
 .title{font-weight:700;font-size:15px;}
-/* --- Açıklama Stili --- */
 .desc{font-size:14px; color:var(--mut); margin-top:2px; line-height:1.4;}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:10px;border:0;font-weight:800;font-size:14px;color:#0b1320;background:#f1f5f9}
@@ -111,8 +126,44 @@ input[type="text"]{
 .btn.share{background:linear-gradient(135deg,var(--share1),var(--share2));color:#111827}
 .btn.go{background:linear-gradient(135deg,#34d399,#22c55e);color:#0b1320}
 .btn.view{background:linear-gradient(135deg,#fde68a,var(--warn));color:#111827}
-
 .empty{color:var(--mut);font-size:13px}
+
+/* --- İletişim Formu Stilleri --- */
+.contact-card { padding: 24px; }
+.contact-card h2 { margin-top: 0; font-size: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 15px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--bd);
+  background: #f8fafc;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: var(--b1);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+}
+textarea { resize: vertical; min-height: 120px; }
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--go), var(--ok));
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-submit:hover { opacity: 0.9; }
+.form-info { font-size: 13px; color: var(--mut); text-align: center; margin-top: 12px; }
 
 footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 @media(max-width:640px){
@@ -135,25 +186,63 @@ footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var
   </section>
 
   <section class="search" id="sehirara">
-    <h2>Şehir Ara</h2>
-    <div class="inputwrap">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
-        <input id="q" placeholder="örn. Düzce, Kayseri, Kocaeli" autocomplete="off" />
-        <button class="clearbtn" id="clearBtn" title="Temizle">×</button>
+    <div class="card search-card">
+        <h2>Şehir Ara</h2>
+        <p class="search-desc">İstediğiniz şehri yazarak tesisleri, gezi noktalarını ve daha fazlasını keşfedin.</p>
+        <div class="inputwrap">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
+            <input id="q" placeholder="örn. Düzce, Kayseri, Kocaeli" autocomplete="off" />
+            <button class="clearbtn" id="clearBtn" title="Temizle">×</button>
+        </div>
+        <div id="suggestions"></div>
     </div>
-    <div id="suggestions"></div>
+  </section>
+  
+  <div class="tabs" id="tabs" style="display:none">
+    <div class="tab" data-tab="tesis">Tesis</div>
+    <div class="tab" data-tab="gezi">Gezi</div>
+    <div class="tab" data-tab="yemek">Yemek</div>
+    <div class="tab" data-tab="sosyal">Sosyal</div>
+  </div>
+  <div class="tabcontent" id="tab-tesis"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-gezi"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-yemek"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-sosyal"><div class="empty">Sonuç yok.</div></div>
 
-    <div class="tabs" id="tabs" style="display:none">
-      <div class="tab" data-tab="tesis">Tesis</div>
-      <div class="tab" data-tab="gezi">Gezi</div>
-      <div class="tab" data-tab="yemek">Yemek</div>
-      <div class="tab" data-tab="sosyal">Sosyal</div>
-    </div>
-
-    <div class="tabcontent" id="tab-tesis"><div class="empty">Sonuç yok.</div></div>
-    <div class="tabcontent" id="tab-gezi"><div class="empty">Sonuç yok.</div></div>
-    <div class="tabcontent" id="tab-yemek"><div class="empty">Sonuç yok.</div></div>
-    <div class="tabcontent" id="tab-sosyal"><div class="empty">Sonuç yok.</div></div>
+  <section class="card contact-card" id="iletisim">
+    <h2>Öneri ve Geri Bildirim</h2>
+    <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain">
+        <div class="form-group">
+            <label for="kategori">Öneri Kategorisi</label>
+            <select id="kategori" name="Kategori" required>
+                <option value="" disabled selected>Kategori seçin...</option>
+                <option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option>
+                <option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option>
+                <option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option>
+                <option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option>
+                <option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option>
+                <option value="Diger">Diğer Görüş ve Öneriler</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sehir">Şehir</label>
+            <input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required>
+        </div>
+        <div class="form-group">
+            <label for="yer_adi">Yer Adı / Konu</label>
+            <input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required>
+        </div>
+        <div class="form-group">
+            <label for="aciklama">Açıklama / Detaylar</label>
+            <textarea id="aciklama" name="Aciklama" placeholder="Konum, telefon, web sitesi gibi detayları veya geri bildiriminizi yazın..." required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="email">E-posta Adresiniz (İsteğe Bağlı)</label>
+            <input type="email" id="email" name="Gonderen_Eposta" placeholder="Geri dönüş yapmamızı isterseniz...">
+        </div>
+        <button type="submit" class="btn-submit">Öneriyi Gönder</button>
+        <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
+    </form>
   </section>
 
   <footer>
@@ -182,13 +271,18 @@ const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
-// Düzeltilmiş ve daha güvenilir link fonksiyonları
+// --- YENİ & GÜNCELLENMİŞ LİNK FONKSİYONLARI ---
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 function mapsHref(il, isim, lat, lng){
-  if(lat && lng) return `https://www.google.com/maps?q=${lat},${lng}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((il||'')+' '+(isim||''))}`;
+  if(lat && lng) return `https://www.google.com/maps?q=$${lat},${lng}`;
+  return `http://googleusercontent.com/maps/google.com/0${encodeURIComponent((il||'')+' '+(isim||''))}`;
 }
 function googleHref(isim, il){ return `https://www.google.com/search?q=${encodeURIComponent((isim||'')+' '+(il||''))}`; }
+// YEMEK SEKMESİ İÇİN GÖRSEL ARAMA LİNKİ OLUŞTURAN YENİ FONKSİYON
+function googleImageHref(isim, il){
+  const query = encodeURIComponent((isim||'') + ' ' + (il||''));
+  return `https://www.google.com/search?tbm=isch&q=${query}`;
+}
 
 function mountList(el, items, type){
   el.innerHTML = '';
@@ -196,20 +290,17 @@ function mountList(el, items, type){
   const list = document.createElement('div'); list.className='list';
   items.forEach(it=>{
     const row = document.createElement('div'); row.className='item';
-    
     const info = document.createElement('div'); info.className = 'info';
     const title = document.createElement('div'); title.className='title'; title.textContent = it.isim || 'İsimsiz';
     info.appendChild(title);
-
-    // Açıklama alanı ekleniyor (sadece gezi, yemek, sosyal için)
     if (['gezi', 'yemek', 'sosyal'].includes(type) && it.aciklama) {
       const desc = document.createElement('div');
       desc.className = 'desc';
       desc.textContent = it.aciklama;
       info.appendChild(desc);
     }
-
     const acts = document.createElement('div'); acts.className='actions';
+    
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
       const maps = mapsHref(it.il, it.isim, it.latitude, it.longitude);
@@ -218,7 +309,22 @@ function mountList(el, items, type){
         `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'\\"')}",url:"${maps}"}) : navigator.clipboard.writeText("${maps}")'>Paylaş</button>`+
         `<a class="btn go" href="${maps}" target="_blank" rel="noopener">Git</a>`;
     } else {
-      const url = googleHref(it.isim, it.il);
+      // --- İSTEĞİNİZE GÖRE DEĞİŞTİRİLEN BÖLÜM ---
+      let url = '';
+      switch(type) {
+        case 'gezi':
+          url = mapsHref(it.il, it.isim); // Harita uygulaması için arama linki
+          break;
+        case 'yemek':
+          url = googleImageHref(it.isim, it.il); // Web'de görsel arama linki
+          break;
+        case 'sosyal':
+          url = mapsHref(it.il, it.isim); // Harita uygulaması için arama linki
+          break;
+        default:
+          url = googleHref(it.isim, it.il); // Varsayılan olarak normal web araması
+          break;
+      }
       acts.innerHTML = `<a class="btn view" href="${url}" target="_blank" rel="noopener">İncele</a>`;
     }
     row.appendChild(info); row.appendChild(acts); list.appendChild(row);
@@ -252,14 +358,15 @@ async function run(){
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
-  const f = x => (x.il||'').toLowerCase() === q; // Tam eşleşme için .includes() yerine === kullandık
+  const f = x => (x.il||'').toLowerCase() === q;
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
   mountList(document.getElementById('tab-yemek'), S.yemek.filter(f), 'yemek');
   mountList(document.getElementById('tab-sosyal'), S.sosyal.filter(f), 'sosyal');
-
   tabsBar.style.display='flex';
-  activate('tesis');
+  if(!document.querySelector('.tab.active')){
+      activate('tesis');
+  }
 }
 
 function updateSuggestions() {
@@ -268,9 +375,7 @@ function updateSuggestions() {
         hideSuggestions();
         return;
     }
-    
     const matchedCities = S.sortedCities.filter(city => city.toLowerCase().startsWith(value)).slice(0, 10);
-    
     if (matchedCities.length > 0) {
         suggestionsEl.innerHTML = matchedCities.map(city => `<div class="suggestion-item">${city}</div>`).join('');
         suggestionsEl.style.display = 'block';
@@ -279,28 +384,9 @@ function updateSuggestions() {
     }
 }
 
-qEl.addEventListener('input', () => {
-    updateSuggestions();
-    // Otomatik arama yapmak isterseniz bu satırı aktif bırakın
-    // run(); 
-});
-
-// Arama kutusuna Enter basıldığında aramayı tetikle
-qEl.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        hideSuggestions();
-        run();
-    }
-});
-
-clearBtn.addEventListener('click', ()=>{ 
-    qEl.value=''; 
-    qEl.focus(); 
-    hideSuggestions();
-    run(); 
-});
-
-// Tahmin listesindeki bir şehre tıklandığında
+qEl.addEventListener('input', updateSuggestions);
+qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
+clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); hideSuggestions(); run(); });
 suggestionsEl.addEventListener('click', (e) => {
     if (e.target.classList.contains('suggestion-item')) {
         qEl.value = e.target.textContent;
@@ -308,15 +394,8 @@ suggestionsEl.addEventListener('click', (e) => {
         run();
     }
 });
+document.addEventListener('click', (e) => { if (!e.target.closest('.search-card')) { hideSuggestions(); } });
 
-// Dışarıya tıklandığında tahmin listesini gizle
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search')) {
-        hideSuggestions();
-    }
-});
-
-// İlk yüklemede şehir listesi
 loadAll();
 </script>
 </body>
