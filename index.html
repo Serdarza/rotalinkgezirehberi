@@ -77,7 +77,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .suggestion-item { padding: 12px 20px; cursor: pointer; font-size: 16px; }
 .suggestion-item:hover { background-color: #f1f5f9; }
 
-/* --- YENİ RENKLİ SEKMELER VE İÇERİK STİLLERİ --- */
+/* --- RENKLİ SEKMELER VE İÇERİK STİLLERİ --- */
 .tabs{margin-top:24px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap}
 .tab{
     padding:8px 14px;border:1px solid var(--bd);border-bottom:0;
@@ -85,22 +85,17 @@ nav{display:flex;gap:14px;color:var(--mut)}
     cursor:pointer;font-weight:700; transition: all 0.2s ease-in-out;
 }
 .tab:hover { background: #fff; color: var(--text); }
-
-/* Aktif Sekme Renkleri */
 .tab.active { color: #fff; }
 .tab.active[data-tab="tesis"]  { background: var(--b1); border-color: var(--b1); }
 .tab.active[data-tab="gezi"]   { background: var(--go); border-color: var(--go); }
 .tab.active[data-tab="yemek"]  { background: var(--warn); border-color: var(--warn); }
 .tab.active[data-tab="sosyal"] { background: var(--share1); border-color: var(--share1); }
-
 .tabcontent {
     display:none;padding:12px;border:1px solid var(--bd);
     border-top-width: 3px; /* Renkli alanı belirginleştir */
     border-radius:0 0 12px 12px;background:#fff
 }
 .tabcontent.active { display:block; }
-
-/* Aktif İçerik Alanı Üst Çizgi Renkleri */
 #tab-tesis.active  { border-top-color: var(--b1); }
 #tab-gezi.active   { border-top-color: var(--go); }
 #tab-yemek.active  { border-top-color: var(--warn); }
@@ -110,14 +105,12 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .item{
     border:1px solid var(--bd);border-radius:10px;padding:10px;background:#fff;
     display:flex;align-items:center;justify-content:space-between;gap:12px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* DOKUNULAN SATIR için geçiş efekti */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-/* DOKUNULAN SATIR İÇİN VURGU EFEKTİ */
 .item:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
-
 .info{flex:1;min-width:160px;}
 .title{font-weight:700;font-size:15px;}
 .desc{font-size:14px; color:var(--mut); margin-top:2px; line-height:1.4;}
@@ -196,7 +189,7 @@ footer{
   <section class="hero card" id="ozellikler">
     <div class="hero-text">
       <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
-      <p>Misafirhaneler, gezi noktaları, yerel yemekler ve sosyal tesisler. Arayın, <strong>Ara</strong> ile telefon edin, <strong>Paylaş</strong> ile link gönderin, <strong>Git</strong> ile haritada açın.</p>
+      <p>Misafirhaneler, gezi noktaları, yerel yemekler ve sosyal tesisler. Arayın, <strong>Ara</strong> ile telefon edin, <strong>Paylaş</strong> ile link gönderin, <strong>Konum</strong> ile haritada açın.</p>
       <a class="btn-store-new" id="indir" href="https://play.google.com/store/apps/details?id=com.serdarza.rotalink" target="_blank" rel="noopener">
         <svg class="icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.39,5.42,12,2,5.61,5.42,5.58,5.44A10.6,10.6,0,0,0,2,15.21,1,1,0,0,0,3,16H3a1,1,0,0,0,.92-.63,8.6,8.6,0,0,1,16.16,0A1,1,0,0,0,21,16h0a1,1,0,0,0,1-0.79A10.6,10.6,0,0,0,18.42,5.44ZM4.1,14.42a8.62,8.62,0,0,1,1.52-5.3L9.4,12.29,4.51,13.71A1,1,0,0,0,4.1,14.42Zm1.61-6.6-4-2.31L12,2l8.29,3.51-4,2.31L12,5.51ZM14.6,9.12l3.78-2.18a8.62,8.62,0,0,1,1.52,5.3,1,1,0,0,0-.41.71L14.6,12.29Z"/></svg>
         <div class="text-wrap">
@@ -234,7 +227,37 @@ footer{
   <section class="card contact-card" id="iletisim">
     <h2>Öneri ve Geri Bildirim</h2>
     <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain">
-       </form>
+       <div class="form-group">
+            <label for="kategori">Öneri Kategorisi</label>
+            <select id="kategori" name="Kategori" required>
+                <option value="" disabled selected>Kategori seçin...</option>
+                <option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option>
+                <option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option>
+                <option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option>
+                <option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option>
+                <option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option>
+                <option value="Diger">Diğer Görüş ve Öneriler</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sehir">Şehir</label>
+            <input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required>
+        </div>
+        <div class="form-group">
+            <label for="yer_adi">Yer Adı / Konu</label>
+            <input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required>
+        </div>
+        <div class="form-group">
+            <label for="aciklama">Açıklama / Detaylar</label>
+            <textarea id="aciklama" name="Aciklama" placeholder="Konum, telefon, web sitesi gibi detayları veya geri bildiriminizi yazın..." required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="email">E-posta Adresiniz (İsteğe Bağlı)</label>
+            <input type="email" id="email" name="Gonderen_Eposta" placeholder="Geri dönüş yapmamızı isterseniz...">
+        </div>
+        <button type="submit" class="btn-submit">Öneriyi Gönder</button>
+        <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
+    </form>
   </section>
 
   <footer id="footer">
@@ -268,28 +291,21 @@ const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
-// --- YENİ PAYLAŞ FONKSİYONU ---
 function handleShare(btn) {
     const isim = btn.dataset.isim;
     const mapsUrl = btn.dataset.mapsUrl;
     const telefon = btn.dataset.telefon;
-    const il = btn.dataset.il;
     
-    // Web sitesi için örnek bir link yapısı oluşturalım.
-    // Gerçek bir site yapınız olduğunda bu linki ona göre güncelleyebilirsiniz.
-    const siteUrl = `https://rotalink-app.com/${il.toLowerCase()}/${isim.toLowerCase().replace(/ /g, '-')}`;
-
     const shareText = `${isim}\n` +
                       `${mapsUrl}\n\n` +
                       `Telefon Numarası: ${telefon || 'Belirtilmemiş'}\n\n` +
                       `Rotalink Gezi Rehberi'ne bu linkten ulaşabilirsiniz:\n` +
-                      `${siteUrl}`;
+                      `https://serdarza.github.io/rotalinkgezirehberi/`;
     
     if (navigator.share) {
         navigator.share({ text: shareText })
             .catch(err => console.error("Paylaşım hatası:", err));
     } else {
-        // Mobil paylaşım API'si yoksa metni panoya kopyala (Masaüstü için)
         navigator.clipboard.writeText(shareText)
             .then(() => alert("Paylaşım metni panoya kopyalandı!"))
             .catch(err => console.error("Kopyalama hatası:", err));
@@ -321,16 +337,13 @@ function mountList(el, items, type){
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
       const mapsUrl = (it.latitude && it.longitude) ? createMapNavigateUrl(it.latitude, it.longitude) : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
-      
-      // PAYLAŞ BUTONU GÜNCELLENDİ
       const shareButtonHTML = `<button class="btn share"
           data-isim="${it.isim || ''}"
           data-maps-url="${mapsUrl}"
           data-telefon="${it.telefon || ''}"
-          data-il="${it.il || ''}"
           onclick="handleShare(this)">Paylaş</button>`;
       
-      acts.innerHTML = (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) + shareButtonHTML + `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Git</a>`;
+      acts.innerHTML = (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) + shareButtonHTML + `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Konum</a>`;
     } else {
       let url = '';
       switch(type) {
