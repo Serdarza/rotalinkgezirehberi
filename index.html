@@ -1,175 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
-    <title>Rotalink Gezi Rehberi</title>
-    <!-- Tailwind CSS'i projemize dahil ediyoruz -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide ikon kütüphanesini dahil ediyoruz -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <style>
-        /* Sayfanın tamamına kaplama ve arka plan resmi uygulama */
-        body {
-            /* BURAYI DEĞİŞTİRİN:
-              Aşağıdaki url(...) kısmına kendi arka plan resminizin linkini ekleyin.
-              Şimdilik örnek bir resim kullanıyorum.
-            */
-            background-image: url('https://images.unsplash.com/photo-1526778548025-1db135a4424b?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        /* Arka plan resminin üzerine hafif karartma efekti ekleyerek yazıları okunur kılıyoruz */
-        .overlay {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RotaLink – Şehirde keşfet, yerini bul</title>
+  <meta name="description" content="RotaLink: belediye sosyal tesisleri, yerel lezzetler ve kültür noktaları için hafif, hızlı bir rehber." />
+  <meta name="theme-color" content="#0ea5e9" />
+  <style>
+    :root{--bg:#0b1220;--card:#111a2b;--text:#e6eefc;--muted:#94a3b8;--brand:#0ea5e9;--accent:#22d3ee}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1220,#0b1220 40%,#0c1322 100%);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    a{color:var(--brand);text-decoration:none}
+    .container{max-width:1080px;margin:auto;padding:28px}
+    header{display:flex;gap:18px;align-items:center;justify-content:space-between}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .logo-badge{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#00131a;font-weight:900}
+    nav{display:flex;gap:16px}
+    nav a{color:var(--muted)}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;margin-top:48px}
+    .hero h1{font-size:42px;line-height:1.15;margin:0 0 8px}
+    .hero p{color:var(--muted);margin:0 0 18px}
+    .card{background:var(--card);border:1px solid #1b2a44;border-radius:18px;padding:22px}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .btn{padding:12px 16px;border-radius:12px;border:1px solid #1b2a44;background:#0e1729;color:var(--text);font-weight:600}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--accent));color:#00131a;border:none}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+    .feature h3{margin:6px 0 6px;font-size:18px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:#cbd5e1}
+    footer{margin-top:56px;padding-top:24px;border-top:1px solid #1b2a44;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .code{background:#0d1424;border:1px dashed #1b2a44;border-radius:14px;padding:12px;overflow:auto}
+    @media(max-width:940px){.hero{grid-template-columns:1fr}}
+    @media(max-width:720px){.features{grid-template-columns:1fr}}
+  </style>
 </head>
-<body class="bg-gray-200">
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="logo-badge">RL</div>
+        <span>RotaLink</span>
+      </div>
+      <nav>
+        <a href="#ozellikler">Özellikler</a>
+        <a href="#indir">İndir</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
+    </header>
 
-    <div class="overlay min-h-screen w-full flex items-center justify-center p-4">
-        <div class="w-full max-w-2xl">
-            <!-- Ana Kart -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl p-6 md:p-10">
-
-                <header class="text-center mb-6">
-                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Rotalink Gezi Rehberi</h1>
-                    <p class="text-gray-600 mt-2">Gitmek istediğiniz yeri arayın</p>
-                </header>
-
-                <!-- Arama Çubuğu -->
-                <div class="relative">
-                    <input type="search" id="searchInput" placeholder="İl veya misafirhane adı ara..." class="w-full p-4 pl-10 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                       <i data-lucide="search" class="text-gray-400"></i>
-                    </div>
-                </div>
-
-                <!-- Sonuçların Gösterileceği Alan -->
-                <div id="resultsContainer" class="mt-6 space-y-4 max-h-[50vh] overflow-y-auto pr-2">
-                    <!-- Başlangıçta yüklenme mesajı gösterilir -->
-                     <p class="text-center text-gray-500">Veriler yükleniyor...</p>
-                </div>
-
-            </div>
+    <section class="hero">
+      <div class="card">
+        <h1>Şehirde keşfet. <span style="color:var(--accent)">Rota</span>nı anında <span style="color:var(--brand)">Link</span>le.</h1>
+        <p>Belediye sosyal tesisleri, yerel lezzetler, mesire ve kültür rotaları tek uygulamada. Hafif. Hızlı. Çevrimdışı dostu.</p>
+        <div class="cta">
+          <a class="btn primary" href="#indir">Uygulamayı indir</a>
+          <a class="btn" href="#ozellikler">Özelliklere bak</a>
         </div>
-    </div>
+      </div>
+      <div class="card code">
+        <div class="mono">GitHub Pages kurulumu</div>
+<pre class="mono"><code>1) Repo: <strong>rotalink-site</strong>
+2) Dosya: <strong>index.html</strong> (bu sayfa)
+3) Settings → Pages → Deploy from Branch
+   Branch: <strong>main</strong>  /  Folder: <strong>/root</strong>
+4) URL: https://&lt;kullanici&gt;.github.io/rotalink-site/
+</code></pre>
+      </div>
+    </section>
 
-    <script>
-        // Sayfa tamamen yüklendiğinde veriyi çek ve uygulamayı başlat.
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                // data.json dosyasını talep et
-                const response = await fetch('data.json');
-                
-                // Eğer dosya bulunamazsa veya bir sunucu hatası olursa hata fırlat
-                if (!response.ok) {
-                    throw new Error(`Veri dosyası yüklenemedi. Durum: ${response.status}`);
-                }
-                
-                // Gelen JSON verisini işle ve uygulamayı bu veriyle başlat
-                const misafirhaneler = await response.json();
-                initializeApp(misafirhaneler);
+    <section id="ozellikler" class="features">
+      <div class="card feature">
+        <h3>Yerel Odak</h3>
+        <p>Belediye tesisleri, halk lokantaları, kütüphaneler ve cazibe noktaları tek yerde.</p>
+      </div>
+      <div class="card feature">
+        <h3>Akıllı Filtreler</h3>
+        <p>Konuma göre yakınlık, fiyat aralığı ve çalışma saatine göre filtrele.</p>
+      </div>
+      <div class="card feature">
+        <h3>Hafif Mimari</h3>
+        <p>Düşük veri kullanımı. Zayıf bağlantıda dahi hızlı açılır.</p>
+      </div>
+    </section>
 
-            } catch (error) {
-                // Hata durumunda kullanıcıyı bilgilendir
-                console.error('Veri yükleme hatası:', error);
-                const resultsContainer = document.getElementById('resultsContainer');
-                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-4 bg-red-100 rounded-lg"><strong>Hata:</strong> Veriler yüklenemedi. 'data.json' dosyasının doğru yerde olduğundan emin olun.</p>`;
-            }
-        });
+    <section id="indir" style="margin-top:32px" class="card">
+      <h2 style="margin:0 0 8px">İndir</h2>
+      <p class="mono">APK ve Play Store bağlantıları burada listelenecek.</p>
+    </section>
 
-        // Arama dinleyicisini ve ilk gösterimi başlatan ana fonksiyon
-        function initializeApp(misafirhaneler) {
-            const searchInput = document.getElementById('searchInput');
-            const resultsContainer = document.getElementById('resultsContainer');
+    <section id="iletisim" style="margin-top:18px" class="card">
+      <h2 style="margin:0 0 8px">İletişim</h2>
+      <p>e‑posta: <a href="mailto:destek@rotalink.app">destek@rotalink.app</a></p>
+    </section>
 
-            // Arama kutusuna her karakter girildiğinde filtreleme yap
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase().trim();
-
-                // Eğer arama kutusu boşsa, tüm listeyi göster
-                if (searchTerm === "") {
-                    displayResults(misafirhaneler, resultsContainer);
-                    return;
-                }
-                
-                // Arama terimini içeren sonuçları filtrele
-                const filteredResults = misafirhaneler.filter(item => {
-                    const ilLower = item.il.toLowerCase();
-                    const isimLower = item.isim.toLowerCase();
-                    return ilLower.includes(searchTerm) || isimLower.includes(searchTerm);
-                });
-
-                displayResults(filteredResults, resultsContainer);
-            });
-
-            // Sayfa ilk yüklendiğinde tüm sonuçları göster
-            displayResults(misafirhaneler, resultsContainer);
-        }
-
-        // Sonuçları ekranda göstermek için fonksiyon
-        function displayResults(results, container) {
-            container.innerHTML = ''; // Önceki sonuçları temizle
-
-            if (results.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-500 p-4 bg-gray-100 rounded-lg">Sonuç bulunamadı.</p>`;
-                return;
-            }
-
-            results.forEach(item => {
-                const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.isim + ', ' + item.il)}`;
-
-                const cardHTML = `
-                    <div class="bg-white/90 p-4 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div class="text-center sm:text-left">
-                            <h3 class="text-xl font-semibold text-gray-800">${item.isim}</h3>
-                            <p class="text-gray-500">${item.il}</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <a href="tel:${item.telefon}" class="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition transform hover:scale-110" title="Ara">
-                                <i data-lucide="phone"></i>
-                            </a>
-                            <a href="${googleMapsLink}" target="_blank" class="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition transform hover:scale-110" title="Haritada Göster">
-                                <i data-lucide="map-pin"></i>
-                            </a>
-                            <button onclick="shareLocation('${item.isim}', '${googleMapsLink}')" class="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition transform hover:scale-110" title="Paylaş">
-                                <i data-lucide="share-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += cardHTML;
-            });
-            
-            // Yeni eklenen ikonları render et
-            lucide.createIcons();
-        }
-        
-        // Paylaşma fonksiyonu
-        async function shareLocation(name, url) {
-            const shareData = {
-                title: `${name} Konumu`,
-                text: `${name} için harita linki:`,
-                url: url,
-            };
-            try {
-                // Modern paylaşım API'sini dene (mobil cihazlarda çalışır)
-                await navigator.share(shareData);
-            } catch (err) {
-                // Eğer çalışmazsa veya masaüstü ise, linki panoya kopyala
-                try {
-                    await navigator.clipboard.writeText(url);
-                    alert('Harita linki panoya kopyalandı!');
-                } catch (copyErr) {
-                    alert('Paylaşım ve kopyalama başarısız oldu.');
-                }
-            }
-        }
-    </script>
+    <footer>
+      <div>© <span id="yil"></span> RotaLink</div>
+      <div class="mono">Açık kaynak: yakında</div>
+    </footer>
+  </div>
+  <script>
+    document.getElementById('yil').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
-
