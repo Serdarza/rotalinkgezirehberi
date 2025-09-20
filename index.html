@@ -62,8 +62,8 @@
         // Sayfa tamamen yüklendiğinde veriyi çek ve uygulamayı başlat.
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // misafirhaneler.json dosyasını talep et
-                const response = await fetch('./misafirhaneler.json');
+                // data.json dosyasını talep et
+                const response = await fetch('./data.json');
                 
                 // Eğer dosya bulunamazsa veya bir sunucu hatası olursa hata fırlat
                 if (!response.ok) {
@@ -78,7 +78,7 @@
                 // Hata durumunda kullanıcıyı bilgilendir
                 console.error('Veri yükleme hatası:', error);
                 const resultsContainer = document.getElementById('resultsContainer');
-                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-4 bg-red-100 rounded-lg"><strong>Hata:</strong> Veriler yüklenemedi. 'misafirhaneler.json' dosyasının doğru yerde olduğundan emin olun.</p>`;
+                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-4 bg-red-100 rounded-lg"><strong>Hata:</strong> Veriler yüklenemedi. 'data.json' dosyasının doğru yerde olduğundan emin olun.</p>`;
             }
         });
 
@@ -99,7 +99,6 @@
                 
                 // Arama terimini içeren sonuçları filtrele
                 const filteredResults = misafirhaneler.filter(item => {
-                    // DÜZELTME: 'ad' yerine 'isim' anahtarı kullanıldı.
                     const ilLower = item.il.toLowerCase();
                     const isimLower = item.isim.toLowerCase();
                     return ilLower.includes(searchTerm) || isimLower.includes(searchTerm);
@@ -122,7 +121,6 @@
             }
 
             results.forEach(item => {
-                // DÜZELTME: 'ad' yerine 'isim' anahtarı kullanıldı.
                 const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.isim + ', ' + item.il)}`;
 
                 const cardHTML = `
