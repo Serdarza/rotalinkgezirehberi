@@ -24,7 +24,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .hero h1{margin:0 0 6px;font-size:22px}
 .hero .btn-store{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a;font-weight:800}
 
-/* --- YENİ ARAMA BÖLÜMÜ TASARIMI --- */
+/* --- ARAMA BÖLÜMÜ TASARIMI --- */
 .search-section {
   padding: 32px 0;
   text-align: center;
@@ -41,7 +41,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
   align-items: center;
   max-width: 600px;
   margin: auto;
-  border-radius: 28px; /* Daha yuvarlak kenarlar */
+  border-radius: 28px;
   background: var(--card);
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: box-shadow 0.3s ease;
@@ -57,17 +57,15 @@ nav{display:flex;gap:14px;color:var(--mut)}
   height: 22px;
   transition: color 0.3s;
 }
-.inputwrap:focus-within .search-icon {
-  color: var(--b1);
-}
-#q { /* Input ID'sine özel stil */
+.inputwrap:focus-within .search-icon { color: var(--b1); }
+#q {
   width:100%;
-  padding: 16px 50px 16px 56px; /* Yeni ölçüler */
+  padding: 16px 50px 16px 56px;
   border-radius:28px;
   border:0;
   background: transparent;
   outline: none;
-  font-size: 18px; /* Yazı boyutu büyüdü */
+  font-size: 18px;
   color: var(--text);
 }
 #q::placeholder { color: #94a3b8; }
@@ -80,7 +78,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
   background:#eef2f7;
   width:32px;
   height:32px;
-  border-radius:50%; /* Tam yuvarlak */
+  border-radius:50%;
   font-weight:900;
   color:#334155;
   cursor:pointer;
@@ -88,9 +86,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
   place-items: center;
   transition: background-color 0.2s;
 }
-.clearbtn:hover {
-    background-color: #dde4ed;
-}
+.clearbtn:hover { background-color: #dde4ed; }
 
 /* --- Şehir Tahmin Kutusu Stilleri --- */
 #suggestions {
@@ -140,41 +136,71 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 15px; }
 .form-group input, .form-group select, .form-group textarea {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--bd);
-  background: #f8fafc;
-  font-size: 16px;
-  font-family: inherit;
+  width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--bd);
+  background: #f8fafc; font-size: 16px; font-family: inherit;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  outline: none;
-  border-color: var(--b1);
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+  outline: none; border-color: var(--b1); background: #fff; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
 }
 textarea { resize: vertical; min-height: 120px; }
 .btn-submit {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 800;
-  border: 0;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--go), var(--ok));
-  color: #fff;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  width: 100%; padding: 14px; font-size: 16px; font-weight: 800;
+  border: 0; border-radius: 10px; background: linear-gradient(135deg, var(--go), var(--ok));
+  color: #fff; cursor: pointer; transition: opacity 0.2s;
 }
 .btn-submit:hover { opacity: 0.9; }
 .form-info { font-size: 13px; color: var(--mut); text-align: center; margin-top: 12px; }
 
-footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+/* --- YENİ ALT BİLGİ (FOOTER) STİLLERİ --- */
+footer{
+  margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);
+  color:var(--mut); display:flex; justify-content:space-between;
+  flex-wrap:wrap; gap:12px; align-items: center; font-size: 14px;
+}
+.footer-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.footer-links a {
+    transition: color 0.2s;
+}
+.footer-links a:hover {
+    color: var(--text);
+}
+
+/* --- YENİ "YUKARI ÇIK" BUTONU STİLİ --- */
+#scrollTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: var(--b1);
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  line-height: 48px; /* Dikey hizalama için */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;
+}
+#scrollTopBtn:hover {
+  background-color: var(--b2);
+}
+
 @media(max-width:640px){
   .item{flex-direction:column;align-items:flex-start}
   .actions{width:100%; margin-top: 8px;}
+  footer { flex-direction: column; text-align: center; }
 }
 </style>
 </head>
@@ -250,9 +276,15 @@ footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var
 
   <footer>
     <div>© <span id="yil"></span> RotaLink</div>
-    <div><a href="mailto:rotalinkinfo@gmail.com">rotalinkinfo@gmail.com</a></div>
+    <div class="footer-links">
+        <a href="#" id="footerAnasayfa">Anasayfa</a>
+        <a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a>
+        <a href="mailto:rotalinkinfo@gmail.com">İletişim</a>
+    </div>
   </footer>
 </div>
+
+<a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 
 <script>
 document.getElementById('yil').textContent = new Date().getFullYear();
@@ -274,7 +306,6 @@ const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
-// --- GÜVENİLİR VE YENİ LİNK FONKSİYONLARI ---
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 function createMapSearchUrl(query) { return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`; }
 function createMapNavigateUrl(lat, lng) { return `https://www.google.com/maps?q=$${lat},${lng}`; }
@@ -293,9 +324,7 @@ function mountList(el, items, type){
     const title = document.createElement('div'); title.className='title'; title.textContent = it.isim || 'İsimsiz';
     info.appendChild(title);
     if (['gezi', 'yemek', 'sosyal'].includes(type) && it.aciklama) {
-      const desc = document.createElement('div');
-      desc.className = 'desc';
-      desc.textContent = it.aciklama;
+      const desc = document.createElement('div'); desc.className = 'desc'; desc.textContent = it.aciklama;
       info.appendChild(desc);
     }
     const acts = document.createElement('div'); acts.className='actions';
@@ -313,19 +342,10 @@ function mountList(el, items, type){
     } else {
       let url = '';
       switch(type) {
-        case 'gezi':
-          url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
-          break;
-        case 'yemek':
-          // 'it' objesi artık 'il' özelliğini içeriyor (run fonksiyonunda eklendi)
-          url = googleImageHref(it.isim, it.il); 
-          break;
-        case 'sosyal':
-          url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
-          break;
-        default:
-          url = `https://www.google.com/search?q=${encodeURIComponent((it.isim||'')+' '+(it.il||''))}`;
-          break;
+        case 'gezi': url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`); break;
+        case 'yemek': url = googleImageHref(it.isim, it.il); break;
+        case 'sosyal': url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`); break;
+        default: url = `https://www.google.com/search?q=${encodeURIComponent((it.isim||'')+' '+(it.il||''))}`; break;
       }
       acts.innerHTML = `<a class="btn view" href="${url}" target="_blank" rel="noopener">İncele</a>`;
     }
@@ -350,38 +370,27 @@ async function run(){
   const q = qEl.value.trim().toLowerCase();
   if(!q){
     tabsBar.style.display='none';
-    ['tab-tesis','tab-gezi','tab-yemek','tab-sosyal'].forEach(id=>{
-      const el=document.getElementById(id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
+    ['tab-tesis','tab-gezi','yemek','sosyal'].forEach(id=>{
+      const el=document.getElementById('tab-'+id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
     });
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
   
-  // Standart filtre (Tesis, Gezi, Sosyal için)
   const f = x => (x.il||'').toLowerCase() === q;
-
-  // Listeleri doldur
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
   mountList(document.getElementById('tab-sosyal'), S.sosyal.filter(f), 'sosyal');
 
-  // --- YEMEK SEKMESİ İÇİN ÖZEL İŞLEM (DÜZELTİLEN BÖLÜM) ---
-  const cityYemekObject = S.yemek.find(f); // Şehre ait yemek objesini bul
+  const cityYemekObject = S.yemek.find(f);
   let yemekList = [];
   if (cityYemekObject && cityYemekObject.yemekler) {
-      // Her bir yemek objesine, ait olduğu şehrin adını ('il') ekle
-      // Bu, 'İncele' butonunun doğru link oluşturması için gerekli
-      yemekList = cityYemekObject.yemekler.map(yemek => ({
-          ...yemek,
-          il: cityYemekObject.il 
-      }));
+      yemekList = cityYemekObject.yemekler.map(yemek => ({...yemek, il: cityYemekObject.il }));
   }
   mountList(document.getElementById('tab-yemek'), yemekList, 'yemek');
   
   tabsBar.style.display='flex';
-  if(!document.querySelector('.tab.active')){
-      activate('tesis');
-  }
+  if(!document.querySelector('.tab.active')){ activate('tesis'); }
 }
 
 function updateSuggestions() {
@@ -405,6 +414,29 @@ suggestionsEl.addEventListener('click', (e) => {
     }
 });
 document.addEventListener('click', (e) => { if (!e.target.closest('.inputwrap')) { hideSuggestions(); } });
+
+// --- YENİ: "YUKARI ÇIK" BUTONU VE FOOTER ANASAYFA LİNKİ İÇİN KOD ---
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+const footerAnasayfaLink = document.getElementById('footerAnasayfa');
+
+// Butonun görünürlüğünü kontrol et
+window.onscroll = function() {
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+    scrollTopBtn.style.display = "block";
+  } else {
+    scrollTopBtn.style.display = "none";
+  }
+};
+
+// Yumuşak kaydırma fonksiyonu
+function scrollToTop(e) {
+  e.preventDefault();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Butonlara tıklama olaylarını ata
+scrollTopBtn.addEventListener('click', scrollToTop);
+footerAnasayfaLink.addEventListener('click', scrollToTop);
 
 loadAll();
 </script>
