@@ -62,8 +62,8 @@
         // Sayfa tamamen yüklendiğinde veriyi çek ve uygulamayı başlat.
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // data.json dosyasını, aynı dizinde olduğunu belirterek talep et
-                const response = await fetch('./data.json');
+                // misafirhaneler.json dosyasını talep et
+                const response = await fetch('./misafirhaneler.json');
                 
                 // Eğer dosya bulunamazsa veya bir sunucu hatası olursa hata fırlat
                 if (!response.ok) {
@@ -78,7 +78,7 @@
                 // Hata durumunda kullanıcıyı bilgilendir
                 console.error('Veri yükleme hatası:', error);
                 const resultsContainer = document.getElementById('resultsContainer');
-                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-4 bg-red-100 rounded-lg"><strong>Hata:</strong> Veriler yüklenemedi. 'data.json' dosyasının doğru yerde olduğundan emin olun.</p>`;
+                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-4 bg-red-100 rounded-lg"><strong>Hata:</strong> Veriler yüklenemedi. 'misafirhaneler.json' dosyasının doğru yerde olduğundan emin olun.</p>`;
             }
         });
 
@@ -99,9 +99,10 @@
                 
                 // Arama terimini içeren sonuçları filtrele
                 const filteredResults = misafirhaneler.filter(item => {
+                    // DÜZELTME: 'ad' yerine 'isim' anahtarı kullanıldı.
                     const ilLower = item.il.toLowerCase();
-                    const adLower = item.ad.toLowerCase();
-                    return ilLower.includes(searchTerm) || adLower.includes(searchTerm);
+                    const isimLower = item.isim.toLowerCase();
+                    return ilLower.includes(searchTerm) || isimLower.includes(searchTerm);
                 });
 
                 displayResults(filteredResults, resultsContainer);
@@ -121,12 +122,13 @@
             }
 
             results.forEach(item => {
-                const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.ad + ', ' + item.il)}`;
+                // DÜZELTME: 'ad' yerine 'isim' anahtarı kullanıldı.
+                const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.isim + ', ' + item.il)}`;
 
                 const cardHTML = `
                     <div class="bg-white/90 p-4 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div class="text-center sm:text-left">
-                            <h3 class="text-xl font-semibold text-gray-800">${item.ad}</h3>
+                            <h3 class="text-xl font-semibold text-gray-800">${item.isim}</h3>
                             <p class="text-gray-500">${item.il}</p>
                         </div>
                         <div class="flex items-center gap-2">
@@ -136,7 +138,7 @@
                             <a href="${googleMapsLink}" target="_blank" class="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition transform hover:scale-110" title="Haritada Göster">
                                 <i data-lucide="map-pin"></i>
                             </a>
-                            <button onclick="shareLocation('${item.ad}', '${googleMapsLink}')" class="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition transform hover:scale-110" title="Paylaş">
+                            <button onclick="shareLocation('${item.isim}', '${googleMapsLink}')" class="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition transform hover:scale-110" title="Paylaş">
                                 <i data-lucide="share-2"></i>
                             </button>
                         </div>
