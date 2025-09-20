@@ -22,15 +22,18 @@
     .hero p{color:var(--muted);margin:0 0 18px}
     .card{background:var(--card);border:1px solid #1b2a44;border-radius:18px;padding:22px}
     .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
-    .btn{padding:12px 16px;border-radius:12px;border:1px solid #1b2a44;background:#0e1729;color:var(--text);font-weight:600}
+    .btn{padding:8px 14px;border-radius:10px;border:1px solid #1b2a44;background:#0e1729;color:var(--text);font-weight:600;font-size:14px;cursor:pointer}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--accent));color:#00131a;border:none}
     .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
     .feature h3{margin:6px 0 6px;font-size:18px}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:#cbd5e1}
     footer{margin-top:56px;padding-top:24px;border-top:1px solid #1b2a44;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
     .code{background:#0d1424;border:1px dashed #1b2a44;border-radius:14px;padding:12px;overflow:auto}
-    @media(max-width:940px){.hero{grid-template-columns:1fr}}
-    @media(max-width:720px){.features{grid-template-columns:1fr}}
+    .search-box{margin-top:40px}
+    .search-box input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1b2a44;background:#0e1729;color:var(--text);font-size:16px}
+    .results{margin-top:20px;display:grid;gap:12px}
+    .result-item{background:#111a2b;border:1px solid #1b2a44;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
   </style>
 </head>
 <body>
@@ -67,6 +70,12 @@
       </div>
     </section>
 
+    <section class="search-box">
+      <h2>Misafirhane Ara</h2>
+      <input type="text" id="searchInput" placeholder="Şehir adı yazın..." />
+      <div id="results" class="results"></div>
+    </section>
+
     <section id="ozellikler" class="features">
       <div class="card feature">
         <h3>Yerel Odak</h3>
@@ -97,8 +106,48 @@
       <div class="mono">Açık kaynak: yakında</div>
     </footer>
   </div>
+
   <script>
     document.getElementById('yil').textContent = new Date().getFullYear();
+
+    async function loadData(){
+      try {
+        const res = await fetch('data.json');
+        return await res.json();
+      } catch(e){
+        console.error('data.json okunamadı', e);
+        return [];
+      }
+    }
+
+    const input = document.getElementById('searchInput');
+    const results = document.getElementById('results');
+
+    input.addEventListener('input', async () => {
+      const val = input.value.trim().toLowerCase();
+      if(!val){results.innerHTML='';return;}
+      const data = await loadData();
+      const filtered = data.filter(item => item.il.toLowerCase().includes(val));
+      results.innerHTML = '';
+      filtered.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.il + ' ' + item.isim)}`;
+        const telUrl = `tel:${item.telefon}`;
+        const shareText = `${item.isim} - ${item.adres} - Tel: ${item.telefon}`;
+        const shareUrl = navigator.share ? '' : `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        div.innerHTML = `
+          <strong>${item.isim}</strong><br>
+          <span>${item.adres}</span><br>
+          <div class="actions">
+            <a class="btn primary" href="${telUrl}">Ara</a>
+            <button class="btn" onclick='navigator.share ? navigator.share({title:"${item.isim}", text:"${shareText}"}) : window.open("${shareUrl}","_blank")'>Paylaş</button>
+            <a class="btn" href="${mapsUrl}" target="_blank">Git</a>
+          </div>
+        `;
+        results.appendChild(div);
+      });
+    });
   </script>
 </body>
 </html>
