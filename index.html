@@ -291,20 +291,25 @@ const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
-// --- CİHAZ TESPİT ETME FONKSİYONU ---
 function isAppleDevice() {
     return /iPhone|iPad|iPod/.test(navigator.platform);
 }
 
+// --- GÜNCELLENMİŞ PAYLAŞ FONKSİYONU ---
 function handleShare(btn) {
     const isim = btn.dataset.isim;
-    const mapsUrl = btn.dataset.mapsUrl;
+    const il = btn.dataset.il;
     const telefon = btn.dataset.telefon;
+    
+    // Paylaşılacak metin için HER ZAMAN arama linki oluşturulur.
+    const shareMapsUrl = createMapSearchUrl(`${isim || ''} ${il || ''}`);
+    
     const shareText = `${isim}\n` +
-                      `${mapsUrl}\n\n` +
+                      `${shareMapsUrl}\n\n` +
                       `Telefon Numarası: ${telefon || 'Belirtilmemiş'}\n\n` +
                       `Rotalink Gezi Rehberi'ne bu linkten ulaşabilirsiniz:\n` +
                       `https://serdarza.github.io/rotalinkgezirehberi/`;
+    
     if (navigator.share) {
         navigator.share({ text: shareText }).catch(err => console.error("Paylaşım hatası:", err));
     } else {
@@ -316,19 +321,20 @@ function handleShare(btn) {
 
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
-// --- AKILLI HARİTA LİNKLERİ ---
 function createMapSearchUrl(query) {
     if (isAppleDevice()) {
         return `https://www.google.com/maps?q=$2{encodeURIComponent(query)}`;
     }
     return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`;
 }
+
 function createMapNavigateUrl(lat, lng) {
     if (isAppleDevice()) {
         return `https://www.google.com/maps?q=$3=${lat},${lng}`;
     }
     return `https://www.google.com/maps?q=$${lat},${lng}`;
 }
+
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
@@ -353,7 +359,7 @@ function mountList(el, items, type){
       const mapsUrl = (it.latitude && it.longitude) ? createMapNavigateUrl(it.latitude, it.longitude) : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
       const shareButtonHTML = `<button class="btn share"
           data-isim="${it.isim || ''}"
-          data-maps-url="${mapsUrl}"
+          data-il="${it.il || ''}"
           data-telefon="${it.telefon || ''}"
           onclick="handleShare(this)">Paylaş</button>`;
       acts.innerHTML = (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) + shareButtonHTML + `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Konum</a>`;
