@@ -5,35 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RotaLink – Şehirde keşfet, yerini bul</title>
   <meta name="description" content="RotaLink: belediye sosyal tesisleri, yerel lezzetler ve kültür noktaları için hafif, hızlı bir rehber." />
-  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="theme-color" content="#f3f4f6" />
   <style>
-    :root{--bg:#0b1220;--card:#111a2b;--text:#e6eefc;--muted:#94a3b8;--brand:#0ea5e9;--accent:#22d3ee}
+    :root{--bg:#f3f4f6;--card:#ffffff;--text:#111827;--muted:#6b7280;--brand:#0ea5e9;--accent:#22d3ee}
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1220,#0b1220 40%,#0c1322 100%);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
     a{color:var(--brand);text-decoration:none}
-    .container{max-width:1080px;margin:auto;padding:28px}
-    header{display:flex;gap:18px;align-items:center;justify-content:space-between}
+    .container{max-width:1080px;margin:auto;padding:20px}
+    header{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e5e7eb}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
     .logo-badge{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#00131a;font-weight:900}
     nav{display:flex;gap:16px}
     nav a{color:var(--muted)}
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;margin-top:48px}
-    .hero h1{font-size:42px;line-height:1.15;margin:0 0 8px}
+    .hero{display:grid;grid-template-columns:1fr;gap:28px;margin-top:32px}
+    .hero h1{font-size:36px;line-height:1.2;margin:0 0 8px}
     .hero p{color:var(--muted);margin:0 0 18px}
-    .card{background:var(--card);border:1px solid #1b2a44;border-radius:18px;padding:22px}
-    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
-    .btn{padding:8px 14px;border-radius:10px;border:1px solid #1b2a44;background:#0e1729;color:var(--text);font-weight:600;font-size:14px;cursor:pointer}
+    .card{background:var(--card);border:1px solid #d1d5db;border-radius:12px;padding:18px}
+    .btn{padding:6px 12px;border-radius:8px;border:1px solid #d1d5db;background:#f9fafb;color:var(--text);font-weight:600;font-size:14px;cursor:pointer}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--accent));color:#00131a;border:none}
     .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
     .feature h3{margin:6px 0 6px;font-size:18px}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:#cbd5e1}
-    footer{margin-top:56px;padding-top:24px;border-top:1px solid #1b2a44;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-    .code{background:#0d1424;border:1px dashed #1b2a44;border-radius:14px;padding:12px;overflow:auto}
-    .search-box{margin-top:40px}
-    .search-box input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1b2a44;background:#0e1729;color:var(--text);font-size:16px}
-    .results{margin-top:20px;display:grid;gap:12px}
-    .result-item{background:#111a2b;border:1px solid #1b2a44;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:#374151}
+    footer{margin-top:40px;padding-top:16px;border-top:1px solid #d1d5db;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .search-box{margin-top:16px}
+    .search-box input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:var(--text);font-size:15px}
+    .results{margin-top:14px;display:grid;gap:8px}
+    .result-item{background:#fff;border:1px solid #d1d5db;border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:space-between}
+    .actions{display:flex;flex-direction:column;gap:6px}
   </style>
 </head>
 <body>
@@ -44,36 +42,24 @@
         <span>RotaLink</span>
       </div>
       <nav>
+        <a href="#sehirara">Şehir Ara</a>
         <a href="#ozellikler">Özellikler</a>
         <a href="#indir">İndir</a>
         <a href="#iletisim">İletişim</a>
       </nav>
     </header>
 
+    <section id="sehirara" class="search-box">
+      <h2>Şehir Ara</h2>
+      <input type="text" id="searchInput" placeholder="Şehir adı yazın..." />
+      <div id="results" class="results"></div>
+    </section>
+
     <section class="hero">
       <div class="card">
         <h1>Şehirde keşfet. <span style="color:var(--accent)">Rota</span>nı anında <span style="color:var(--brand)">Link</span>le.</h1>
         <p>Belediye sosyal tesisleri, yerel lezzetler, mesire ve kültür rotaları tek uygulamada. Hafif. Hızlı. Çevrimdışı dostu.</p>
-        <div class="cta">
-          <a class="btn primary" href="#indir">Uygulamayı indir</a>
-          <a class="btn" href="#ozellikler">Özelliklere bak</a>
-        </div>
       </div>
-      <div class="card code">
-        <div class="mono">GitHub Pages kurulumu</div>
-<pre class="mono"><code>1) Repo: <strong>rotalink-site</strong>
-2) Dosya: <strong>index.html</strong> (bu sayfa)
-3) Settings → Pages → Deploy from Branch
-   Branch: <strong>main</strong>  /  Folder: <strong>/root</strong>
-4) URL: https://&lt;kullanici&gt;.github.io/rotalink-site/
-</code></pre>
-      </div>
-    </section>
-
-    <section class="search-box">
-      <h2>Misafirhane Ara</h2>
-      <input type="text" id="searchInput" placeholder="Şehir adı yazın..." />
-      <div id="results" class="results"></div>
     </section>
 
     <section id="ozellikler" class="features">
@@ -98,7 +84,7 @@
 
     <section id="iletisim" style="margin-top:18px" class="card">
       <h2 style="margin:0 0 8px">İletişim</h2>
-      <p>e‑posta: <a href="mailto:destek@rotalink.app">destek@rotalink.app</a></p>
+      <p>e-posta: <a href="mailto:destek@rotalink.app">destek@rotalink.app</a></p>
     </section>
 
     <footer>
@@ -112,7 +98,7 @@
 
     async function loadData(){
       try {
-        const res = await fetch('data.json');
+        const res = await fetch('data.json', {cache:'no-store'});
         return await res.json();
       } catch(e){
         console.error('data.json okunamadı', e);
@@ -127,22 +113,28 @@
       const val = input.value.trim().toLowerCase();
       if(!val){results.innerHTML='';return;}
       const data = await loadData();
-      const filtered = data.filter(item => item.il.toLowerCase().includes(val));
+      const filtered = data.filter(item => (item.il||'').toLowerCase().includes(val));
       results.innerHTML = '';
       filtered.forEach(item => {
         const div = document.createElement('div');
         div.className = 'result-item';
-        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.il + ' ' + item.isim)}`;
-        const telUrl = `tel:${item.telefon}`;
-        const shareText = `${item.isim} - ${item.adres} - Tel: ${item.telefon}`;
-        const shareUrl = navigator.share ? '' : `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+
+        const lat = item.latitude, lng = item.longitude;
+        const mapsUrl = (lat && lng)
+          ? `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+          : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.il||'')+' '+(item.isim||''))}`;
+
+        const telDigits = String(item.telefon||'').replace(/[^0-9+]/g,'');
+        const telUrl = telDigits ? `tel:${telDigits}` : '';
+
+        const shareText = `${item.isim||''}`;
+
         div.innerHTML = `
-          <strong>${item.isim}</strong><br>
-          <span>${item.adres}</span><br>
+          <span>${item.isim||'İsimsiz'}</span>
           <div class="actions">
-            <a class="btn primary" href="${telUrl}">Ara</a>
-            <button class="btn" onclick='navigator.share ? navigator.share({title:"${item.isim}", text:"${shareText}"}) : window.open("${shareUrl}","_blank")'>Paylaş</button>
-            <a class="btn" href="${mapsUrl}" target="_blank">Git</a>
+            ${telUrl ? `<a class="btn primary" href="${telUrl}">Ara</a>` : `<button class="btn" disabled>Telefon yok</button>`}
+            <button class="btn" onclick='navigator.share ? navigator.share({title:"${(item.isim||"Konum").replace(/"/g,"&quot;")}", text:"${shareText.replace(/"/g,"&quot;")}", url:"${mapsUrl}"}) : navigator.clipboard.writeText("${mapsUrl}").then(()=>alert("Kopyalandı"))'>Paylaş</button>
+            <a class="btn" href="${mapsUrl}" target="_blank" rel="noopener">Git</a>
           </div>
         `;
         results.appendChild(div);
