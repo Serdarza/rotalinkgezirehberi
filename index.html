@@ -21,7 +21,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 nav{display:flex;gap:14px;color:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
 
-/* --- YENİ HERO BÖLÜMÜ TASARIMI --- */
+/* --- HERO BÖLÜMÜ TASARIMI --- */
 .hero.card {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -176,7 +176,7 @@ footer{
 
 @media(max-width:900px){
   .hero.card { grid-template-columns: 1fr; }
-  .hero-image { display: none; } /* Küçük ekranlarda görseli gizle */
+  .hero-image { display: none; }
   .hero.card { padding: 24px; text-align: center; }
   .hero-text h1 { font-size: 28px; }
   .btn-store-new { margin: auto; }
@@ -209,7 +209,7 @@ footer{
       </a>
     </div>
     <div class="hero-image">
-      <svg width="800px" height="800px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="var(--b1)" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.36 158.08a48.96 48.96 0 0 0-48.896 48.896v479.552a48.96 48.96 0 0 0 74.496 42.432l354.56-239.744a48.96 48.96 0 0 0 0-84.864l-354.56-239.744a48.96 48.96 0 0 0-25.6-6.528z"></path></g></svg>
+      <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="var(--b1)" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.36 158.08a48.96 48.96 0 0 0-48.896 48.896v479.552a48.96 48.96 0 0 0 74.496 42.432l354.56-239.744a48.96 48.96 0 0 0 0-84.864l-354.56-239.744a48.96 48.96 0 0 0-25.6-6.528z"></path></svg>
     </div>
   </section>
 
@@ -292,9 +292,6 @@ async function loadAll(){
   const [d,g,y,s] = await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[])));
   S.data=d; S.gezi=g; S.yemek=y; S.sosyal=s; S.ready=true;
   [...d,...g,...y,...s].forEach(it=>{ if(it && it.il) S.citySet.add(it.il.trim()); });
-  if (typeof S.yemek === 'object' && S.yemek !== null && !Array.isArray(S.yemek)) {
-      Object.keys(S.yemek).forEach(il => S.citySet.add(il.trim()));
-  }
   S.sortedCities = [...S.citySet].sort((a,b)=>a.localeCompare(b,'tr'));
 }
 
@@ -305,8 +302,8 @@ const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
-function createMapSearchUrl(query) { return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`; }
-function createMapNavigateUrl(lat, lng) { return `https://www.google.com/maps?q=$${lat},${lng}`; }
+function createMapSearchUrl(query) { return `https://www.google.com/maps/search/?api=1&query=$$${encodeURIComponent(query)}`; }
+function createMapNavigateUrl(lat, lng) { return `https://www.google.com/maps?q=$$${lat},${lng}`; }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
@@ -364,26 +361,14 @@ async function run(){
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
+  
   const f = x => (x.il||'').toLowerCase() === q;
+  
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
+  mountList(document.getElementById('tab-yemek'), S.yemek.filter(f), 'yemek'); // DÜZELTİLDİ
   mountList(document.getElementById('tab-sosyal'), S.sosyal.filter(f), 'sosyal');
 
-  let yemekList = [];
-  if (Array.isArray(S.yemek)) {
-    const cityYemekObject = S.yemek.find(f);
-    if (cityYemekObject && cityYemekObject.yemekler) {
-      yemekList = cityYemekObject.yemekler.map(yemek => ({...yemek, il: cityYemekObject.il}));
-    }
-  }
-  else if (typeof S.yemek === 'object' && S.yemek !== null) {
-    const cityKey = Object.keys(S.yemek).find(key => key.toLowerCase() === q);
-    if (cityKey && Array.isArray(S.yemek[cityKey])) {
-      yemekList = S.yemek[cityKey].map(yemek => ({...yemek, il: cityKey}));
-    }
-  }
-  mountList(document.getElementById('tab-yemek'), yemekList, 'yemek');
-  
   tabsBar.style.display='flex';
   if(!document.querySelector('.tab.active')){ activate('tesis'); }
 }
