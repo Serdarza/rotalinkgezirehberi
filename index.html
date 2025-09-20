@@ -1,155 +1,138 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RotaLink – Şehirde keşfet, yerini bul</title>
-  <meta name="description" content="RotaLink: belediye sosyal tesisleri, yerel lezzetler ve kültür noktaları için hafif, hızlı bir rehber." />
-  <meta name="theme-color" content="#f3f6fb" />
-  <style>
-    :root{--bg:#f7faff;--card:#ffffff;--text:#0f172a;--muted:#475569;--brand:#0ea5e9;--accent:#22d3ee}
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:960px;margin:auto;padding:20px}
-    header{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e2e8f0;background:#fff}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-    .logo-badge{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#00131a;font-weight:900}
-    nav{display:flex;gap:16px}
-    nav a{color:var(--muted)}
-    .search-box{margin-top:16px}
-    .search-box h2{margin:0 0 6px;font-size:18px}
-    .search-box input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:var(--text);font-size:15px}
-
-    .results{margin-top:12px;display:grid;gap:10px}
-    .result-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .result-item span{font-weight:600;font-size:15px;flex:1;min-width:140px}
-
-    .actions{display:flex;flex-direction:row;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .btn{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;padding:8px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:var(--text);font-weight:700;font-size:14px;cursor:pointer}
-    .btn.primary{background:linear-gradient(135deg,#0ea5e9,#22d3ee);color:#00131a;border:0}
-    .btn.share{background:linear-gradient(135deg,#a78bfa,#f472b6);color:#111827;border:0}
-    .btn.go{background:linear-gradient(135deg,#34d399,#22c55e);color:#0b1320;border:0}
-
-    .hero{margin-top:32px}
-    .hero h1{font-size:32px;line-height:1.2;margin:0 0 8px}
-    .hero p{color:var(--muted);margin:0 0 18px}
-    .card{background:var(--card);border:1px solid #e2e8f0;border-radius:12px;padding:18px}
-    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
-    .feature h3{margin:6px 0 6px;font-size:18px}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:#374151}
-    footer{margin-top:40px;padding-top:16px;border-top:1px solid #e2e8f0;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-
-    @media (max-width:560px){
-      .result-item{flex-direction:column;align-items:flex-start}
-      .actions{width:100%;justify-content:flex-start}
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RotaLink – Şehir Ara</title>
+<meta name="theme-color" content="#f7faff" />
+<style>
+  :root{
+    --bg:#f7faff;--card:#fff;--text:#0f172a;--muted:#475569;
+    --b1:#0ea5e9;--b2:#22d3ee;--ok:#22c55e;--share:#a78bfa;--go:#fb923c;--bd:#e2e8f0
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto}
+  a{text-decoration:none;color:inherit}
+  .container{max-width:1100px;margin:auto;padding:18px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd);background:#fff}
+  .logo{display:flex;gap:10px;align-items:center;font-weight:800}
+  .badge{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a}
+  nav{display:flex;gap:14px;color:var(--muted)}
+  .search-box{margin-top:14px}
+  .search-box h2{margin:0 0 8px;font-size:18px}
+  .search-box input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cbd5e1;background:#fff}
+  .grid{margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .col{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:200px}
+  .col h3{margin:0 0 6px;font-size:16px;border-bottom:1px solid var(--bd);padding-bottom:6px}
+  .item{border:1px solid var(--bd);border-radius:8px;padding:8px;background:#fff;display:flex;align-items:center;gap:10px;justify-content:space-between}
+  .item-title{font-weight:700;font-size:14px;flex:1;min-width:120px}
+  .actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:8px;border:0;font-weight:700;font-size:13px;color:#0b1320;background:#f1f5f9}
+  .btn.call{background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a}
+  .btn.share{background:linear-gradient(135deg,var(--share),#f472b6)}
+  .btn.go{background:linear-gradient(135deg,var(--ok),var(--go))}
+  .empty{color:var(--muted);font-size:13px}
+  @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}.item{flex-direction:column;align-items:flex-start}.actions{width:100%}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <div class="logo-badge">RL</div>
-        <span>RotaLink</span>
-      </div>
-      <nav>
-        <a href="#sehirara">Şehir Ara</a>
-        <a href="#ozellikler">Özellikler</a>
-        <a href="#indir">İndir</a>
-        <a href="#iletisim">İletişim</a>
-      </nav>
-    </header>
+<div class="container">
+  <header>
+    <div class="logo"><div class="badge">RL</div><span>RotaLink</span></div>
+    <nav><span>Şehir Ara</span></nav>
+  </header>
 
-    <section id="sehirara" class="search-box">
-      <h2>Şehir Ara</h2>
-      <input type="text" id="searchInput" placeholder="Şehir adı yazın..." />
-      <div id="results" class="results"></div>
-    </section>
+  <section class="search-box">
+    <h2>Şehir Ara</h2>
+    <input id="q" placeholder="örn. Düzce, Kayseri, Kocaeli" autocomplete="off" />
+  </section>
 
-    <section class="hero">
-      <div class="card">
-        <h1>Şehirde keşfet. <span style="color:var(--accent)">Rota</span>nı anında <span style="color:var(--brand)">Link</span>le.</h1>
-        <p>Belediye sosyal tesisleri, yerel lezzetler, mesire ve kültür rotaları tek uygulamada. Hafif. Hızlı. Çevrimdışı dostu.</p>
-      </div>
-    </section>
+  <section class="grid" id="grid">
+    <div class="col" id="col-tesis"><h3>Tesis</h3><div class="empty">Şehir yazın.</div></div>
+    <div class="col" id="col-gezi"><h3>Gezi</h3><div class="empty">Şehir yazın.</div></div>
+    <div class="col" id="col-yemek"><h3>Yemek</h3><div class="empty">Şehir yazın.</div></div>
+    <div class="col" id="col-sosyal"><h3>Sosyal</h3><div class="empty">Şehir yazın.</div></div>
+  </section>
+</div>
 
-    <section id="ozellikler" class="features">
-      <div class="card feature">
-        <h3>Yerel Odak</h3>
-        <p>Belediye tesisleri, halk lokantaları, kütüphaneler ve cazibe noktaları tek yerde.</p>
-      </div>
-      <div class="card feature">
-        <h3>Akıllı Filtreler</h3>
-        <p>Konuma göre yakınlık, fiyat aralığı ve çalışma saatine göre filtrele.</p>
-      </div>
-      <div class="card feature">
-        <h3>Hafif Mimari</h3>
-        <p>Düşük veri kullanımı. Zayıf bağlantıda dahi hızlı açılır.</p>
-      </div>
-    </section>
+<script>
+const S = { loaded:false, data:[], gezi:[], yemek:[], sosyal:[] };
 
-    <section id="indir" style="margin-top:32px" class="card">
-      <h2 style="margin:0 0 8px">İndir</h2>
-      <p class="mono">APK ve Play Store bağlantıları burada listelenecek.</p>
-    </section>
+async function loadAll(){
+  if(S.loaded) return;
+  const files = ['data.json','gezi.json','yemek.json','sosyal.json'];
+  try{
+    const [d,g,y,s] = await Promise.all(files.map(f => fetch(f,{cache:'no-store'}).then(r=>r.ok?r.json():[]).catch(()=>[])));
+    S.data=d; S.gezi=g; S.yemek=y; S.sosyal=s; S.loaded=true;
+  }catch{ S.data=S.gezi=S.yemek=S.sosyal=[]; S.loaded=true; }
+}
 
-    <section id="iletisim" style="margin-top:18px" class="card">
-      <h2 style="margin:0 0 8px">İletişim</h2>
-      <p>e-posta: <a href="mailto:destek@rotalink.app">destek@rotalink.app</a></p>
-    </section>
+const qEl = document.getElementById('q');
+qEl.addEventListener('input', run);
 
-    <footer>
-      <div>© <span id="yil"></span> RotaLink</div>
-      <div class="mono">Açık kaynak: yakında</div>
-    </footer>
-  </div>
+function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
+function mapsHref(il, isim, lat, lng){
+  if(lat && lng) return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((il||'')+' '+(isim||''))}`;
+}
+function searchHref(isim, il){ return `https://www.google.com/search?q=${encodeURIComponent((isim||'')+' '+(il||''))}`; }
 
-  <script>
-    document.getElementById('yil').textContent = new Date().getFullYear();
+function renderList(el, items, kind){
+  el.innerHTML = '';
+  if(!items.length){ el.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
+  items.forEach(it=>{
+    const row = document.createElement('div');
+    row.className='item';
+    const title = document.createElement('div');
+    title.className='item-title';
+    title.textContent = it.isim || 'İsimsiz';
+    row.appendChild(title);
 
-    async function loadData(){
-      try {
-        const res = await fetch('data.json',{cache:'no-store'});
-        return await res.json();
-      } catch(e){
-        console.error('data.json okunamadı', e);
-        return [];
-      }
+    const act = document.createElement('div'); act.className='actions';
+
+    if(kind==='tesis'){
+      const tel = phoneHref(it.telefon);
+      const maps = mapsHref(it.il, it.isim, it.latitude, it.longitude);
+      act.innerHTML =
+        (tel ? `<a class="btn call" href="${tel}">Ara</a>` : `<button class="btn" disabled>Telefon yok</button>`) +
+        `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'&quot;')}",url:"${maps}"}) : navigator.clipboard.writeText("${maps}")'>Paylaş</button>`+
+        `<a class="btn go" href="${maps}" target="_blank" rel="noopener">Git</a>`;
+    }else{
+      const google = searchHref(it.isim, it.il);
+      act.innerHTML =
+        `<a class="btn go" href="${google}" target="_blank" rel="noopener">İncele</a>`;
     }
 
-    const input = document.getElementById('searchInput');
-    const results = document.getElementById('results');
+    row.appendChild(act);
+    el.appendChild(row);
+  });
+}
 
-    input.addEventListener('input', async () => {
-      const val = input.value.trim().toLowerCase();
-      if(!val){results.innerHTML='';return;}
-      const data = await loadData();
-      const filtered = data.filter(item => (item.il||'').toLowerCase().includes(val));
-      results.innerHTML = '';
-      filtered.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'result-item';
-
-        const lat = item.latitude, lng = item.longitude;
-        const mapsUrl = (lat && lng)
-          ? `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
-          : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.il||'')+' '+(item.isim||''))}`;
-
-        const telDigits = String(item.telefon||'').replace(/[^0-9+]/g,'');
-        const telUrl = telDigits ? `tel:${telDigits}` : '';
-
-        div.innerHTML = `
-          <span>${item.isim||'İsimsiz'}</span>
-          <div class="actions">
-            ${telUrl ? `<a class="btn primary" href="${telUrl}">Ara</a>` : `<button class="btn" disabled>Telefon yok</button>`}
-            <button class="btn share" onclick='navigator.share ? navigator.share({title:"${(item.isim||"Konum").replace(/"/g,"&quot;")}", text:"${(item.isim||"").replace(/"/g,"&quot;")}", url:"${mapsUrl}"}) : navigator.clipboard.writeText("${mapsUrl}").then(()=>alert("Kopyalandı"))'>Paylaş</button>
-            <a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Git</a>
-          </div>
-        `;
-        results.appendChild(div);
-      });
+async function run(){
+  const q = qEl.value.trim().toLowerCase();
+  if(!q){
+    ['col-tesis','col-gezi','col-yemek','col-sosyal'].forEach(id=>{
+      const c=document.getElementById(id);
+      c.querySelectorAll('.item,.empty').forEach(n=>n.remove());
+      const a=document.createElement('div'); a.className='empty'; a.textContent='Şehir yazın.'; c.appendChild(a);
     });
-  </script>
+    return;
+  }
+  await loadAll();
+  const f = x => (x.il||'').toLowerCase().includes(q);
+
+  const tEl = document.getElementById('col-tesis');
+  const gEl = document.getElementById('col-gezi');
+  const yEl = document.getElementById('col-yemek');
+  const sEl = document.getElementById('col-sosyal');
+
+  renderList(tEl, S.data.filter(f), 'tesis');
+  renderList(gEl, S.gezi.filter(f), 'gezi');
+  renderList(yEl, S.yemek.filter(f), 'yemek');
+  renderList(sEl, S.sosyal.filter(f), 'sosyal');
+}
+
+</script>
 </body>
 </html>
