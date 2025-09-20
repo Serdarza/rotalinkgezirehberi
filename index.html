@@ -19,58 +19,58 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 .logo{display:flex;gap:10px;align-items:center;font-weight:800}
 .badge{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a}
 nav{display:flex;gap:14px;color:var(--mut)}
-.hero{display:grid;grid-template-columns:1fr;gap:14px;margin-top:16px}
+.hero{display:grid;grid-template-columns:1fr;gap:14px;}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
 .hero h1{margin:0 0 6px;font-size:22px}
 .hero .btn-store{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a;font-weight:800}
 
-/* --- Arama Kartı ve Elemanları İçin Stiller --- */
-.search-card {
-  padding: 24px;
-  position: relative;
+/* --- YENİ ARAMA BÖLÜMÜ TASARIMI --- */
+.search-section {
+  padding: 32px 0;
+  text-align: center;
 }
-.search-card h2 {
+.search-section h2 {
+  font-size: 32px;
+  font-weight: 800;
   margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 24px;
-}
-.search-desc {
-  color: var(--mut);
-  margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .inputwrap{
   position:relative;
   display: flex;
   align-items: center;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  background: #f8fafc;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 28px; /* Daha yuvarlak kenarlar */
+  background: var(--card);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: box-shadow 0.3s ease;
 }
 .inputwrap:focus-within {
-  border-color: var(--b1);
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2), 0 4px 20px rgba(0,0,0,0.1);
 }
 .search-icon {
   position: absolute;
-  left: 16px;
+  left: 20px;
   color: #94a3b8;
   width: 22px;
   height: 22px;
+  transition: color 0.3s;
 }
-input[type="text"], input[type="email"] {
+.inputwrap:focus-within .search-icon {
+  color: var(--b1);
+}
+#q { /* Input ID'sine özel stil */
   width:100%;
-  padding: 16px 50px 16px 52px;
-  border-radius:12px;
+  padding: 16px 50px 16px 56px; /* Yeni ölçüler */
+  border-radius:28px;
   border:0;
   background: transparent;
   outline: none;
-  font-size: 17px;
+  font-size: 18px; /* Yazı boyutu büyüdü */
   color: var(--text);
 }
-input::placeholder { color: #94a3b8; }
+#q::placeholder { color: #94a3b8; }
 .clearbtn{
   position:absolute;
   right: 12px;
@@ -80,30 +80,36 @@ input::placeholder { color: #94a3b8; }
   background:#eef2f7;
   width:32px;
   height:32px;
-  border-radius:10px;
+  border-radius:50%; /* Tam yuvarlak */
   font-weight:900;
   color:#334155;
   cursor:pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.2s;
+}
+.clearbtn:hover {
+    background-color: #dde4ed;
 }
 
 /* --- Şehir Tahmin Kutusu Stilleri --- */
 #suggestions {
   display: none;
   position: absolute;
-  top: calc(100% - 20px);
-  left: 24px; 
-  right: 24px;
-  background: #fff;
+  top: calc(100% + 8px);
+  left: 0; 
+  right: 0;
+  text-align: left;
+  background: var(--card);
   border: 1px solid var(--bd);
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   max-height: 250px;
   overflow-y: auto;
   z-index: 10;
-  border-top: none;
 }
 .suggestion-item {
-  padding: 12px 18px;
+  padding: 12px 20px;
   cursor: pointer;
   font-size: 16px;
 }
@@ -185,15 +191,12 @@ footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--bd);color:var
     <a class="btn-store" id="indir" href="https://play.google.com/store/apps/details?id=com.serdarza.rotalink" target="_blank" rel="noopener">Google Play’den indir</a>
   </section>
 
-  <section class="search" id="sehirara">
-    <div class="card search-card">
-        <h2>Şehir Ara</h2>
-        <p class="search-desc">İstediğiniz şehri yazarak tesisleri, gezi noktalarını ve daha fazlasını keşfedin.</p>
-        <div class="inputwrap">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
-            <input id="q" placeholder="örn. Düzce, Kayseri, Kocaeli" autocomplete="off" />
-            <button class="clearbtn" id="clearBtn" title="Temizle">×</button>
-        </div>
+  <section class="search-section" id="sehirara">
+    <h2>Şehir Ara</h2>
+    <div class="inputwrap">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
+        <input id="q" placeholder="İstediğiniz şehri yazın..." autocomplete="off" />
+        <button class="clearbtn" id="clearBtn" title="Temizle">×</button>
         <div id="suggestions"></div>
     </div>
   </section>
@@ -271,14 +274,19 @@ const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 
-// --- YENİ & GÜNCELLENMİŞ LİNK FONKSİYONLARI ---
+// --- GÜVENİLİR VE YENİ LİNK FONKSİYONLARI ---
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
-function mapsHref(il, isim, lat, lng){
-  if(lat && lng) return `https://www.google.com/maps?q=$${lat},${lng}`;
-  return `http://googleusercontent.com/maps/google.com/0${encodeURIComponent((il||'')+' '+(isim||''))}`;
+
+// Google Haritalar'da arama yapmak için (Gezi, Sosyal)
+function createMapSearchUrl(query) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
-function googleHref(isim, il){ return `https://www.google.com/search?q=${encodeURIComponent((isim||'')+' '+(il||''))}`; }
-// YEMEK SEKMESİ İÇİN GÖRSEL ARAMA LİNKİ OLUŞTURAN YENİ FONKSİYON
+// Google Haritalar'da doğrudan konuma gitmek için (Tesis)
+function createMapNavigateUrl(lat, lng) {
+    return `https://www.google.com/maps?q=${lat},${lng}`;
+}
+
+// YEMEK SEKMESİ İÇİN GÖRSEL ARAMA LİNKİ
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
@@ -303,26 +311,29 @@ function mountList(el, items, type){
     
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
-      const maps = mapsHref(it.il, it.isim, it.latitude, it.longitude);
+      // Tesis için harita linki: Varsa koordinat, yoksa isim+il araması
+      const mapsUrl = (it.latitude && it.longitude)
+        ? createMapNavigateUrl(it.latitude, it.longitude)
+        : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
+      
       acts.innerHTML =
         (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) +
-        `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'\\"')}",url:"${maps}"}) : navigator.clipboard.writeText("${maps}")'>Paylaş</button>`+
-        `<a class="btn go" href="${maps}" target="_blank" rel="noopener">Git</a>`;
+        `<button class="btn share" onclick='navigator.share?navigator.share({title:"${(it.isim||'Konum').replace(/"/g,'\\"')}",url:"${mapsUrl}"}) : navigator.clipboard.writeText("${mapsUrl}")'>Paylaş</button>`+
+        `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Git</a>`;
     } else {
-      // --- İSTEĞİNİZE GÖRE DEĞİŞTİRİLEN BÖLÜM ---
       let url = '';
       switch(type) {
         case 'gezi':
-          url = mapsHref(it.il, it.isim); // Harita uygulaması için arama linki
+          url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
           break;
         case 'yemek':
-          url = googleImageHref(it.isim, it.il); // Web'de görsel arama linki
+          url = googleImageHref(it.isim, it.il);
           break;
         case 'sosyal':
-          url = mapsHref(it.il, it.isim); // Harita uygulaması için arama linki
+          url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
           break;
         default:
-          url = googleHref(it.isim, it.il); // Varsayılan olarak normal web araması
+          url = `https://www.google.com/search?q=${encodeURIComponent((it.isim||'')+' '+(it.il||''))}`;
           break;
       }
       acts.innerHTML = `<a class="btn view" href="${url}" target="_blank" rel="noopener">İncele</a>`;
@@ -394,7 +405,7 @@ suggestionsEl.addEventListener('click', (e) => {
         run();
     }
 });
-document.addEventListener('click', (e) => { if (!e.target.closest('.search-card')) { hideSuggestions(); } });
+document.addEventListener('click', (e) => { if (!e.target.closest('.inputwrap')) { hideSuggestions(); } });
 
 loadAll();
 </script>
