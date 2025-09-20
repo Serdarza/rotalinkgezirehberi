@@ -276,17 +276,8 @@ const suggestionsEl = document.getElementById('suggestions');
 
 // --- GÜVENİLİR VE YENİ LİNK FONKSİYONLARI ---
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
-
-// Google Haritalar'da arama yapmak için (Gezi, Sosyal)
-function createMapSearchUrl(query) {
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-}
-// Google Haritalar'da doğrudan konuma gitmek için (Tesis)
-function createMapNavigateUrl(lat, lng) {
-    return `https://www.google.com/maps?q=${lat},${lng}`;
-}
-
-// YEMEK SEKMESİ İÇİN GÖRSEL ARAMA LİNKİ
+function createMapSearchUrl(query) { return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`; }
+function createMapNavigateUrl(lat, lng) { return `https://www.google.com/maps?q=$${lat},${lng}`; }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
@@ -294,7 +285,7 @@ function googleImageHref(isim, il){
 
 function mountList(el, items, type){
   el.innerHTML = '';
-  if(!items.length){ el.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
+  if(!items || !items.length){ el.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
   const list = document.createElement('div'); list.className='list';
   items.forEach(it=>{
     const row = document.createElement('div'); row.className='item';
@@ -311,7 +302,6 @@ function mountList(el, items, type){
     
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
-      // Tesis için harita linki: Varsa koordinat, yoksa isim+il araması
       const mapsUrl = (it.latitude && it.longitude)
         ? createMapNavigateUrl(it.latitude, it.longitude)
         : createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
@@ -327,7 +317,8 @@ function mountList(el, items, type){
           url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
           break;
         case 'yemek':
-          url = googleImageHref(it.isim, it.il);
+          // 'it' objesi artık 'il' özelliğini içeriyor (run fonksiyonunda eklendi)
+          url = googleImageHref(it.isim, it.il); 
           break;
         case 'sosyal':
           url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
@@ -352,11 +343,7 @@ function activate(tabName){
 }
 
 tabBtns.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
-
-function hideSuggestions() {
-  suggestionsEl.style.display = 'none';
-  suggestionsEl.innerHTML = '';
-}
+function hideSuggestions() { suggestionsEl.style.display = 'none'; suggestionsEl.innerHTML = ''; }
 
 async function run(){
   await loadAll();
@@ -369,11 +356,28 @@ async function run(){
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
+  
+  // Standart filtre (Tesis, Gezi, Sosyal için)
   const f = x => (x.il||'').toLowerCase() === q;
+
+  // Listeleri doldur
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
-  mountList(document.getElementById('tab-yemek'), S.yemek.filter(f), 'yemek');
   mountList(document.getElementById('tab-sosyal'), S.sosyal.filter(f), 'sosyal');
+
+  // --- YEMEK SEKMESİ İÇİN ÖZEL İŞLEM (DÜZELTİLEN BÖLÜM) ---
+  const cityYemekObject = S.yemek.find(f); // Şehre ait yemek objesini bul
+  let yemekList = [];
+  if (cityYemekObject && cityYemekObject.yemekler) {
+      // Her bir yemek objesine, ait olduğu şehrin adını ('il') ekle
+      // Bu, 'İncele' butonunun doğru link oluşturması için gerekli
+      yemekList = cityYemekObject.yemekler.map(yemek => ({
+          ...yemek,
+          il: cityYemekObject.il 
+      }));
+  }
+  mountList(document.getElementById('tab-yemek'), yemekList, 'yemek');
+  
   tabsBar.style.display='flex';
   if(!document.querySelector('.tab.active')){
       activate('tesis');
@@ -382,17 +386,12 @@ async function run(){
 
 function updateSuggestions() {
     const value = qEl.value.trim().toLowerCase();
-    if (!value) {
-        hideSuggestions();
-        return;
-    }
+    if (!value) { hideSuggestions(); return; }
     const matchedCities = S.sortedCities.filter(city => city.toLowerCase().startsWith(value)).slice(0, 10);
     if (matchedCities.length > 0) {
         suggestionsEl.innerHTML = matchedCities.map(city => `<div class="suggestion-item">${city}</div>`).join('');
         suggestionsEl.style.display = 'block';
-    } else {
-        hideSuggestions();
-    }
+    } else { hideSuggestions(); }
 }
 
 qEl.addEventListener('input', updateSuggestions);
