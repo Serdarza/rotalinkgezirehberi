@@ -70,7 +70,8 @@ nav a:hover {
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
 .hero.card {
     display: grid; grid-template-columns: 1fr 1fr; align-items: center;
-    gap: 32px; padding: 32px;
+    gap: 24px 32px;
+    padding: 32px;
 }
 .hero-text h1 { margin: 0 0 12px; font-size: 32px; line-height: 1.3; font-weight: 800; }
 .hero-text p {
@@ -244,7 +245,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .fixed-action-buttons {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    right: 16px; /* Kenara daha yakın */
     z-index: 98;
     display: flex;
     flex-direction: column;
@@ -422,9 +423,9 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 </div>
 </div>
 
-<div class="fixed-action-buttons" id="fixed-action-buttons">
+<div class="fixed-action-buttons" id="fixed-action-buttons" style="display: none;">
     <div class="fab-container" id="fab-container">
-        <div class="fab-options" id="fab-options">
+        <div class="fab-options">
             <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
                 <span class="label">Tarihçe</span>
                 <span class="icon">📜</span>
@@ -442,7 +443,9 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     </div>
     <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 </div>
+
 <script>
+// YENİ MOBİL MENÜ KODU
 const menuToggle = document.getElementById('menu-toggle');
 const mainNav = document.getElementById('main-nav');
 menuToggle.addEventListener('click', () => {
@@ -505,6 +508,7 @@ const fabMain = document.getElementById('fab-main');
 const fabWeather = document.getElementById('fab-weather');
 const fabPharmacy = document.getElementById('fab-pharmacy');
 const fabHistory = document.getElementById('fab-history');
+const fixedActionButtons = document.getElementById('fixed-action-buttons');
 
 fabMain.addEventListener('click', () => {
     fabContainer.classList.toggle('open');
@@ -518,7 +522,7 @@ function convertToUrlSlug(text) {
 
 function updateFabLinks(cityName) {
     const cityNameSlug = convertToUrlSlug(cityName);
-    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
+    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
     
     fabWeather.href = `https://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?il=${capitalizedCityName}`;
     fabPharmacy.href = `https://www.eczaneler.gen.tr/nobetci-${cityNameSlug}`;
@@ -545,12 +549,12 @@ function handleShare(btn) {
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$3{encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps/search/?api=1&query=$$4{encodeURIComponent(query)}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$7{encodeURIComponent(query)}`; }
+    return `https://www.google.com/maps/search/?api=1&query=$$8{encodeURIComponent(query)}`;
 }
 function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$5{lat},${lng}`; }
-    return `https://www.google.com/maps/search/?api=1&query=$$6{lat},${lng}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$9{lat},${lng}`; }
+    return `https://www.google.com/maps/search/?api=1&query=$$$0{lat},${lng}`;
 }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
@@ -600,7 +604,8 @@ async function run(){
   const q = qEl.value.trim().toLowerCase();
   if(!q){
     tabsBar.style.display='none';
-    fabContainer.style.display = 'none';
+    fixedActionButtons.style.display = 'none';
+    fabContainer.classList.remove('open');
     ['tesis','gezi','yemek','sosyal'].forEach(id=>{
       const el=document.getElementById('tab-'+id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
     });
@@ -608,7 +613,8 @@ async function run(){
     return;
   }
   updateFabLinks(qEl.value);
-  fabContainer.style.display = 'flex';
+  fixedActionButtons.style.display = 'flex';
+  fabContainer.classList.add('open');
   const f = x => (x.il||'').toLowerCase() === q;
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
