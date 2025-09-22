@@ -241,13 +241,12 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
-
 .fixed-action-buttons {
     position: fixed;
     bottom: 20px;
     right: 16px;
     z-index: 98;
-    display: flex;
+    display: none; /* DÜZELTME: Sayfa ilk açıldığında gizli */
     flex-direction: column;
     align-items: center;
     gap: 12px;
@@ -315,7 +314,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     display: grid; place-items: center; font-size: 24px;
     flex-shrink: 0;
 }
-
 @media (max-width: 900px){
     .hero.card { grid-template-columns: 1fr; }
     .hero-image { display: none; }
