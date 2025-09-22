@@ -247,9 +247,9 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     bottom: 20px;
     right: 16px;
     z-index: 98;
-    display: none;
+    display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Hizalamayı sağa yasla */
+    align-items: flex-end;
 }
 #scrollTopBtn {
     position: relative;
@@ -264,9 +264,9 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 #scrollTopBtn:hover { background-color: var(--b2); }
 .fab-container {
     position: relative;
-    display: flex;
+    display: none; /* Arama yapılmadan önce gizli */
     flex-direction: column-reverse;
-    align-items: flex-end; /* DÜZELTME: Hizalamayı sağa yasla */
+    align-items: flex-end;
 }
 .fab-main {
     width: 56px; height: 56px; border-radius: 50%;
@@ -389,7 +389,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
         <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
         <p><span class="text-highlight">Ordu evleri, polis evleri, öğretmenevleri</span> gibi pek çok kamu misafirhanesini tek ekranda keşfedin. Türkiye’nin dört bir yanındaki <span class="text-highlight">sosyal tesisler</span>, uygun fiyatlı konaklama imkânları, lezzetli yemekler ve dinlenme alanları artık elinizin altında.</p>
         <p><strong>Arayın</strong>, tek dokunuşla tesis yetkililerine ulaşın. <strong>Paylaş</strong>, bilgileri kolayca sevdiklerinize iletin. <strong>Konum</strong>, yol tarifini açarak dilediğiniz noktaya zahmetsizce ulaşın.</p>
-        <p>RotaLink sayesinde hem şehir içi seyahatlerinizde hem de iş ve tatil yolculuklarınızda <span class="text-highlight">güvenilir kamu tesislerine</span> kolayca erişin.</p>
+        <p>RotaLink sayesinde hem şehir içi seyahatlerinizde hem de iş ve tatil yolculuklarınızda <span class="text-highlight">kamu tesislerine</span> kolayca erişin.</p>
         <a class="btn-store-new" id="indir" href="https://play.google.com/store/apps/details?id=com.serdarza.rotalink" target="_blank" rel="noopener">
             <svg class="icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.39,5.42,12,2,5.61,5.42,5.58,5.44A10.6,10.6,0,0,0,2,15.21,1,1,0,0,0,3,16H3a1,1,0,0,0,.92-.63,8.6,8.6,0,0,1,16.16,0A1,1,0,0,0,21,16h0a1,1,0,0,0,1-0.79A10.6,10.6,0,0,0,18.42,5.44ZM4.1,14.42a8.62,8.62,0,0,1,1.52-5.3L9.4,12.29,4.51,13.71A1,1,0,0,0,4.1,14.42Zm1.61-6.6-4-2.31L12,2l8.29,3.51-4,2.31L12,5.51ZM14.6,9.12l3.78-2.18a8.62,8.62,0,0,1,1.52,5.3,1,1,0,0,0-.41.71L14.6,12.29Z"/></svg>
             <div class="text-wrap">
