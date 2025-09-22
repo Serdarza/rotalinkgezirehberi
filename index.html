@@ -69,13 +69,24 @@ nav a:hover {
 .menu-toggle.open .line3 { transform: translateY(-7px) rotate(-45deg); }
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
 
-/* --- GÜNCELLENMİŞ HERO BÖLÜMÜ TASARIMI --- */
+/* --- YENİ DÜZENDEKİ HERO VE ARAMA STİLLERİ --- */
+.search-hero {
+    padding: 48px 24px;
+    text-align: center;
+    background: #e0f2fe;
+    border-radius: 12px;
+    margin-top: 16px;
+}
+.search-hero h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: var(--text);
+}
 .hero.card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 24px 32px; /* Dikey boşluk azaltıldı */
-    padding: 32px;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+    gap: 32px; padding: 32px;
 }
 .hero-text h1 { margin: 0 0 12px; font-size: 32px; line-height: 1.3; font-weight: 800; }
 .hero-text p {
@@ -115,14 +126,13 @@ nav a:hover {
 
 .search-wrapper {
     position: relative;
-    max-width: 100%; /* Genişliği ayarlandı */
-    grid-column: 1 / -1; /* İki sütunu da kapla */
-    margin-top: 16px;
+    max-width: 700px;
+    margin: auto;
 }
 .inputwrap{
   position:relative; display: flex; align-items: center;
   border-radius: 28px;
-  background: linear-gradient(145deg, #e6f7ff, #fff);
+  background: var(--card); /* Arka planı beyaz yaptık */
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   border: 2px solid var(--bd);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -157,6 +167,7 @@ nav a:hover {
 @keyframes blink {
     50% { opacity: 0; }
 }
+
 .clearbtn{
   position:absolute; right: 105px;
   top:50%; transform:translateY(-50%); border:0; background:#eef2f7;
@@ -165,6 +176,7 @@ nav a:hover {
   z-index: 2;
 }
 .clearbtn:hover { background-color: #dde4ed; }
+
 .search-btn {
     position: absolute;
     right: 6px;
@@ -268,10 +280,10 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     align-items: center;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 16px 0;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: all 0.2s ease;
     pointer-events: none;
 }
 .fab-container.open .fab-options {
@@ -280,10 +292,11 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     pointer-events: auto;
 }
 .fab-option {
-    margin-bottom: 12px;
+    margin-top: 12px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    width: 100%;
 }
 .fab-option .label {
     background: white;
@@ -296,6 +309,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     opacity: 0;
     transform: translateX(10px);
     transition: opacity 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
 }
 .fab-container.open .fab-option .label {
     opacity: 1;
@@ -313,6 +327,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     display: grid;
     place-items: center;
     font-size: 24px;
+    flex-shrink: 0;
 }
 
 @media (max-width: 900px){
@@ -332,8 +347,8 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     .item{flex-direction:column;align-items:flex-start}
     .actions{width:100%; margin-top: 8px;}
     footer { flex-direction: column; text-align: center; }
-    .fab-container { bottom: 70px; right: 15px; }
-    #scrollTopBtn { bottom: 15px; }
+    .fab-container { bottom: 85px; right: 15px; }
+    #scrollTopBtn { bottom: 20px; right: 15px; }
 }
 </style>
 </head>
@@ -359,6 +374,20 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 
 <div class="container">
 
+  <section class="search-hero" id="sehirara">
+    <h2>Şehri Keşfetmeye Başla</h2>
+    <div class="search-wrapper">
+        <div class="inputwrap">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
+            <div class="typing-container"></div>
+            <input id="q" placeholder="" autocomplete="off" />
+            <button class="clearbtn" id="clearBtn" title="Temizle" style="display: none;">×</button>
+            <button class="search-btn" id="searchBtn">Bul</button>
+        </div>
+        <div id="suggestions"></div>
+      </div>
+  </section>
+
   <section class="hero card" id="ozellikler">
       <div class="hero-text">
         <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
@@ -375,16 +404,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
       </div>
       <div class="hero-image">
         <img src="logo.png" alt="RotaLink Uygulama Logosu" class="app-logo">
-      </div>
-      <div class="search-wrapper" id="sehirara">
-        <div class="inputwrap">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
-            <div class="typing-container"></div>
-            <input id="q" placeholder="" autocomplete="off" />
-            <button class="clearbtn" id="clearBtn" title="Temizle" style="display: none;">×</button>
-            <button class="search-btn" id="searchBtn">Bul</button>
-        </div>
-        <div id="suggestions"></div>
       </div>
   </section>
 
@@ -508,13 +527,13 @@ fabMain.addEventListener('click', () => {
 
 function convertToUrlSlug(text) {
     if (!text) return '';
-    const trMap = { 'ç':'c', 'ğ':'g', 'ı':'i', 'ö':'o', 'ş':'s', 'ü':'u', 'İ': 'I' };
+    const trMap = { 'ç':'c', 'ğ':'g', 'ı':'i', 'ö':'o', 'ş':'s', 'ü':'u', 'İ': 'i' };
     return text.toLowerCase().replace(/[çğıöşüİ]/g, char => trMap[char]);
 }
 
 function updateFabLinks(cityName) {
     const cityNameSlug = convertToUrlSlug(cityName);
-    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
     
     fabWeather.href = `https://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?il=${capitalizedCityName}`;
     fabPharmacy.href = `https://www.eczaneler.gen.tr/nobetci-${cityNameSlug}`;
@@ -541,12 +560,12 @@ function handleShare(btn) {
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) { return `google.com/maps?q=...9$${encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps/search/?api=1&query=QUERY0$${encodeURIComponent(query)}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$3{encodeURIComponent(query)}`; }
+    return `https://www.google.com/maps/search/?api=1&query=$$4{encodeURIComponent(query)}`;
 }
 function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=QUERY1$${lat},${lng}`; }
-    return `https://www.google.com/maps/search/?api=1&query=QUERY2$${lat},${lng}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$5{lat},${lng}`; }
+    return `https://www.google.com/maps/search/?api=1&query=$$6{lat},${lng}`;
 }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
