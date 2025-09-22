@@ -44,13 +44,12 @@ nav{display:flex;gap:14px;color:var(--mut)}
     color: var(--text);
 }
 .hero-image { text-align: center; }
-/* GÜNCELLENDİ: Logo boyutu ve border-radius */
 .hero-image .app-logo {
-    max-width: 450px; /* Daha büyük */
-    max-height: 450px; /* Daha büyük */
+    max-width: 350px;
+    max-height: 350px;
     height: auto;
-    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.15)); /* Hafif gölge */
-    border-radius: 25px; /* Daha oval kenarlar */
+    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.15));
+    border-radius: 25px;
 }
 .btn-store-new {
     display: inline-flex; align-items: center; gap: 12px; padding: 8px 20px;
@@ -63,7 +62,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .btn-store-new .text-label { font-size: 12px; opacity: 0.8; }
 .btn-store-new .text-store { font-size: 18px; font-weight: 600; }
 
-/* --- ARAMA BÖLÜMÜ TASARIMI --- */
+/* --- GÜNCELLENMİŞ ARAMA BÖLÜMÜ TASARIMI --- */
 .search-section { padding: 32px 0; text-align: center; }
 .search-section h2 { font-size: 32px; font-weight: 800; margin-top: 0; margin-bottom: 24px; }
 .search-wrapper {
@@ -204,7 +203,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
   </header>
 
   <section class="hero card" id="ozellikler">
-    <div class="hero-text">
+      <div class="hero-text">
         <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
         <p><span class="text-highlight">Ordu evleri, polis evleri, öğretmenevleri</span> gibi pek çok kamu misafirhanesini tek ekranda keşfedin. Türkiye’nin dört bir yanındaki <span class="text-highlight">sosyal tesisler</span>, uygun fiyatlı konaklama imkânları, lezzetli yemekler ve dinlenme alanları artık elinizin altında.</p>
         <p><strong>Arayın</strong>, tek dokunuşla tesis yetkililerine ulaşın. <strong>Paylaş</strong>, bilgileri kolayca sevdiklerinize iletin. <strong>Konum</strong>, yol tarifini açarak dilediğiniz noktaya zahmetsizce ulaşın.</p>
@@ -334,12 +333,12 @@ function handleShare(btn) {
 
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) { return `https://www.google.com/maps?q=$2{encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(query)}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...2${encodeURIComponent(query)}`; }
+    return `https://www.google.com/maps?q=$9${encodeURIComponent(query)}`;
 }
 function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) { return `https://www.google.com/maps?q=$3=${lat},${lng}`; }
-    return `https://www.google.com/maps?q=$${lat},${lng}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...3${lat},${lng}`; }
+    return `https://www.google.com/maps?q=$6${lat},${lng}`;
 }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
@@ -362,16 +361,27 @@ function mountList(el, items, type){
     const acts = document.createElement('div'); acts.className='actions';
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
-      const mapsUrl = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`);
+      // GÜNCELLENDİ: Tesis konumu sadece misafirhane adıyla arama yapar
+      const mapsUrl = createMapSearchUrl(`${it.isim || ''}`);
       const shareButtonHTML = `<button class="btn share" data-isim="${it.isim || ''}" data-il="${it.il || ''}" data-telefon="${it.telefon || ''}" onclick="handleShare(this)">Paylaş</button>`;
       acts.innerHTML = (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) + shareButtonHTML + `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Konum</a>`;
     } else {
       let url = '';
+      // GÜNCELLENDİ: Gezi ve Sosyal sekmeleri için özel arama formatları
       switch(type) {
-        case 'gezi': url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`); break;
-        case 'yemek': url = googleImageHref(it.isim, it.il); break;
-        case 'sosyal': url = createMapSearchUrl(`${it.isim || ''} ${it.il || ''}`); break;
-        default: url = `https://www.google.com/search?q=${encodeURIComponent((it.isim||'')+' '+(it.il||''))}`; break;
+        case 'gezi':
+          url = createMapSearchUrl(`${it.il || ''} ${it.isim || ''}`);
+          break;
+        case 'yemek':
+          url = googleImageHref(it.isim, it.il);
+          break;
+        case 'sosyal':
+          const sosyalQuery = `${it.ilce || ''} ${it.belediye || ''} ${it.isim || ''}`.trim();
+          url = createMapSearchUrl(sosyalQuery);
+          break;
+        default:
+          url = `https://www.google.com/search?q=${encodeURIComponent((it.isim||'')+' '+(it.il||''))}`;
+          break;
       }
       acts.innerHTML = `<a class="btn view" href="${url}" target="_blank" rel="noopener">İncele</a>`;
     }
