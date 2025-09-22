@@ -3288,7 +3288,229 @@
     { "il": "Muğla", "isim": "Çubucak Tabiat Parkı", "adres": "Muğla-Marmaris", "aciklama": "Türkiye'nin en büyük orman kampı, 400 çadır, 35 karavan, deniz ve göletler, piknik ve kamp." },
     { "il": "Muğla", "isim": "Apostol Kilisesi", "adres": "Tavşan Adası-Bodrum", "aciklama": "M.Ö. 2.yy, devasa sütunlar, taş oymalar, Ege ve Tavşan Adası manzarası." },
     { "il": "Muğla", "isim": "Venedik Kalesi", "adres": "Akyarlar-Bodrum", "aciklama": "Aspat Koyu'na hakim, surlar, balıkçı tekneleri, savunma ve gözetleme noktası." },
-    { "il": "Nevşehir", "isim": "Asmalı Konak", "adres": "Ürgüp", "aciklama": "Kapadokya taş ve ahşap mimarili, dizi çekimlerinin ünlü konağı, mobilyalı odalar." },
+   {
+    "il": "Muş",
+    "isim": "Tarihi Murat Köprüsü",
+    "adres": "Murat Nehri, Muş Merkez",
+    "aciklama": "13. yüzyılda Selçuklular tarafından inşa edilen 143 metre uzunluğunda, 12 gözlü tarihi köprü. 1871’de restore edilmiş, halen kullanımda olan turistik bir cazibe merkezi."
+  },
+  {
+    "il": "Muş",
+    "isim": "Muş Müzesi",
+    "adres": "Muş Merkez",
+    "aciklama": "1938’de Atatürk İlkokulu olarak inşa edilen bina, 2021’de müze olarak açıldı. Tunç Çağı’ndan Osmanlı’ya uzanan eserler, Sultan Alparslan ve Malazgirt Zaferi’ne adanmış bölümler içerir."
+  },
+  {
+    "il": "Muş",
+    "isim": "Malazgirt Kalesi",
+    "adres": "Malazgirt Merkez, Muş",
+    "aciklama": "10. yüzyılda Bizanslılar tarafından inşa edilen kale, siyah sert taşlar ve Horasan harcı ile yapılmış. İki paralel suru ile tarihi bir yapı, iç kale kısmı günümüze ulaşamamış."
+  },
+  {
+    "il": "Muş",
+    "isim": "Hacı Şeref Camii",
+    "adres": "Muş Merkez",
+    "aciklama": "17. yüzyılda inşa edilen Selçuklu yapısı cami, sade mihrabı ve 1902’de eklenen minaresi ile dikkat çeker. Aslanlı Han içinde yer alan tarihi bir simge."
+  },
+  {
+    "il": "Muş",
+    "isim": "Kutsal Havariler Manastırı",
+    "adres": "Kepenek Köyü, Muş Merkez",
+    "aciklama": "4. yüzyılda Aziz Aydınlatıcı Grigor tarafından kurulan Ermeni manastırı. 11. yüzyılda kiliseye çevrildi, 1915’te tahrip edildi, günümüzde harabe halinde."
+  },
+  {
+    "il": "Muş",
+    "isim": "Ulu Camii",
+    "adres": "Muş Merkez",
+    "aciklama": "14. yüzyılda eski bir Ermeni kilisesi üzerine inşa edilen cami, moloz taştan yapılmış, 1968’de minaresi yeniden inşa edilmiştir."
+  },
+  {
+    "il": "Muş",
+    "isim": "Haspet Kalesi",
+    "adres": "Muş Merkez",
+    "aciklama": "Birçok medeniyete ev sahipliği yapmış eski Ermeni kalesi. Günümüze az bir kısmı kalsa da Muş manzarası ile etkileyici bir tarihi yapı."
+  },
+  {
+    "il": "Muş",
+    "isim": "Güzeldağ Kayak Merkezi",
+    "adres": "Muş Merkez, 10 km uzaklıkta",
+    "aciklama": "1100 metre yükseklikte, 2.5 km’lik pisti ile kış turizminin merkezi. Telesiyej ve sosyal tesislerle kayak severlere hizmet veriyor."
+  },
+  {
+    "il": "Muş",
+    "isim": "Alaeddin Bey Camii",
+    "adres": "Muş Merkez",
+    "aciklama": "18. yüzyılda Alaeddin Bey tarafından yaptırılan, kare planlı, bitki motifli mihrabı ve iki renkli minaresi ile tarihi bir cami."
+  },
+  {
+    "il": "Muş",
+    "isim": "Kaz Gölü",
+    "adres": "Malazgirt, Muş",
+    "aciklama": "Tuzlu sulara sahip doğal bir göl, kazlar ve çeşitli kuş türlerine ev sahipliği yapar. Piknik ve doğa yürüyüşü için ideal."
+  },
+  {
+    "il": "Muş",
+    "isim": "Esenlik Camii",
+    "adres": "Esenlik Köyü, Bulanık, Muş",
+    "aciklama": "1194’te Şeyh Abdülmelik tarafından yaptırılan Selçuklu camisi, Ahlat taşından inşa edilmiş, 1985’te restore edilmiştir."
+  },
+  {
+    "il": "Muş",
+    "isim": "Migre Hamamı",
+    "adres": "Muş Merkez",
+    "aciklama": "Türk üçgeni mimarisi ve kerpiç yapısı ile dikkat çeken Osmanlı dönemi hamamı, kültür turizmi için önemli bir durak."
+  },
+  {
+    "il": "Muş",
+    "isim": "Akdoğan Gölü",
+    "adres": "Muş Merkez",
+    "aciklama": "2 bin metre yükseklikte, kuş türlerine ev sahipliği yapan huzurlu bir göl. Doğa yürüyüşü ve piknik için ideal."
+  },
+  {
+    "il": "Muş",
+    "isim": "Bulanık Mollakent Camii",
+    "adres": "Bulanık, Muş",
+    "aciklama": "1290’da Şeyh İbrahim tarafından yaptırılan Selçuklu camisi, Mollakent Medresesi ile birlikte Ahlat taşından inşa edilmiştir."
+  },
+  {
+    "il": "Muş",
+    "isim": "Zafer Anıtı",
+    "adres": "Malazgirt, Muş",
+    "aciklama": "1071 Malazgirt Zaferi anısına 1992’de inşa edilen, 52 metre yüksekliğinde iki sütundan oluşan tarihi anıt."
+  },
+  {
+    "il": "Muş",
+    "isim": "Künav Mağarası",
+    "adres": "Kayadelen Köyü, Varto, Muş",
+    "aciklama": "3 km uzunluğunda, 35 metre tavan yüksekliğine sahip iki katlı mağara. İlk çağlarda yerleşim yeri olarak kullanılmış."
+  },
+  {
+    "il": "Muş",
+    "isim": "Yağcılar Höyüğü",
+    "adres": "Yeşilova Beldesi, Muş Merkez",
+    "aciklama": "Urartu öncesi ve sonrası dönemlere ait seramik parçaları bulunan, tarih severler için gizemli bir höyük."
+  },
+  {
+    "il": "Muş",
+    "isim": "Mercimekkale Höyüğü",
+    "adres": "Mercimekkale Köyü, Muş Merkez",
+    "aciklama": "Murat Nehri kıyısında, Roma’dan Osmanlı’ya kadar medeniyetlere ev sahipliği yapmış, haberleşme amaçlı kale içeren höyük."
+  },
+  {
+    "il": "Muş",
+    "isim": "Muş Kalesi",
+    "adres": "Muş Merkez",
+    "aciklama": "Urartular döneminden itibaren birçok medeniyete ev sahipliği yapmış, panoramik Muş manzarası sunan tarihi kale."
+  },
+  {
+    "il": "Muş",
+    "isim": "Malazgirt Müzesi",
+    "adres": "Malazgirt, Muş",
+    "aciklama": "2021’de açılan müze, 1071 Malazgirt Zaferi’ni ve Türk-İslam tarihini görsellerle anlatır, yöresel eserler sergiler."
+  },
+  {
+    "il": "Muş",
+    "isim": "Muşet Kalesi",
+    "adres": "Muş Merkez",
+    "aciklama": "Urartular tarafından yapıldığı düşünülen, doğal güzelliklerle uyumlu, tarihi ve manzarasıyla öne çıkan kale."
+  },
+  {
+    "il": "Muş",
+    "isim": "Muş Ovası",
+    "adres": "Muş Merkez",
+    "aciklama": "1650 km²’lik tektonik ova, Haçreş ve Şerafettin Dağları ile çevrili, alüvyonlarla kaplı doğal bir alan."
+  },
+  {
+    "il": "Muş",
+    "isim": "Surp Garabet Manastırı",
+    "adres": "Muş Merkez",
+    "aciklama": "4. yüzyılda inşa edilen Ermeni manastırı, Vaftizci Yahya’ya adanmış, Taron’un dini merkezi olarak biliniyor."
+  },
+  {
+    "il": "Muş",
+    "isim": "Tıkızlı Kalesi",
+    "adres": "Muş Merkez",
+    "aciklama": "Urartular döneminde (MÖ 830-810) inşa edilen, 25-30 metre çevresiyle tarihi bir kale."
+  },
+  {
+    "il": "Muş",
+    "isim": "Liz Ovası",
+    "adres": "Bulanık, Muş",
+    "aciklama": "1650 km²’lik tarım alanı, Bilican ve Haçreş Dağları ile çevrili, doğal güzellikleriyle dikkat çeker."
+  },
+  {
+    "il": "Muş",
+    "isim": "Alaaddin Bey Hamamı",
+    "adres": "Muş Merkez",
+    "aciklama": "Osmanlı dönemi eseri, kaplumbağa kabartması ve bitki motifleriyle süslü, Alaaddin Bey Camii ile birlikte inşa edilmiş."
+  },
+  {
+    "il": "Muş",
+    "isim": "Yıldızlı Han",
+    "adres": "Muş Merkez",
+    "aciklama": "Osmanlı döneminden kalma, yıldız motifleriyle süslü han, kültür ve sanat merkezi olarak hizmet veriyor."
+  },
+  {
+    "il": "Muş",
+    "isim": "Murat Vadisi",
+    "adres": "Ulukaya Köyü, Muş Merkez",
+    "aciklama": "Murat Nehri’nin geçtiği, Roma ve Bizans kalıntılarıyla zengin, trekking ve piknik için ideal bir vadi."
+  },
+  {
+    "il": "Muş",
+    "isim": "Kale Parkı",
+    "adres": "Muş Merkez",
+    "aciklama": "Tarihi Muş Kalesi’ni çevreleyen park, yeşil alanları ve sosyal aktiviteleriyle huzurlu bir ortam sunar."
+  },
+  {
+    "il": "Muş",
+    "isim": "Kayalıdere Antik Kenti",
+    "adres": "Varto, Muş",
+    "aciklama": "Urartu Kaya Mezarı olarak bilinen, II. Sarduri döneminde askeri yerleşim yeri, tapınak ve şarap küpleri içerir."
+  },
+  {
+    "il": "Muş",
+    "isim": "Haçlı Gölü",
+    "adres": "Bulanık, Muş",
+    "aciklama": "Volkanik set gölü, alabalık ve aynalı sazan bulunan, doğa yürüyüşü ve balıkçılık için ideal."
+  },
+  {
+    "il": "Muş",
+    "isim": "Kalecik Kalesi",
+    "adres": "Kalecik Köyü, Muş",
+    "aciklama": "Surlarla korunan tarihi kale, çanak-çömlek kalıntılarıyla geçmişin izlerini taşır, kaçak kazılarla tahrip edilmiş."
+  },
+  {
+    "il": "Muş",
+    "isim": "Yünören Camii",
+    "adres": "Korkut, Muş",
+    "aciklama": "Selçuklu dönemi dikdörtgen planlı cami, silmeler ve tırtıllı kapı süslemeleriyle dikkat çeker, kitabe tahrip olmuş."
+  },
+  {
+    "il": "Muş",
+    "isim": "Dolabaş Höyüğü",
+    "adres": "Dolabaş Köyü, Malazgirt, Muş",
+    "aciklama": "Urartu yerleşkesi, demir çağına ait izler taşır, kazı çalışması yapılmamış gizemli bir höyük."
+  },
+  {
+    "il": "Muş",
+    "isim": "Bostankale Höyüğü",
+    "adres": "Bostankaya Köyü, Malazgirt, Muş",
+    "aciklama": "Urartu döneminden kalma, doğal güzellikleriyle çevrili, kazı çalışması olmayan tarihi bir höyük."
+  },
+  {
+    "il": "Muş",
+    "isim": "Tarihi Hatun Köprüsü",
+    "adres": "Muş Merkez",
+    "aciklama": "Selçuklu dönemine ait, taş yapısı ve zarif tasarımıyla halen kullanılan tarihi bir köprü."
+  },
+  {
+    "il": "Muş",
+    "isim": "Müştak Baba Türbesi",
+    "adres": "Muş Merkez",
+    "aciklama": "1758-1831 yılları arasında yaşayan sufi şair Müştak Baba’ya adanmış, manevi bir ziyaret noktası."
+  },
+  { "il": "Nevşehir", "isim": "Asmalı Konak", "adres": "Ürgüp", "aciklama": "Kapadokya taş ve ahşap mimarili, dizi çekimlerinin ünlü konağı, mobilyalı odalar." },
     { "il": "Nevşehir", "isim": "Güvercinlik Vadisi", "adres": "Uçhisar-Göreme", "aciklama": "Yürüyüş, bisiklet, ATV rotası, güvercin yuvaları, dilek ağaçları, kaya kiliseleri, nazar boncukları." },
     { "il": "Nevşehir", "isim": "Çavuşin", "adres": "Avanos", "aciklama": "En eski yerleşim, Rahipler Vadisi, Çavuşin Kilisesi, Aziz Yahya Kilisesi, freskli kaya kiliseleri." },
     { "il": "Nevşehir", "isim": "Üç Güzeller", "adres": "Ürgüp", "aciklama": "Kapadokya'nın simgesi şapkalı peribacaları, fotoğraf noktası, aileyi andıran kaya oluşumu." },
