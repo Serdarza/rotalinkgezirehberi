@@ -245,7 +245,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .fixed-action-buttons {
     position: fixed;
     bottom: 20px;
-    right: 16px; /* Kenara daha yakın */
+    right: 16px;
     z-index: 98;
     display: flex;
     flex-direction: column;
@@ -423,7 +423,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 </div>
 </div>
 
-<div class="fixed-action-buttons" id="fixed-action-buttons" style="display: none;">
+<div class="fixed-action-buttons" id="fixed-action-buttons">
     <div class="fab-container" id="fab-container">
         <div class="fab-options">
             <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
@@ -445,7 +445,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 </div>
 
 <script>
-// YENİ MOBİL MENÜ KODU
 const menuToggle = document.getElementById('menu-toggle');
 const mainNav = document.getElementById('main-nav');
 menuToggle.addEventListener('click', () => {
@@ -522,7 +521,7 @@ function convertToUrlSlug(text) {
 
 function updateFabLinks(cityName) {
     const cityNameSlug = convertToUrlSlug(cityName);
-    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
     
     fabWeather.href = `https://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?il=${capitalizedCityName}`;
     fabPharmacy.href = `https://www.eczaneler.gen.tr/nobetci-${cityNameSlug}`;
@@ -548,14 +547,15 @@ function handleShare(btn) {
 
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
+// DÜZELTİLDİ: Template literal sözdizimi hatası giderildi
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$7{encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps/search/?api=1&query=$$8{encodeURIComponent(query)}`;
+    const encodedQuery = encodeURIComponent(query);
+    if (isAppleDevice()) {
+        return `http://maps.apple.com/?q=${encodedQuery}`;
+    }
+    return `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
 }
-function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=$$9{lat},${lng}`; }
-    return `https://www.google.com/maps/search/?api=1&query=$$$0{lat},${lng}`;
-}
+
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
