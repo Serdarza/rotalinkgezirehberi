@@ -9461,6 +9461,97 @@
     "latitude": 37.29144504319927,
     "longitude": 27.779104638885517
   },
+    {
+    "isim": "Muş Merkez Öğretmenevi Aso",
+    "tip": "Öğretmenevi",
+    "il": "Muş",
+    "adres": "Hürriyet Mahallesi, Sanat Okulu Yanı, Merkez, Muş",
+    "telefon": "(0436) 212 54 06",
+    "latitude": 38.738256730243606,
+    "longitude": 41.49303574291874
+  },
+  {
+    "isim": "Muş Alparslan Üniversitesi Konukevi",
+    "tip": "Üniversite Misafirhanesi",
+    "il": "Muş",
+    "adres": "Saray, 49250 Güzeltepe, Muş Merkez, Muş",
+    "telefon": "04362491265",
+    "latitude": 38.76749848890757,
+    "longitude": 41.42195716223016
+  },
+  {
+    "isim": "Muş Polisevi",
+    "tip": "Polisevi",
+    "il": "Muş",
+    "adres": "Atatürk Bulvarı, Akbank Karşısı, Muş",
+    "telefon": "(0436) 212 43 45",
+    "latitude": 38.75588207526061,
+    "longitude": 41.50722869153036
+  },
+  {
+    "isim": "Muş İl Sağlık Müdürlüğü Misafirhanesi",
+    "tip": "Sağlık Müdürlüğü Misafirhanesi",
+    "il": "Muş",
+    "adres": "Hürriyet Mahallesi, Murat Paşa Caddesi, 49100 Merkez, Muş",
+    "telefon": "(0436) 212 10 10",
+    "latitude": 38.733474709588904,
+    "longitude": 41.48821022546231
+  },
+  {
+    "isim": "Muş Çevre ve Şehircilik Bakanlığı Misafirhanesi",
+    "tip": "Bakanlık Misafirhanesi",
+    "il": "Muş",
+    "adres": "Zafer Mahallesi, Erzurum Yolu Üzeri No:18, Merkez, Muş",
+    "telefon": "(0436) 216 10 78",
+    "latitude": 38.76132595844388,
+    "longitude": 41.503412618048685
+  },
+  {
+    "isim": "Bulanık Öğretmenevi",
+    "tip": "Öğretmenevi",
+    "il": "Muş",
+    "adres": "Zafer Mahallesi, Özgürlük Caddesi, Bulanık, Muş",
+    "telefon": "(0436) 311 40 50",
+    "latitude": 39.09339016032579,
+    "longitude": 42.274073018251435
+  },
+  {
+    "isim": "Hasköy Öğretmenevi",
+    "tip": "Öğretmenevi",
+    "il": "Muş",
+    "adres": "Atatürk Caddesi, Sunay Mahallesi, Hasköy, Muş",
+    "telefon": "(0436) 411 30 04",
+    "latitude": 38.68262372439914,
+    "longitude": 41.68983370826108
+  },
+  {
+    "isim": "Malazgirt Öğretmenevi",
+    "tip": "Öğretmenevi",
+    "il": "Muş",
+    "adres": "Bulanık Yolu Üzeri, Karayolları Şefliği Karşısı, Malazgirt, Muş",
+    "telefon": "(0436) 511 23 84",
+    "latitude": 39.146728482816265,
+    "longitude": 42.53037818315467
+  },
+  {
+    "isim": "Varto Öğretmenevi",
+    "tip": "Öğretmenevi",
+    "il": "Muş",
+    "adres": "Aşağı Çarşı, Muş Caddesi, Kızılay Binası, Varto, Muş",
+    "telefon": "(0436) 711 35 70",
+    "latitude": 39.16930369312787,
+    "longitude": 41.45517199129943
+  },
+  {
+    "isim": "Muş İl Özel İdaresi Misafirhanesi",
+    "tip": "İl Özel İdaresi Misafirhanesi",
+    "il": "Muş",
+    "adres": "Saray, Bitlis Karayolu, 49200 Muş Merkez, Muş",
+    "telefon": "(0436) 212 10 52",
+    "latitude": 38.74636471159098,
+    "longitude": 41.50510813499995
+  },
+
    {
     "isim": "Nevşehir Merkez Öğretmenevi",
     "tip": "Öğretmenevi",
