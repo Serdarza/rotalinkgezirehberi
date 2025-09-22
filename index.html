@@ -241,13 +241,12 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
-
 .fab-container {
     position: fixed;
     bottom: 80px;
     right: 16px;
     z-index: 98;
-    display: none; /* Arama yapılmadan önce gizli */
+    display: none;
     flex-direction: column-reverse;
     align-items: flex-end;
 }
@@ -403,7 +402,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 
   <section class="card contact-card" id="iletisim">
     <h2>Öneri ve Geri Bildirim</h2>
-    <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain">
+    <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain" autocomplete="on">
        <div class="form-group"><label for="kategori">Öneri Kategorisi</label><select id="kategori" name="Kategori" required><option value="" disabled selected>Kategori seçin...</option><option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option><option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option><option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option><option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option><option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option><option value="Diger">Diğer Görüş ve Öneriler</option></select></div>
        <div class="form-group"><label for="sehir">Şehir</label><input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required></div>
        <div class="form-group"><label for="yer_adi">Yer Adı / Konu</label><input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required></div>
