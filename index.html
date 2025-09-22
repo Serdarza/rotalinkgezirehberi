@@ -241,7 +241,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
 
-/* --- GÜNCELLENMİŞ YÜZEN BUTON GRUBU --- */
 .fixed-action-buttons {
     position: fixed;
     bottom: 20px;
@@ -253,7 +252,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     gap: 12px;
 }
 #scrollTopBtn {
-    position: relative; /* Sabit pozisyonu ana kapsayıcıdan alacak */
+    position: relative;
     display: none;
     border: none; outline: none; background-color: var(--b1); color: white;
     cursor: pointer; padding: 0; border-radius: 50%; width: 48px; height: 48px;
@@ -278,7 +277,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .fab-container.open .fab-main { transform: rotate(45deg); }
 .fab-options {
     display: flex; flex-direction: column;
-    align-items: flex-end; /* Yazıları ve ikonları sağa hizala */
+    align-items: flex-end;
     list-style: none; padding: 0; margin: 0 0 16px 0;
     opacity: 0; transform: translateY(10px);
     transition: all 0.2s ease;
@@ -319,7 +318,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 @media (max-width: 900px){
     .hero.card { grid-template-columns: 1fr; }
     .hero-image { display: none; }
-    .hero-card { padding: 24px; text-align: center; }
+    .hero.card { padding: 24px; text-align: center; }
     .hero-text h1 { font-size: 28px; }
     .btn-store-new { margin: auto; }
 }
@@ -372,7 +371,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
         <div id="suggestions"></div>
       </div>
   </section>
-
+  
   <div class="tabs" id="tabs" style="display:none">
     <div class="tab" data-tab="tesis">Tesis</div>
     <div class="tab" data-tab="gezi">Gezi</div>
@@ -423,7 +422,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 </div>
 </div>
 
-<div class="fixed-action-buttons" id="fixed-action-buttons" style="display: none;">
+<div class="fixed-action-buttons" id="fixed-action-buttons">
     <div class="fab-container" id="fab-container">
         <div class="fab-options" id="fab-options">
             <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
@@ -443,7 +442,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     </div>
     <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 </div>
-
 <script>
 const menuToggle = document.getElementById('menu-toggle');
 const mainNav = document.getElementById('main-nav');
