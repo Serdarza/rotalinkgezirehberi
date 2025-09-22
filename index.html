@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RotaLink – Şehir Ara ve Öneri Gönder</title>
+<title>Rotalink Gezi Rehberi</title>
 <meta name="theme-color" content="#f7faff" />
 <style>
 :root{
@@ -17,7 +17,11 @@ a{text-decoration:none;color:inherit}
 .container{max-width:1100px;margin:auto;padding:18px}
 header{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd);background:#fff}
 .logo{display:flex;gap:10px;align-items:center;font-weight:800}
-.badge{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--b1),var(--b2));color:#00131a}
+.logo-amblem { /* YENİ LOGO İÇİN STİL */
+    width: 30px;
+    height: 30px;
+    border-radius: 8px; /* Logonuzun kenarlarını ovalleştirmek için */
+}
 nav{display:flex;gap:14px;color:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
 
@@ -45,8 +49,8 @@ nav{display:flex;gap:14px;color:var(--mut)}
 }
 .hero-image { text-align: center; }
 .hero-image .app-logo {
-    max-width: 450px;
-    max-height: 450px;
+    max-width: 350px;
+    max-height: 350px;
     height: auto;
     filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.15));
     border-radius: 25px;
@@ -62,7 +66,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .btn-store-new .text-label { font-size: 12px; opacity: 0.8; }
 .btn-store-new .text-store { font-size: 18px; font-weight: 600; }
 
-/* --- GÜNCELLENMİŞ ARAMA BÖLÜMÜ TASARIMI --- */
+/* --- ARAMA BÖLÜMÜ TASARIMI --- */
 .search-section { padding: 32px 0; text-align: center; }
 .search-section h2 { font-size: 32px; font-weight: 800; margin-top: 0; margin-bottom: 24px; }
 .search-wrapper {
@@ -198,12 +202,15 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 <body>
 <div class="container">
   <header>
-    <div class="logo"><div class="badge">RL</div><span>RotaLink</span></div>
+    <div class="logo">
+      <img src="amblem.png" alt="Rotalink Amblem" class="logo-amblem">
+      <span>Rotalink Gezi Rehberi</span>
+    </div>
     <nav><a href="#sehirara">Şehir Ara</a><a href="#ozellikler">Özellikler</a><a href="#indir">İndir</a><a href="#iletisim">İletişim</a></nav>
   </header>
 
   <section class="hero card" id="ozellikler">
-      <div class="hero-text">
+    <div class="hero-text">
         <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
         <p><span class="text-highlight">Ordu evleri, polis evleri, öğretmenevleri</span> gibi pek çok kamu misafirhanesini tek ekranda keşfedin. Türkiye’nin dört bir yanındaki <span class="text-highlight">sosyal tesisler</span>, uygun fiyatlı konaklama imkânları, lezzetli yemekler ve dinlenme alanları artık elinizin altında.</p>
         <p><strong>Arayın</strong>, tek dokunuşla tesis yetkililerine ulaşın. <strong>Paylaş</strong>, bilgileri kolayca sevdiklerinize iletin. <strong>Konum</strong>, yol tarifini açarak dilediğiniz noktaya zahmetsizce ulaşın.</p>
@@ -260,7 +267,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
   </section>
 
   <footer id="footer">
-    <div>© <span id="yil"></span> RotaLink</div>
+    <div>© <span id="yil"></span> Rotalink Gezi Rehberi</div>
     <div class="footer-links"><a href="#" id="footerAnasayfa">Anasayfa</a><a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a><a href="mailto:rotalinkinfo@gmail.com">İletişim</a></div>
   </footer>
 </div>
@@ -361,13 +368,11 @@ function mountList(el, items, type){
     const acts = document.createElement('div'); acts.className='actions';
     if(type==='tesis'){
       const tel = phoneHref(it.telefon);
-      // GÜNCELLENDİ: Tesis konumu sadece misafirhane adıyla arama yapar
       const mapsUrl = createMapSearchUrl(`${it.isim || ''}`);
       const shareButtonHTML = `<button class="btn share" data-isim="${it.isim || ''}" data-il="${it.il || ''}" data-telefon="${it.telefon || ''}" onclick="handleShare(this)">Paylaş</button>`;
       acts.innerHTML = (tel?`<a class="btn call" href="${tel}">Ara</a>`:`<button class="btn" disabled>Telefon yok</button>`) + shareButtonHTML + `<a class="btn go" href="${mapsUrl}" target="_blank" rel="noopener">Konum</a>`;
     } else {
       let url = '';
-      // GÜNCELLENDİ: Gezi ve Sosyal sekmeleri için özel arama formatları
       switch(type) {
         case 'gezi':
           url = createMapSearchUrl(`${it.il || ''} ${it.isim || ''}`);
