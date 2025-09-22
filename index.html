@@ -68,22 +68,6 @@ nav a:hover {
 .menu-toggle.open .line2 { opacity: 0; }
 .menu-toggle.open .line3 { transform: translateY(-7px) rotate(-45deg); }
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
-
-/* --- YENİ DÜZENDEKİ HERO VE ARAMA STİLLERİ --- */
-.search-hero {
-    padding: 48px 24px;
-    text-align: center;
-    background: #e0f2fe;
-    border-radius: 12px;
-    margin-top: 16px;
-}
-.search-hero h2 {
-    font-size: 32px;
-    font-weight: 800;
-    margin-top: 0;
-    margin-bottom: 24px;
-    color: var(--text);
-}
 .hero.card {
     display: grid; grid-template-columns: 1fr 1fr; align-items: center;
     gap: 32px; padding: 32px;
@@ -123,7 +107,20 @@ nav a:hover {
 .btn-store-new .text-wrap { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; }
 .btn-store-new .text-label { font-size: 12px; opacity: 0.8; }
 .btn-store-new .text-store { font-size: 18px; font-weight: 600; }
-
+.search-hero {
+    padding: 48px 24px;
+    text-align: center;
+    background: #e0f2fe;
+    border-radius: 12px;
+    margin-top: 16px;
+}
+.search-hero h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: var(--text);
+}
 .search-wrapper {
     position: relative;
     max-width: 700px;
@@ -132,7 +129,7 @@ nav a:hover {
 .inputwrap{
   position:relative; display: flex; align-items: center;
   border-radius: 28px;
-  background: var(--card); /* Arka planı beyaz yaptık */
+  background: var(--card);
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   border: 2px solid var(--bd);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -167,7 +164,6 @@ nav a:hover {
 @keyframes blink {
     50% { opacity: 0; }
 }
-
 .clearbtn{
   position:absolute; right: 105px;
   top:50%; transform:translateY(-50%); border:0; background:#eef2f7;
@@ -176,7 +172,6 @@ nav a:hover {
   z-index: 2;
 }
 .clearbtn:hover { background-color: #dde4ed; }
-
 .search-btn {
     position: absolute;
     right: 6px;
@@ -197,7 +192,6 @@ nav a:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
 }
-
 #suggestions {
   display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; text-align: left;
   background: var(--card); border: 1px solid var(--bd); border-radius: 16px;
@@ -246,43 +240,47 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
-#scrollTopBtn {display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99;border: none; outline: none; background-color: var(--b1); color: white;cursor: pointer; padding: 0; border-radius: 50%; width: 48px; height: 48px;font-size: 24px; line-height: 48px; text-align: center;box-shadow: 0 4px 8px rgba(0,0,0,0.2);transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;}
-#scrollTopBtn:hover { background-color: var(--b2); }
 
-.fab-container {
+/* --- GÜNCELLENMİŞ YÜZEN BUTON GRUBU --- */
+.fixed-action-buttons {
     position: fixed;
-    bottom: 80px;
+    bottom: 20px;
     right: 20px;
     z-index: 98;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+#scrollTopBtn {
+    position: relative; /* Sabit pozisyonu ana kapsayıcıdan alacak */
+    display: none;
+    border: none; outline: none; background-color: var(--b1); color: white;
+    cursor: pointer; padding: 0; border-radius: 50%; width: 48px; height: 48px;
+    font-size: 24px; line-height: 48px; text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;
+}
+#scrollTopBtn:hover { background-color: var(--b2); }
+.fab-container {
+    position: relative;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
 }
 .fab-main {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
+    width: 56px; height: 56px; border-radius: 50%;
     background: linear-gradient(135deg, var(--b1), var(--b2));
-    color: white;
-    font-size: 36px;
-    line-height: 56px;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    color: white; font-size: 36px; line-height: 56px; text-align: center;
+    border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer; transition: transform 0.3s ease;
 }
-.fab-container.open .fab-main {
-    transform: rotate(45deg);
-}
+.fab-container.open .fab-main { transform: rotate(45deg); }
 .fab-options {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 16px 0;
-    opacity: 0;
-    transform: translateY(10px);
+    display: flex; flex-direction: column;
+    align-items: flex-end; /* Yazıları ve ikonları sağa hizala */
+    list-style: none; padding: 0; margin: 0 0 16px 0;
+    opacity: 0; transform: translateY(10px);
     transition: all 0.2s ease;
     pointer-events: none;
 }
@@ -292,22 +290,15 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     pointer-events: auto;
 }
 .fab-option {
-    margin-top: 12px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    width: 100%;
 }
 .fab-option .label {
-    background: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    margin-right: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    font-weight: 600;
-    font-size: 14px;
-    opacity: 0;
-    transform: translateX(10px);
+    background: white; padding: 6px 12px; border-radius: 8px;
+    margin-right: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    font-weight: 600; font-size: 14px;
+    opacity: 0; transform: translateX(10px);
     transition: opacity 0.2s ease, transform 0.2s ease;
     white-space: nowrap;
 }
@@ -319,21 +310,16 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .fab-option:nth-child(2) .label { transition-delay: 0.1s; }
 .fab-option:nth-child(3) .label { transition-delay: 0s; }
 .fab-option .icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    display: grid;
-    place-items: center;
-    font-size: 24px;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    display: grid; place-items: center; font-size: 24px;
     flex-shrink: 0;
 }
 
 @media (max-width: 900px){
     .hero.card { grid-template-columns: 1fr; }
     .hero-image { display: none; }
-    .hero.card { padding: 24px; text-align: center; }
+    .hero-card { padding: 24px; text-align: center; }
     .hero-text h1 { font-size: 28px; }
     .btn-store-new { margin: auto; }
 }
@@ -347,8 +333,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     .item{flex-direction:column;align-items:flex-start}
     .actions{width:100%; margin-top: 8px;}
     footer { flex-direction: column; text-align: center; }
-    .fab-container { bottom: 85px; right: 15px; }
-    #scrollTopBtn { bottom: 20px; right: 15px; }
+    .fixed-action-buttons { right: 15px; bottom: 15px; }
 }
 </style>
 </head>
@@ -388,6 +373,17 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
       </div>
   </section>
 
+  <div class="tabs" id="tabs" style="display:none">
+    <div class="tab" data-tab="tesis">Tesis</div>
+    <div class="tab" data-tab="gezi">Gezi</div>
+    <div class="tab" data-tab="yemek">Yemek</div>
+    <div class="tab" data-tab="sosyal">Sosyal</div>
+  </div>
+  <div class="tabcontent" id="tab-tesis"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-gezi"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-yemek"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-sosyal"><div class="empty">Sonuç yok.</div></div>
+
   <section class="hero card" id="ozellikler">
       <div class="hero-text">
         <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
@@ -407,17 +403,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
       </div>
   </section>
 
-  <div class="tabs" id="tabs" style="display:none">
-    <div class="tab" data-tab="tesis">Tesis</div>
-    <div class="tab" data-tab="gezi">Gezi</div>
-    <div class="tab" data-tab="yemek">Yemek</div>
-    <div class="tab" data-tab="sosyal">Sosyal</div>
-  </div>
-  <div class="tabcontent" id="tab-tesis"><div class="empty">Sonuç yok.</div></div>
-  <div class="tabcontent" id="tab-gezi"><div class="empty">Sonuç yok.</div></div>
-  <div class="tabcontent" id="tab-yemek"><div class="empty">Sonuç yok.</div></div>
-  <div class="tabcontent" id="tab-sosyal"><div class="empty">Sonuç yok.</div></div>
-
   <section class="card contact-card" id="iletisim">
     <h2>Öneri ve Geri Bildirim</h2>
     <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain">
@@ -436,25 +421,27 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     <div class="footer-links"><a href="#" id="footerAnasayfa">Anasayfa</a><a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a><a href="mailto:rotalinkinfo@gmail.com">İletişim</a></div>
   </footer>
 </div>
+</div>
 
-<a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
-
-<div class="fab-container" id="fab-container" style="display: none;">
-    <div class="fab-options" id="fab-options">
-        <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
-            <span class="label">Tarihçe</span>
-            <span class="icon">📜</span>
-        </a>
-        <a href="#" id="fab-pharmacy" class="fab-option" target="_blank" rel="noopener">
-            <span class="label">Nöbetçi Eczane</span>
-            <span class="icon">🌙</span>
-        </a>
-        <a href="#" id="fab-weather" class="fab-option" target="_blank" rel="noopener">
-            <span class="label">Hava Durumu</span>
-            <span class="icon">☀️</span>
-        </a>
+<div class="fixed-action-buttons" id="fixed-action-buttons" style="display: none;">
+    <div class="fab-container" id="fab-container">
+        <div class="fab-options" id="fab-options">
+            <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
+                <span class="label">Tarihçe</span>
+                <span class="icon">📜</span>
+            </a>
+            <a href="#" id="fab-pharmacy" class="fab-option" target="_blank" rel="noopener">
+                <span class="label">Nöbetçi Eczane</span>
+                <span class="icon">🌙</span>
+            </a>
+            <a href="#" id="fab-weather" class="fab-option" target="_blank" rel="noopener">
+                <span class="label">Hava Durumu</span>
+                <span class="icon">☀️</span>
+            </a>
+        </div>
+        <button class="fab-main" id="fab-main">+</button>
     </div>
-    <button class="fab-main" id="fab-main">+</button>
+    <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 </div>
 
 <script>
