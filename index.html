@@ -4,7 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Rotalink Gezi Rehberi</title>
+<meta name="description" id="meta-description" content="Türkiye'deki kamu misafirhaneleri, orduevleri, polisevleri, öğretmenevleri ve sosyal tesisler için en güncel gezi rehberi. Şehir arayın, konaklama ve gezi noktalarını keşfedin.">
 <meta name="theme-color" content="#f7faff" />
+<div id="structured-data-container"></div>
 <style>
 :root{
   --bg:#f7faff;--card:#fff;--text:#0f172a;--mut:#475569;--bd:#e2e8f0;
@@ -14,6 +16,16 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto;scroll-behavior: smooth;}
 a{text-decoration:none;color:inherit}
+body {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input, textarea {
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
 .container{max-width:1100px;margin:auto;padding:18px}
 header{
     display:flex;
@@ -200,6 +212,7 @@ nav a:hover {
 }
 .suggestion-item { padding: 12px 20px; cursor: pointer; font-size: 16px; }
 .suggestion-item:hover { background-color: #f1f5f9; }
+#results-title { text-align: center; margin-top: 24px; }
 .tabs{margin-top:24px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap}
 .tab{padding:8px 14px;border:1px solid var(--bd);border-bottom:0;border-radius:10px 10px 0 0;background:#f8fafc;color:var(--mut);cursor:pointer;font-weight:700; transition: all 0.2s ease-in-out;}
 .tab:hover { background: #fff; color: var(--text); }
@@ -501,7 +514,6 @@ function erase() {
         setTimeout(type, 500);
     }
 }
-
 const fabContainer = document.getElementById('fab-container');
 const fabMain = document.getElementById('fab-main');
 const fabWeather = document.getElementById('fab-weather');
@@ -562,7 +574,7 @@ function mountList(el, items, type){
   el.innerHTML = '';
   if(!items || !items.length){ el.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
   
-  document.getElementById('structured-data-container').innerHTML = ''; // Önceki yapısal verileri temizle
+  document.getElementById('structured-data-container').innerHTML = '';
   
   const list = document.createElement('div'); list.className='list';
   items.forEach(it=>{
@@ -592,7 +604,6 @@ function mountList(el, items, type){
     }
     row.appendChild(info); row.appendChild(acts); list.appendChild(row);
 
-    // Yapısal Veri Oluştur
     const schema = {
         "@context": "https://schema.org",
         "@type": "Place",
@@ -689,7 +700,7 @@ function checkUrlHashForSearch() {
 
 document.addEventListener('DOMContentLoaded', () => {
     type();
-    checkUrlHashForSearch();
+    loadAll().then(checkUrlHashForSearch); // Veriler yüklendikten sonra URL'yi kontrol et
 });
 
 qEl.addEventListener('input', updateSuggestions);
@@ -728,7 +739,7 @@ window.onscroll = function() {
 function scrollToTop(e) { e.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'}); }
 scrollTopBtn.addEventListener('click', scrollToTop);
 footerAnasayfaLink.addEventListener('click', scrollToTop);
-loadAll();
+
 </script>
 </body>
 </html>
