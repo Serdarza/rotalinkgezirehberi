@@ -242,7 +242,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
 
-/* --- YÜZEN BUTON GRUBU --- */
 .fixed-action-buttons {
     position: fixed;
     bottom: 20px;
@@ -250,7 +249,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     z-index: 98;
     display: none;
     flex-direction: column;
-    align-items: flex-end; /* DÜZELTME: Hizalamayı sağa yasla */
+    align-items: flex-end;
 }
 #scrollTopBtn {
     position: relative;
@@ -260,7 +259,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     font-size: 24px; line-height: 48px; text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;
-    margin-top: 12px; /* FAB ile arasına boşluk koy */
+    margin-top: 12px;
 }
 #scrollTopBtn:hover { background-color: var(--b2); }
 .fab-container {
@@ -375,15 +374,52 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
   </section>
   
   <div class="tabs" id="tabs" style="display:none">
-    </div>
+    <div class="tab" data-tab="tesis">Tesis</div>
+    <div class="tab" data-tab="gezi">Gezi</div>
+    <div class="tab" data-tab="yemek">Yemek</div>
+    <div class="tab" data-tab="sosyal">Sosyal</div>
+  </div>
+  <div class="tabcontent" id="tab-tesis"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-gezi"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-yemek"><div class="empty">Sonuç yok.</div></div>
+  <div class="tabcontent" id="tab-sosyal"><div class="empty">Sonuç yok.</div></div>
+
   <section class="hero card" id="ozellikler">
-      </section>
+      <div class="hero-text">
+        <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
+        <p><span class="text-highlight">Ordu evleri, polis evleri, öğretmenevleri</span> gibi pek çok kamu misafirhanesini tek ekranda keşfedin. Türkiye’nin dört bir yanındaki <span class="text-highlight">sosyal tesisler</span>, uygun fiyatlı konaklama imkânları, lezzetli yemekler ve dinlenme alanları artık elinizin altında.</p>
+        <p><strong>Arayın</strong>, tek dokunuşla tesis yetkililerine ulaşın. <strong>Paylaş</strong>, bilgileri kolayca sevdiklerinize iletin. <strong>Konum</strong>, yol tarifini açarak dilediğiniz noktaya zahmetsizce ulaşın.</p>
+        <p>RotaLink sayesinde hem şehir içi seyahatlerinizde hem de iş ve tatil yolculuklarınızda <span class="text-highlight">güvenilir kamu tesislerine</span> kolayca erişin.</p>
+        <a class="btn-store-new" id="indir" href="https://play.google.com/store/apps/details?id=com.serdarza.rotalink" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.39,5.42,12,2,5.61,5.42,5.58,5.44A10.6,10.6,0,0,0,2,15.21,1,1,0,0,0,3,16H3a1,1,0,0,0,.92-.63,8.6,8.6,0,0,1,16.16,0A1,1,0,0,0,21,16h0a1,1,0,0,0,1-0.79A10.6,10.6,0,0,0,18.42,5.44ZM4.1,14.42a8.62,8.62,0,0,1,1.52-5.3L9.4,12.29,4.51,13.71A1,1,0,0,0,4.1,14.42Zm1.61-6.6-4-2.31L12,2l8.29,3.51-4,2.31L12,5.51ZM14.6,9.12l3.78-2.18a8.62,8.62,0,0,1,1.52,5.3,1,1,0,0,0-.41.71L14.6,12.29Z"/></svg>
+            <div class="text-wrap">
+              <span class="text-label">HEMEN İNDİR</span>
+              <span class="text-store">Google Play</span>
+            </div>
+          </a>
+      </div>
+      <div class="hero-image">
+        <img src="logo.png" alt="RotaLink Uygulama Logosu" class="app-logo">
+      </div>
+  </section>
 
   <section class="card contact-card" id="iletisim">
-    </section>
+    <h2>Öneri ve Geri Bildirim</h2>
+    <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain">
+       <div class="form-group"><label for="kategori">Öneri Kategorisi</label><select id="kategori" name="Kategori" required><option value="" disabled selected>Kategori seçin...</option><option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option><option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option><option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option><option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option><option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option><option value="Diger">Diğer Görüş ve Öneriler</option></select></div>
+       <div class="form-group"><label for="sehir">Şehir</label><input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required></div>
+       <div class="form-group"><label for="yer_adi">Yer Adı / Konu</label><input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required></div>
+       <div class="form-group"><label for="aciklama">Açıklama / Detaylar</label><textarea id="aciklama" name="Aciklama" placeholder="Konum, telefon, web sitesi gibi detayları veya geri bildiriminizi yazın..." required></textarea></div>
+       <div class="form-group"><label for="email">E-posta Adresiniz (İsteğe Bağlı)</label><input type="email" id="email" name="Gonderen_Eposta" placeholder="Geri dönüş yapmamızı isterseniz..."></div>
+       <button type="submit" class="btn-submit">Öneriyi Gönder</button>
+       <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
+    </form>
+  </section>
 
   <footer id="footer">
-    </footer>
+    <div>© <span id="yil"></span> Rotalink Gezi Rehberi</div>
+    <div class="footer-links"><a href="#" id="footerAnasayfa">Anasayfa</a><a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a><a href="mailto:rotalinkinfo@gmail.com">İletişim</a></div>
+  </footer>
 </div>
 </div>
 
@@ -407,6 +443,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     </div>
     <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 </div>
+
 <script>
 const menuToggle = document.getElementById('menu-toggle');
 const mainNav = document.getElementById('main-nav');
@@ -510,7 +547,6 @@ function handleShare(btn) {
 
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
-// DÜZELTİLDİ: Template literal sözdizimi hatası giderildi
 function createMapSearchUrl(query) {
     const encodedQuery = encodeURIComponent(query);
     if (isAppleDevice()) {
