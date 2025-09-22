@@ -14,6 +14,20 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto;scroll-behavior: smooth;}
 a{text-decoration:none;color:inherit}
+
+/* YENİ: Kopyalamayı Engelleme Kodu */
+body {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Standard syntax */
+}
+/* YENİ: Form alanlarında kopyalamaya izin ver */
+input, textarea {
+    -webkit-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+
 .container{max-width:1100px;margin:auto;padding:18px}
 header{
     display:flex;
@@ -241,6 +255,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
+
 .fab-container {
     position: fixed;
     bottom: 80px;
@@ -402,7 +417,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 
   <section class="card contact-card" id="iletisim">
     <h2>Öneri ve Geri Bildirim</h2>
-    <form action="mailto:rotalinkinfo@gmail.com" method="post" enctype="text/plain" autocomplete="on">
+    <form id="contact-form">
        <div class="form-group"><label for="kategori">Öneri Kategorisi</label><select id="kategori" name="Kategori" required><option value="" disabled selected>Kategori seçin...</option><option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option><option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option><option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option><option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option><option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option><option value="Diger">Diğer Görüş ve Öneriler</option></select></div>
        <div class="form-group"><label for="sehir">Şehir</label><input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required></div>
        <div class="form-group"><label for="yer_adi">Yer Adı / Konu</label><input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required></div>
@@ -636,6 +651,22 @@ suggestionsEl.addEventListener('click', (e) => {
     if (e.target.classList.contains('suggestion-item')) { qEl.value = e.target.textContent; hideSuggestions(); run(); updateSuggestions();}
 });
 document.addEventListener('click', (e) => { if (!e.target.closest('.search-wrapper')) { hideSuggestions(); } });
+
+const contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const to = 'rotalinkinfo@gmail.com';
+    const subject = encodeURIComponent('RotaLink - Öneri/Geri Bildirim: ' + this.elements['Kategori'].value);
+    const body = encodeURIComponent(
+        `Kategori: ${this.elements['Kategori'].value}\n` +
+        `Şehir: ${this.elements['Sehir'].value}\n` +
+        `Yer Adı / Konu: ${this.elements['Yer_Adi'].value}\n` +
+        `Açıklama: ${this.elements['Aciklama'].value}\n\n` +
+        `Gönderen E-posta: ${this.elements['Gonderen_Eposta'].value || 'Belirtilmemiş'}`
+    );
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+});
+
 const scrollTopBtn = document.getElementById('scrollTopBtn');
 const footerAnasayfaLink = document.getElementById('footerAnasayfa');
 window.onscroll = function() {
