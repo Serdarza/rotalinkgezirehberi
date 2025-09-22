@@ -3821,6 +3821,38 @@
         "adres": "Muğla ve sahil köyleri",
         "aciklama": "Kabak çiçeklerinin içinin zeytinyağlı harçla doldurulup pişirildiği Ege’ye özgü yemek."
     },
+    
+  {
+    "il": "Muş",
+    "isim": "Muş Köftesi",
+    "adres": "Muş lokantaları ve restoranları",
+    "aciklama": "Yağsız etin iki veya üç kez çekilip dövülmesiyle hazırlanır, köftelik bulgurla yoğrulur ve genellikle mangalda pişirilen yöresel bir lezzet."
+  },
+  {
+    "il": "Muş",
+    "isim": "Hez Dolması",
+    "adres": "Muş lokantaları ve restoranları",
+    "aciklama": "Yağlı kıyma ve pirincin yoğrulmasıyla hazırlanan iç harç, haşlanmış lahana yapraklarına sarılarak tencerede pişirilir."
+  },
+  {
+    "il": "Muş",
+    "isim": "Keşkek",
+    "adres": "Muş lokantaları ve restoranları",
+    "aciklama": "Nohut ve buğday taneleri suda haşlanır, önceden pişirilmiş et ve toz biberle birleştirilerek hazırlanan geleneksel bir yemek."
+  },
+  {
+    "il": "Muş",
+    "isim": "Çorti",
+    "adres": "Muş lokantaları ve restoranları",
+    "aciklama": "Ufak doğranmış lahana yaprakları, maydanoz, reyhan, soğan ve çeşitli baharatlarla hazırlanan yöresel bir ot yemeği."
+  },
+  {
+    "il": "Muş",
+    "isim": "Domatesli Lahana Dolması",
+    "adres": "Muş lokantaları ve restoranları",
+    "aciklama": "Yağlı kıyma ve bulgurun yoğrulmasıyla hazırlanan iç harç, haşlanmış lahana yapraklarına sarılır ve domates sosuyla tencerede pişirilir."
+  },
+
     {
         "il": "Nevşehir",
         "isim": "Testi Kebabı",
