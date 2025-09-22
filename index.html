@@ -233,6 +233,85 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links a:hover { color: var(--text); }
 #scrollTopBtn {display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99;border: none; outline: none; background-color: var(--b1); color: white;cursor: pointer; padding: 0; border-radius: 50%; width: 48px; height: 48px;font-size: 24px; line-height: 48px; text-align: center;box-shadow: 0 4px 8px rgba(0,0,0,0.2);transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;}
 #scrollTopBtn:hover { background-color: var(--b2); }
+
+.fab-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 98;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.fab-main {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--b1), var(--b2));
+    color: white;
+    font-size: 36px;
+    line-height: 56px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.fab-container.open .fab-main {
+    transform: rotate(45deg);
+}
+.fab-options {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+}
+.fab-container.open .fab-options {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.fab-option {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.fab-option .label {
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-right: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    font-weight: 600;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fab-container.open .fab-option .label {
+    opacity: 1;
+    transform: translateX(0);
+}
+.fab-option:nth-child(1) .label { transition-delay: 0.2s; }
+.fab-option:nth-child(2) .label { transition-delay: 0.1s; }
+.fab-option:nth-child(3) .label { transition-delay: 0s; }
+.fab-option .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+}
+
 @media (max-width: 900px){
     .hero.card { grid-template-columns: 1fr; }
     .hero-image { display: none; }
@@ -246,7 +325,13 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     nav.nav-open { display: flex; }
     nav a { padding: 12px 0; }
 }
-@media(max-width:640px){.item{flex-direction:column;align-items:flex-start}.actions{width:100%; margin-top: 8px;}footer { flex-direction: column; text-align: center; }}
+@media(max-width:600px){
+    .item{flex-direction:column;align-items:flex-start}
+    .actions{width:100%; margin-top: 8px;}
+    footer { flex-direction: column; text-align: center; }
+    .fab-container { bottom: 70px; right: 15px; }
+    #scrollTopBtn { bottom: 15px; }
+}
 </style>
 </head>
 <body>
@@ -336,8 +421,25 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 
 <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 
+<div class="fab-container" id="fab-container" style="display: none;">
+    <div class="fab-options" id="fab-options">
+        <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
+            <span class="label">Tarihçe</span>
+            <span class="icon">📜</span>
+        </a>
+        <a href="#" id="fab-pharmacy" class="fab-option" target="_blank" rel="noopener">
+            <span class="label">Nöbetçi Eczane</span>
+            <span class="icon">➕</span>
+        </a>
+        <a href="#" id="fab-weather" class="fab-option" target="_blank" rel="noopener">
+            <span class="label">Hava Durumu</span>
+            <span class="icon">☀️</span>
+        </a>
+    </div>
+    <button class="fab-main" id="fab-main">+</button>
+</div>
+
 <script>
-// YENİ MOBİL MENÜ KODU
 const menuToggle = document.getElementById('menu-toggle');
 const mainNav = document.getElementById('main-nav');
 menuToggle.addEventListener('click', () => {
@@ -394,7 +496,33 @@ function erase() {
 document.addEventListener('DOMContentLoaded', type);
 qEl.addEventListener('focus', () => { typingContainer.style.display = 'none'; });
 qEl.addEventListener('blur', () => { if(!qEl.value) typingContainer.style.display = 'block'; });
+
+const fabContainer = document.getElementById('fab-container');
+const fabMain = document.getElementById('fab-main');
+const fabWeather = document.getElementById('fab-weather');
+const fabPharmacy = document.getElementById('fab-pharmacy');
+const fabHistory = document.getElementById('fab-history');
+
+fabMain.addEventListener('click', () => {
+    fabContainer.classList.toggle('open');
+});
+
+function convertToUrlSlug(text) {
+    if (!text) return '';
+    const trMap = { 'ç':'c', 'ğ':'g', 'ı':'i', 'ö':'o', 'ş':'s', 'ü':'u', 'İ': 'I' };
+    return text.toLowerCase().replace(/[çğıöşüİ]/g, char => trMap[char]);
+}
+
+function updateFabLinks(cityName) {
+    const cityNameSlug = convertToUrlSlug(cityName);
+    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+    fabWeather.href = `https://www.accuweather.com/tr/search-locations?query=${cityNameSlug}`;
+    fabPharmacy.href = `https://www.google.com/search?q=${capitalizedCityName}+nöbetçi+eczane`;
+    fabHistory.href = `https://tr.wikipedia.org/wiki/${capitalizedCityName}`;
+}
+
 function isAppleDevice() { return /iPhone|iPad|iPod/.test(navigator.platform); }
+
 function handleShare(btn) {
     const isim = btn.dataset.isim;
     const il = btn.dataset.il;
@@ -409,14 +537,15 @@ function handleShare(btn) {
             .catch(err => console.error("Kopyalama hatası:", err));
     }
 }
+
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...2$${encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps?q=${encodeURIComponent(query)}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...2$$${encodeURIComponent(query)}`; }
+    return `https://www.google.com/maps?q=$9$$${encodeURIComponent(query)}`;
 }
 function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...3$${lat},${lng}`; }
-    return `https://www.google.com/maps?q=$6$${lat},${lng}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...3$$${lat},${lng}`; }
+    return `https://www.google.com/maps?q=$6$$${lat},${lng}`;
 }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
@@ -466,12 +595,15 @@ async function run(){
   const q = qEl.value.trim().toLowerCase();
   if(!q){
     tabsBar.style.display='none';
+    fabContainer.style.display = 'none';
     ['tesis','gezi','yemek','sosyal'].forEach(id=>{
       const el=document.getElementById('tab-'+id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
     });
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
+  updateFabLinks(qEl.value);
+  fabContainer.style.display = 'flex';
   const f = x => (x.il||'').toLowerCase() === q;
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
