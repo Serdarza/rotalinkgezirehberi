@@ -44,7 +44,12 @@ nav{display:flex;gap:14px;color:var(--mut)}
     color: var(--text);
 }
 .hero-image { text-align: center; }
-.hero-image svg { max-width: 100%; height: auto; }
+.hero-image .app-logo {
+    max-width: 250px;
+    max-height: 250px;
+    height: auto;
+    filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.1));
+}
 .btn-store-new {
     display: inline-flex; align-items: center; gap: 12px; padding: 8px 20px;
     border-radius: 10px; background: #0f172a; color: #fff;
@@ -85,13 +90,9 @@ nav{display:flex;gap:14px;color:var(--mut)}
   position: relative;
   z-index: 1;
 }
-/* Placeholder Animasyon Stilleri */
 #q::placeholder {
   color: #94a3b8;
   transition: opacity 0.3s ease;
-}
-.placeholder-typing::placeholder {
-  color: transparent;
 }
 .typing-container {
     position: absolute;
@@ -103,15 +104,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
     pointer-events: none; /* Üzerine tıklanmasını engelle */
     z-index: 0;
 }
-.typing-cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1.2em;
-    background-color: var(--mut);
-    animation: blink 0.7s infinite;
-}
 @keyframes blink {
-    0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
 
@@ -124,7 +117,6 @@ nav{display:flex;gap:14px;color:var(--mut)}
 }
 .clearbtn:hover { background-color: #dde4ed; }
 
-/* Yeni Bul Butonu */
 .search-btn {
     position: absolute;
     right: 6px;
@@ -210,7 +202,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
   </header>
 
   <section class="hero card" id="ozellikler">
-      <div class="hero-text">
+    <div class="hero-text">
         <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
         <p><span class="text-highlight">Ordu evleri, polis evleri, öğretmenevleri</span> gibi pek çok kamu misafirhanesini tek ekranda keşfedin. Türkiye’nin dört bir yanındaki <span class="text-highlight">sosyal tesisler</span>, uygun fiyatlı konaklama imkânları, lezzetli yemekler ve dinlenme alanları artık elinizin altında.</p>
         <p><strong>Arayın</strong>, tek dokunuşla tesis yetkililerine ulaşın. <strong>Paylaş</strong>, bilgileri kolayca sevdiklerinize iletin. <strong>Konum</strong>, yol tarifini açarak dilediğiniz noktaya zahmetsizce ulaşın.</p>
@@ -224,7 +216,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
           </a>
       </div>
       <div class="hero-image">
-        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="var(--b1)" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.36 158.08a48.96 48.96 0 0 0-48.896 48.896v479.552a48.96 48.96 0 0 0 74.496 42.432l354.56-239.744a48.96 48.96 0 0 0 0-84.864l-354.56-239.744a48.96 48.96 0 0 0-25.6-6.528z"></path></svg>
+        <img src="logo.png" alt="RotaLink Uygulama Logosu" class="app-logo">
       </div>
   </section>
 
@@ -265,6 +257,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
        <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
     </form>
   </section>
+
   <footer id="footer">
     <div>© <span id="yil"></span> RotaLink</div>
     <div class="footer-links"><a href="#" id="footerAnasayfa">Anasayfa</a><a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a><a href="mailto:rotalinkinfo@gmail.com">İletişim</a></div>
@@ -288,16 +281,15 @@ async function loadAll(){
 
 const qEl = document.getElementById('q');
 const clearBtn = document.getElementById('clearBtn');
-const searchBtn = document.getElementById('searchBtn'); // Yeni buton
+const searchBtn = document.getElementById('searchBtn');
 const tabsBar = document.getElementById('tabs');
 const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
-
-// --- Placeholder Animasyon Kodları ---
 const typingContainer = document.querySelector('.typing-container');
 const placeholderTexts = ["İstediğiniz şehri yazın...", "örn. Düzce"];
 let textIndex = 0;
 let charIndex = 0;
+
 function type() {
     if (charIndex < placeholderTexts[textIndex].length) {
         typingContainer.textContent += placeholderTexts[textIndex].charAt(charIndex);
@@ -317,11 +309,9 @@ function erase() {
         setTimeout(type, 500);
     }
 }
-// Animasyonu Başlat
 document.addEventListener('DOMContentLoaded', type);
 qEl.addEventListener('focus', () => { typingContainer.style.display = 'none'; });
 qEl.addEventListener('blur', () => { if(!qEl.value) typingContainer.style.display = 'block'; });
-
 
 function isAppleDevice() { return /iPhone|iPad|iPod/.test(navigator.platform); }
 
@@ -418,8 +408,8 @@ async function run(){
 
 function updateSuggestions() {
     const value = qEl.value.trim().toLowerCase();
-    clearBtn.style.display = value ? 'grid' : 'none'; // Temizle butonunu göster/gizle
-    typingContainer.style.display = value ? 'none' : 'block'; // Yazı varsa animasyonu gizle
+    clearBtn.style.display = value ? 'grid' : 'none';
+    typingContainer.style.display = value ? 'none' : 'block';
 
     if (!value) { hideSuggestions(); return; }
     const matchedCities = S.sortedCities.filter(city => city.toLowerCase().startsWith(value)).slice(0, 10);
@@ -432,7 +422,7 @@ function updateSuggestions() {
 qEl.addEventListener('input', updateSuggestions);
 qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
 clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); hideSuggestions(); run(); updateSuggestions(); });
-searchBtn.addEventListener('click', () => { hideSuggestions(); run(); }); // Bul butonu
+searchBtn.addEventListener('click', () => { hideSuggestions(); run(); });
 suggestionsEl.addEventListener('click', (e) => {
     if (e.target.classList.contains('suggestion-item')) { qEl.value = e.target.textContent; hideSuggestions(); run(); updateSuggestions();}
 });
