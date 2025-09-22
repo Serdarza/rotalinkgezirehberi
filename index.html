@@ -44,11 +44,13 @@ nav{display:flex;gap:14px;color:var(--mut)}
     color: var(--text);
 }
 .hero-image { text-align: center; }
+/* GÜNCELLENDİ: Logo boyutu ve border-radius */
 .hero-image .app-logo {
-    max-width: 250px;
-    max-height: 250px;
+    max-width: 350px; /* Daha büyük */
+    max-height: 350px; /* Daha büyük */
     height: auto;
-    filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.15)); /* Hafif gölge */
+    border-radius: 25px; /* Daha oval kenarlar */
 }
 .btn-store-new {
     display: inline-flex; align-items: center; gap: 12px; padding: 8px 20px;
@@ -61,7 +63,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .btn-store-new .text-label { font-size: 12px; opacity: 0.8; }
 .btn-store-new .text-store { font-size: 18px; font-weight: 600; }
 
-/* --- GÜNCELLENMİŞ ARAMA BÖLÜMÜ TASARIMI --- */
+/* --- ARAMA BÖLÜMÜ TASARIMI --- */
 .search-section { padding: 32px 0; text-align: center; }
 .search-section h2 { font-size: 32px; font-weight: 800; margin-top: 0; margin-bottom: 24px; }
 .search-wrapper {
@@ -72,7 +74,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .inputwrap{
   position:relative; display: flex; align-items: center;
   border-radius: 28px;
-  background: linear-gradient(145deg, #e6f7ff, #fff); /* Daha canlı renk */
+  background: linear-gradient(145deg, #e6f7ff, #fff);
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   border: 2px solid var(--bd);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -84,7 +86,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 .search-icon { position: absolute; left: 20px; color: #94a3b8; width: 22px; height: 22px; transition: color 0.3s; z-index: 2;}
 .inputwrap:focus-within .search-icon { color: var(--b1); }
 #q {
-  width:100%; padding: 16px 120px 16px 56px; /* Butona yer açmak için sağ padding arttı */
+  width:100%; padding: 16px 120px 16px 56px;
   border-radius:28px; border:0;
   background: transparent; outline: none; font-size: 18px; color: var(--text);
   position: relative;
@@ -101,7 +103,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
     transform: translateY(-50%);
     font-size: 18px;
     color: #94a3b8;
-    pointer-events: none; /* Üzerine tıklanmasını engelle */
+    pointer-events: none;
     z-index: 0;
 }
 @keyframes blink {
@@ -109,7 +111,7 @@ nav{display:flex;gap:14px;color:var(--mut)}
 }
 
 .clearbtn{
-  position:absolute; right: 105px; /* Butonun soluna konumlandı */
+  position:absolute; right: 105px;
   top:50%; transform:translateY(-50%); border:0; background:#eef2f7;
   width:32px; height:32px; border-radius:50%; font-weight:900; color:#334155;
   cursor:pointer; display: grid; place-items: center; transition: background-color 0.2s;
