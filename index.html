@@ -242,32 +242,28 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
 
-.fixed-action-buttons {
+.fab-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 80px;
     right: 16px;
     z-index: 98;
-    display: flex;
-    flex-direction: column;
+    display: none; /* Arama yapılmadan önce gizli */
+    flex-direction: column-reverse;
     align-items: flex-end;
 }
 #scrollTopBtn {
-    position: relative;
+    position: fixed;
+    bottom: 20px;
+    right: 16px;
+    z-index: 99;
     display: none;
     border: none; outline: none; background-color: var(--b1); color: white;
     cursor: pointer; padding: 0; border-radius: 50%; width: 48px; height: 48px;
     font-size: 24px; line-height: 48px; text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;
-    margin-top: 12px;
 }
 #scrollTopBtn:hover { background-color: var(--b2); }
-.fab-container {
-    position: relative;
-    display: none; /* Arama yapılmadan önce gizli */
-    flex-direction: column-reverse;
-    align-items: flex-end;
-}
 .fab-main {
     width: 56px; height: 56px; border-radius: 50%;
     background: linear-gradient(135deg, var(--b1), var(--b2));
@@ -333,7 +329,9 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     .item{flex-direction:column;align-items:flex-start}
     .actions{width:100%; margin-top: 8px;}
     footer { flex-direction: column; text-align: center; }
-    .fixed-action-buttons { right: 15px; bottom: 15px; }
+    #scrollTopBtn, .fab-container { right: 15px; }
+    #scrollTopBtn { bottom: 15px; }
+    .fab-container { bottom: 75px; }
 }
 </style>
 </head>
@@ -423,26 +421,25 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 </div>
 </div>
 
-<div class="fixed-action-buttons" id="fixed-action-buttons">
-    <div class="fab-container" id="fab-container">
-        <div class="fab-options">
-            <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
-                <span class="label">Tarihçe</span>
-                <span class="icon">📜</span>
-            </a>
-            <a href="#" id="fab-pharmacy" class="fab-option" target="_blank" rel="noopener">
-                <span class="label">Nöbetçi Eczane</span>
-                <span class="icon">🌙</span>
-            </a>
-            <a href="#" id="fab-weather" class="fab-option" target="_blank" rel="noopener">
-                <span class="label">Hava Durumu</span>
-                <span class="icon">☀️</span>
-            </a>
-        </div>
-        <button class="fab-main" id="fab-main">+</button>
+<div class="fab-container" id="fab-container">
+    <div class="fab-options">
+        <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
+            <span class="label">Tarihçe</span>
+            <span class="icon">📜</span>
+        </a>
+        <a href="#" id="fab-pharmacy" class="fab-option" target="_blank" rel="noopener">
+            <span class="label">Nöbetçi Eczane</span>
+            <span class="icon">🌙</span>
+        </a>
+        <a href="#" id="fab-weather" class="fab-option" target="_blank" rel="noopener">
+            <span class="label">Hava Durumu</span>
+            <span class="icon">☀️</span>
+        </a>
     </div>
-    <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
+    <button class="fab-main" id="fab-main">+</button>
 </div>
+
+<a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 
 <script>
 const menuToggle = document.getElementById('menu-toggle');
@@ -507,7 +504,6 @@ const fabMain = document.getElementById('fab-main');
 const fabWeather = document.getElementById('fab-weather');
 const fabPharmacy = document.getElementById('fab-pharmacy');
 const fabHistory = document.getElementById('fab-history');
-const fixedActionButtons = document.getElementById('fixed-action-buttons');
 
 fabMain.addEventListener('click', () => {
     fabContainer.classList.toggle('open');
@@ -603,7 +599,7 @@ async function run(){
   const q = qEl.value.trim().toLowerCase();
   if(!q){
     tabsBar.style.display='none';
-    fixedActionButtons.style.display = 'none';
+    fabContainer.style.display = 'none';
     fabContainer.classList.remove('open');
     ['tesis','gezi','yemek','sosyal'].forEach(id=>{
       const el=document.getElementById('tab-'+id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
@@ -612,7 +608,7 @@ async function run(){
     return;
   }
   updateFabLinks(qEl.value);
-  fixedActionButtons.style.display = 'flex';
+  fabContainer.style.display = 'flex';
   fabContainer.classList.add('open');
   const f = x => (x.il||'').toLowerCase() === q;
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
