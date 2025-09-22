@@ -68,9 +68,14 @@ nav a:hover {
 .menu-toggle.open .line2 { opacity: 0; }
 .menu-toggle.open .line3 { transform: translateY(-7px) rotate(-45deg); }
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px; margin-top: 16px;}
+
+/* --- GÜNCELLENMİŞ HERO BÖLÜMÜ TASARIMI --- */
 .hero.card {
-    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
-    gap: 32px; padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 24px 32px; /* Dikey boşluk azaltıldı */
+    padding: 32px;
 }
 .hero-text h1 { margin: 0 0 12px; font-size: 32px; line-height: 1.3; font-weight: 800; }
 .hero-text p {
@@ -107,12 +112,12 @@ nav a:hover {
 .btn-store-new .text-wrap { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; }
 .btn-store-new .text-label { font-size: 12px; opacity: 0.8; }
 .btn-store-new .text-store { font-size: 18px; font-weight: 600; }
-.search-section { padding: 32px 0; text-align: center; }
-.search-section h2 { font-size: 32px; font-weight: 800; margin-top: 0; margin-bottom: 24px; }
+
 .search-wrapper {
     position: relative;
-    max-width: 700px;
-    margin: auto;
+    max-width: 100%; /* Genişliği ayarlandı */
+    grid-column: 1 / -1; /* İki sütunu da kapla */
+    margin-top: 16px;
 }
 .inputwrap{
   position:relative; display: flex; align-items: center;
@@ -152,7 +157,6 @@ nav a:hover {
 @keyframes blink {
     50% { opacity: 0; }
 }
-
 .clearbtn{
   position:absolute; right: 105px;
   top:50%; transform:translateY(-50%); border:0; background:#eef2f7;
@@ -161,7 +165,6 @@ nav a:hover {
   z-index: 2;
 }
 .clearbtn:hover { background-color: #dde4ed; }
-
 .search-btn {
     position: absolute;
     right: 6px;
@@ -373,11 +376,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
       <div class="hero-image">
         <img src="logo.png" alt="RotaLink Uygulama Logosu" class="app-logo">
       </div>
-  </section>
-
-  <section class="search-section" id="sehirara">
-    <h2>Şehir Ara</h2>
-    <div class="search-wrapper">
+      <div class="search-wrapper" id="sehirara">
         <div class="inputwrap">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
             <div class="typing-container"></div>
@@ -386,7 +385,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
             <button class="search-btn" id="searchBtn">Bul</button>
         </div>
         <div id="suggestions"></div>
-    </div>
+      </div>
   </section>
 
   <div class="tabs" id="tabs" style="display:none">
@@ -515,8 +514,8 @@ function convertToUrlSlug(text) {
 
 function updateFabLinks(cityName) {
     const cityNameSlug = convertToUrlSlug(cityName);
-    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
-
+    const capitalizedCityName = cityName.charAt(0).toUpperCase() + cityName.slice(1).toLowerCase();
+    
     fabWeather.href = `https://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?il=${capitalizedCityName}`;
     fabPharmacy.href = `https://www.eczaneler.gen.tr/nobetci-${cityNameSlug}`;
     fabHistory.href = `https://tr.wikipedia.org/wiki/${capitalizedCityName}`;
@@ -542,12 +541,12 @@ function handleShare(btn) {
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 
 function createMapSearchUrl(query) {
-    if (isAppleDevice()) { return `google.com/maps?q=...9${encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps/search/?api=1&query=QUERY0${encodeURIComponent(query)}`;
+    if (isAppleDevice()) { return `google.com/maps?q=...9$${encodeURIComponent(query)}`; }
+    return `https://www.google.com/maps/search/?api=1&query=QUERY0$${encodeURIComponent(query)}`;
 }
 function createMapNavigateUrl(lat, lng) {
-    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=QUERY1${lat},${lng}`; }
-    return `https://www.google.com/maps/search/?api=1&query=QUERY2${lat},${lng}`;
+    if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=QUERY1$${lat},${lng}`; }
+    return `https://www.google.com/maps/search/?api=1&query=QUERY2$${lat},${lng}`;
 }
 function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
