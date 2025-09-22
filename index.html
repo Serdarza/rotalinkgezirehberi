@@ -412,7 +412,7 @@ function handleShare(btn) {
 function phoneHref(t){ const d=String(t||'').replace(/[^0-9+]/g,''); return d?`tel:${d}`:''; }
 function createMapSearchUrl(query) {
     if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...2$${encodeURIComponent(query)}`; }
-    return `https://www.google.com/maps?q=$9$${encodeURIComponent(query)}`;
+    return `https://www.google.com/maps?q=${encodeURIComponent(query)}`;
 }
 function createMapNavigateUrl(lat, lng) {
     if (isAppleDevice()) { return `https://www.google.com/maps/search/?api=1&query=...3$${lat},${lng}`; }
