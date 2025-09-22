@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Rotalink Tatil ve Gezi Rehberi</title>
+<title>Rotalink Gezi Rehberi</title>
 <meta name="theme-color" content="#f7faff" />
 <style>
 :root{
@@ -14,20 +14,6 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto;scroll-behavior: smooth;}
 a{text-decoration:none;color:inherit}
-
-/* YENİ: Kopyalamayı Engelleme Kodu */
-body {
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10+ */
-    user-select: none; /* Standard syntax */
-}
-/* YENİ: Form alanlarında kopyalamaya izin ver */
-input, textarea {
-    -webkit-user-select: auto;
-    -ms-user-select: auto;
-    user-select: auto;
-}
-
 .container{max-width:1100px;margin:auto;padding:18px}
 header{
     display:flex;
@@ -255,7 +241,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
-
 .fab-container {
     position: fixed;
     bottom: 80px;
@@ -385,6 +370,8 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
       </div>
   </section>
   
+  <h2 id="results-title" style="display: none;"></h2>
+
   <div class="tabs" id="tabs" style="display:none">
     <div class="tab" data-tab="tesis">Tesis</div>
     <div class="tab" data-tab="gezi">Gezi</div>
@@ -488,6 +475,11 @@ const tabBtns = [...document.querySelectorAll('.tab')];
 const suggestionsEl = document.getElementById('suggestions');
 const typingContainer = document.querySelector('.typing-container');
 const placeholderTexts = ["İstediğiniz şehri yazın...", "örn. Düzce"];
+const resultsTitle = document.getElementById('results-title');
+const defaultTitle = "Rotalink Gezi Rehberi";
+const metaDescription = document.getElementById('meta-description');
+const defaultDescription = metaDescription.getAttribute('content');
+
 let textIndex = 0;
 let charIndex = 0;
 function type() {
@@ -509,9 +501,6 @@ function erase() {
         setTimeout(type, 500);
     }
 }
-document.addEventListener('DOMContentLoaded', type);
-qEl.addEventListener('focus', () => { typingContainer.style.display = 'none'; });
-qEl.addEventListener('blur', () => { if(!qEl.value) typingContainer.style.display = 'block'; });
 
 const fabContainer = document.getElementById('fab-container');
 const fabMain = document.getElementById('fab-main');
@@ -572,6 +561,9 @@ function googleImageHref(isim, il){
 function mountList(el, items, type){
   el.innerHTML = '';
   if(!items || !items.length){ el.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
+  
+  document.getElementById('structured-data-container').innerHTML = ''; // Önceki yapısal verileri temizle
+  
   const list = document.createElement('div'); list.className='list';
   items.forEach(it=>{
     const row = document.createElement('div'); row.className='item';
@@ -599,6 +591,30 @@ function mountList(el, items, type){
       acts.innerHTML = `<a class="btn view" href="${url}" target="_blank" rel="noopener">İncele</a>`;
     }
     row.appendChild(info); row.appendChild(acts); list.appendChild(row);
+
+    // Yapısal Veri Oluştur
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "Place",
+        "name": it.isim,
+        "description": it.aciklama,
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": it.il,
+            "addressCountry": "TR"
+        }
+    };
+    if (type === 'tesis') {
+        schema["@type"] = "LodgingBusiness";
+        if (it.telefon) schema.telephone = it.telefon;
+    } else if (type === 'gezi') {
+        schema["@type"] = "TouristAttraction";
+    }
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(schema);
+    document.getElementById('structured-data-container').appendChild(script);
   });
   el.appendChild(list);
 }
@@ -610,21 +626,39 @@ tabBtns.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
 function hideSuggestions() { suggestionsEl.style.display = 'none'; suggestionsEl.innerHTML = ''; }
 async function run(){
   await loadAll();
-  const q = qEl.value.trim().toLowerCase();
+  const q = qEl.value.trim();
+  const qLower = q.toLowerCase();
+  
   if(!q){
     tabsBar.style.display='none';
     fabContainer.style.display = 'none';
     fabContainer.classList.remove('open');
+    resultsTitle.style.display = 'none';
+    window.location.hash = '';
+    document.title = defaultTitle;
+    metaDescription.setAttribute('content', defaultDescription);
     ['tesis','gezi','yemek','sosyal'].forEach(id=>{
       const el=document.getElementById('tab-'+id); el.innerHTML='<div class="empty">Aramak için bir şehir adı yazın.</div>'; el.classList.remove('active');
     });
     tabBtns.forEach(b=>b.classList.remove('active'));
     return;
   }
-  updateFabLinks(qEl.value);
+  
+  const capitalizedCityName = q.charAt(0).toUpperCase() + q.slice(1).toLowerCase();
+
+  updateFabLinks(q);
   fabContainer.style.display = 'flex';
   fabContainer.classList.add('open');
-  const f = x => (x.il||'').toLowerCase() === q;
+  
+  resultsTitle.textContent = `${capitalizedCityName} Arama Sonuçları`;
+  resultsTitle.style.display = 'block';
+
+  document.title = `${capitalizedCityName} Kamu Tesisleri ve Gezi Rehberi | Rotalink`;
+  metaDescription.setAttribute('content', `${capitalizedCityName} şehrindeki orduevleri, polisevleri, gezilecek yerler ve daha fazlasını Rotalink'te keşfedin.`);
+
+  window.location.hash = encodeURIComponent(capitalizedCityName);
+
+  const f = x => (x.il||'').toLowerCase() === qLower;
   mountList(document.getElementById('tab-tesis'), S.data.filter(f), 'tesis');
   mountList(document.getElementById('tab-gezi'), S.gezi.filter(f), 'gezi');
   mountList(document.getElementById('tab-yemek'), S.yemek.filter(f), 'yemek');
@@ -632,6 +666,7 @@ async function run(){
   tabsBar.style.display='flex';
   if(!document.querySelector('.tab.active')){ activate('tesis'); }
 }
+
 function updateSuggestions() {
     const value = qEl.value.trim().toLowerCase();
     clearBtn.style.display = value ? 'grid' : 'none';
@@ -643,6 +678,20 @@ function updateSuggestions() {
         suggestionsEl.style.display = 'block';
     } else { hideSuggestions(); }
 }
+
+function checkUrlHashForSearch() {
+    if(window.location.hash) {
+        const cityName = decodeURIComponent(window.location.hash.substring(1));
+        qEl.value = cityName;
+        run();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    type();
+    checkUrlHashForSearch();
+});
+
 qEl.addEventListener('input', updateSuggestions);
 qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
 clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); hideSuggestions(); run(); updateSuggestions(); });
