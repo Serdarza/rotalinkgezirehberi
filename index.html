@@ -175,7 +175,7 @@ nav a:hover {
     font-size: 18px;
     color: #94a3b8;
     pointer-events: none;
-    z-index: 0;
+    z-index: 2;
 }
 @keyframes blink {
     50% { opacity: 0; }
@@ -471,7 +471,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 
 <div class="modal-overlay" id="contact-modal">
     <div class="modal-content">
-        <button class="modal-close" id="modal-close-btn">&times;</button>
+        <button class="modal-close" id="modal-close-btn">×</button>
         <div class="contact-card">
             <h2>Öneri ve Geri Bildirim</h2>
             <form id="contact-form">
@@ -517,7 +517,7 @@ menuToggle.addEventListener('click', () => {
 const navLinks = mainNav.querySelectorAll('a');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
-        if (link.id !== 'iletisim-link') { // Sadece sayfa içi linkler menüyü kapatsın
+        if (link.id !== 'iletisim-link') {
             mainNav.classList.remove('nav-open');
             menuToggle.classList.remove('open');
         }
@@ -735,8 +735,8 @@ async function run(){
 
 function updateSuggestions() {
     const value = qEl.value.trim().toLowerCase();
-    clearBtn.style.display = value ? 'grid' 'none';
-    typingContainer.style.display = value ? 'none' 'block';
+    clearBtn.style.display = value ? 'grid' : 'none';
+    typingContainer.style.display = value ? 'none' : 'block';
     if (!value) { hideSuggestions(); return; }
     const matchedCities = S.sortedCities.filter(city => city.toLowerCase().startsWith(value)).slice(0, 10);
     if (matchedCities.length > 0) {
