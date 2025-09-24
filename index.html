@@ -1,22 +1,13 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6N7YF2FVKW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-6N7YF2FVKW');
-</script>
-<link rel="icon" href="amblem.png" type="image/png">
-<link rel="apple-touch-icon" href="amblem.png">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Rotalink Seyahatin Akıllı Rehberi</title>
+<title>Rotalink Gezi Rehberi</title>
 <meta name="description" id="meta-description" content="Türkiye'deki kamu misafirhaneleri, orduevleri, polisevleri, öğretmenevleri ve sosyal tesisler için en güncel gezi rehberi. Şehir arayın, konaklama ve gezi noktalarını keşfedin.">
 <meta name="theme-color" content="#f7faff" />
+<link rel="icon" href="amblem.png" type="image/png">
+<link rel="apple-touch-icon" href="amblem.png">
 <div id="structured-data-container"></div>
 <style>
 :root{
@@ -61,6 +52,7 @@ nav{display:flex;gap:24px;color:var(--mut)}
 nav a {
     font-weight: 600;
     transition: color 0.2s ease;
+    cursor: pointer;
 }
 nav a:hover {
     color: var(--b1);
@@ -251,11 +243,56 @@ nav a:hover {
 .btn.go{background:linear-gradient(135deg,#34d399,#22c55e);color:#0b1320}
 .btn.view{background:linear-gradient(135deg,#fde68a,var(--warn));color:#111827}
 .empty{color:var(--mut);font-size:13px}
-.contact-card { padding: 24px; }
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-content {
+    background: var(--bg);
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.open .modal-content {
+    transform: translateY(0);
+}
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e2e8f0;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 32px;
+}
 .contact-card h2 { margin-top: 0; font-size: 24px; }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 15px; }
-.form-group input, .form-group select, .form-group textarea {width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--bd);background: #f8fafc; font-size: 16px; font-family: inherit;transition: border-color 0.2s, box-shadow 0.2s;}
+.form-group input, .form-group select, .form-group textarea {width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--bd);background: var(--card); font-size: 16px; font-family: inherit;transition: border-color 0.2s, box-shadow 0.2s;}
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus {outline: none; border-color: var(--b1); background: #fff; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);}
 textarea { resize: vertical; min-height: 120px; }
 .btn-submit {width: 100%; padding: 14px; font-size: 16px; font-weight: 800;border: 0; border-radius: 10px; background: linear-gradient(135deg, var(--go), var(--ok));color: #fff; cursor: pointer; transition: opacity 0.2s;}
@@ -334,7 +371,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     display: grid; place-items: center; font-size: 24px;
     flex-shrink: 0;
 }
-
 @media (max-width: 900px){
     .hero.card { grid-template-columns: 1fr; }
     .hero-image { display: none; }
@@ -363,13 +399,13 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
   <header>
     <div class="logo">
       <img src="amblem.png" alt="Rotalink Amblem" class="logo-amblem">
-      <span>Rotalink Seyahatin Akıllı Rehberi</span>
+      <span>Rotalink Gezi Rehberi</span>
     </div>
     <nav id="main-nav">
         <a href="#sehirara">Şehir Ara</a>
         <a href="#ozellikler">Özellikler</a>
         <a href="#indir">İndir</a>
-        <a href="#iletisim">İletişim</a>
+        <a id="iletisim-link">İletişim</a>
     </nav>
     <button class="menu-toggle" id="menu-toggle">
         <span class="line line1"></span>
@@ -426,24 +462,29 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
       </div>
   </section>
 
-  <section class="card contact-card" id="iletisim">
-    <h2>Öneri ve Geri Bildirim</h2>
-    <form id="contact-form">
-       <div class="form-group"><label for="kategori">Öneri Kategorisi</label><select id="kategori" name="Kategori" required><option value="" disabled selected>Kategori seçin...</option><option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option><option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option><option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option><option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option><option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option><option value="Diger">Diğer Görüş ve Öneriler</option></select></div>
-       <div class="form-group"><label for="sehir">Şehir</label><input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required></div>
-       <div class="form-group"><label for="yer_adi">Yer Adı / Konu</label><input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required></div>
-       <div class="form-group"><label for="aciklama">Açıklama / Detaylar</label><textarea id="aciklama" name="Aciklama" placeholder="Konum, telefon, web sitesi gibi detayları veya geri bildiriminizi yazın..." required></textarea></div>
-       <div class="form-group"><label for="email">E-posta Adresiniz (İsteğe Bağlı)</label><input type="email" id="email" name="Gonderen_Eposta" placeholder="Geri dönüş yapmamızı isterseniz..."></div>
-       <button type="submit" class="btn-submit">Öneriyi Gönder</button>
-       <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
-    </form>
-  </section>
-
   <footer id="footer">
     <div>© <span id="yil"></span> Rotalink Gezi Rehberi</div>
     <div class="footer-links"><a href="#" id="footerAnasayfa">Anasayfa</a><a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a><a href="mailto:rotalinkinfo@gmail.com">İletişim</a></div>
   </footer>
 </div>
+</div>
+
+<div class="modal-overlay" id="contact-modal">
+    <div class="modal-content">
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+        <div class="contact-card">
+            <h2>Öneri ve Geri Bildirim</h2>
+            <form id="contact-form">
+               <div class="form-group"><label for="kategori">Öneri Kategorisi</label><select id="kategori" name="Kategori" required><option value="" disabled selected>Kategori seçin...</option><option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option><option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option><option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option><option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option><option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option><option value="Diger">Diğer Görüş ve Öneriler</option></select></div>
+               <div class="form-group"><label for="sehir">Şehir</label><input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required></div>
+               <div class="form-group"><label for="yer_adi">Yer Adı / Konu</label><input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required></div>
+               <div class="form-group"><label for="aciklama">Açıklama / Detaylar</label><textarea id="aciklama" name="Aciklama" placeholder="Konum, telefon, web sitesi gibi detayları veya geri bildiriminizi yazın..." required></textarea></div>
+               <div class="form-group"><label for="email">E-posta Adresiniz (İsteğe Bağlı)</label><input type="email" id="email" name="Gonderen_Eposta" placeholder="Geri dönüş yapmamızı isterseniz..."></div>
+               <button type="submit" class="btn-submit">Öneriyi Gönder</button>
+               <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
+            </form>
+        </div>
+    </div>
 </div>
 
 <div class="fab-container" id="fab-container">
@@ -476,8 +517,10 @@ menuToggle.addEventListener('click', () => {
 const navLinks = mainNav.querySelectorAll('a');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
-        mainNav.classList.remove('nav-open');
-        menuToggle.classList.remove('open');
+        if (link.id !== 'iletisim-link') { // Sadece sayfa içi linkler menüyü kapatsın
+            mainNav.classList.remove('nav-open');
+            menuToggle.classList.remove('open');
+        }
     });
 });
 
@@ -525,6 +568,7 @@ function erase() {
         setTimeout(type, 500);
     }
 }
+
 const fabContainer = document.getElementById('fab-container');
 const fabMain = document.getElementById('fab-main');
 const fabWeather = document.getElementById('fab-weather');
@@ -691,8 +735,8 @@ async function run(){
 
 function updateSuggestions() {
     const value = qEl.value.trim().toLowerCase();
-    clearBtn.style.display = value ? 'grid' : 'none';
-    typingContainer.style.display = value ? 'none' : 'block';
+    clearBtn.style.display = value ? 'grid' 'none';
+    typingContainer.style.display = value ? 'none' 'block';
     if (!value) { hideSuggestions(); return; }
     const matchedCities = S.sortedCities.filter(city => city.toLowerCase().startsWith(value)).slice(0, 10);
     if (matchedCities.length > 0) {
@@ -711,7 +755,7 @@ function checkUrlHashForSearch() {
 
 document.addEventListener('DOMContentLoaded', () => {
     type();
-    loadAll().then(checkUrlHashForSearch); // Veriler yüklendikten sonra URL'yi kontrol et
+    loadAll().then(checkUrlHashForSearch);
 });
 
 qEl.addEventListener('input', updateSuggestions);
@@ -722,6 +766,23 @@ suggestionsEl.addEventListener('click', (e) => {
     if (e.target.classList.contains('suggestion-item')) { qEl.value = e.target.textContent; hideSuggestions(); run(); updateSuggestions();}
 });
 document.addEventListener('click', (e) => { if (!e.target.closest('.search-wrapper')) { hideSuggestions(); } });
+
+const contactModal = document.getElementById('contact-modal');
+const iletisimLink = document.getElementById('iletisim-link');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+
+iletisimLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    contactModal.classList.add('open');
+});
+modalCloseBtn.addEventListener('click', () => {
+    contactModal.classList.remove('open');
+});
+contactModal.addEventListener('click', (e) => {
+    if (e.target === contactModal) {
+        contactModal.classList.remove('open');
+    }
+});
 
 const contactForm = document.getElementById('contact-form');
 contactForm.addEventListener('submit', function(e) {
@@ -736,6 +797,7 @@ contactForm.addEventListener('submit', function(e) {
         `Gönderen E-posta: ${this.elements['Gonderen_Eposta'].value || 'Belirtilmemiş'}`
     );
     window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    contactModal.classList.remove('open');
 });
 
 const scrollTopBtn = document.getElementById('scrollTopBtn');
