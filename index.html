@@ -371,22 +371,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
     display: grid; place-items: center; font-size: 24px;
     flex-shrink: 0;
 }
-.visitor-counter {
-    text-align: center;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #eef2f7;
-    border-radius: 8px;
-    font-size: 14px;
-    color: var(--mut);
-    font-weight: 500;
-    order: -1;
-}
-.visitor-counter span {
-    font-weight: 700;
-    color: var(--text);
-}
+
 @media (max-width: 900px){
     .hero.card { grid-template-columns: 1fr; }
     .hero-image { display: none; }
@@ -477,12 +462,7 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
         <img src="logo.png" alt="RotaLink Uygulama Logosu" class="app-logo">
       </div>
   </section>
-
-  <footer id="footer">
-    <div class="visitor-counter">Bu site <span id="visitor-count">...</span> defa ziyaret edildi.</div>
-    <div>© <span id="yil"></span> Rotalink Gezi Rehberi</div>
-    <div class="footer-links"><a href="#" id="footerAnasayfa">Anasayfa</a><a href="https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a><a id="footer-iletisim-link">İletişim</a></div>
-  </footer>
+ 
 </div>
 </div>
 
@@ -828,45 +808,6 @@ function scrollToTop(e) { e.preventDefault(); window.scrollTo({top: 0, behavior:
 scrollTopBtn.addEventListener('click', scrollToTop);
 footerAnasayfaLink.addEventListener('click', scrollToTop);
 
-(function () {
-  const el = document.getElementById('visitor-count');
-  const fmt = n => Number(n || 0).toLocaleString('tr-TR');
-
-  // Benzersiz anahtar: alan adı + sayfa yolu
-  const NS  = encodeURIComponent(location.hostname || 'local');
-  const KEY = encodeURIComponent((location.pathname || 'index').replace(/[^\w]/g, '_'));
-
-  const LS_KEY = `vc_total_${NS}_${KEY}`;
-
-  async function updateVisitorCount() {
-    // Hızlı timeout
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 2500);
-
-    try {
-      // CountAPI: /hit her çağrıda +1
-      const res = await fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`, {
-        cache: 'no-store',
-        signal: ctrl.signal
-      });
-      clearTimeout(to);
-      if (!res.ok) throw new Error(res.status);
-      const data = await res.json();               // { value: <toplam> }
-      localStorage.setItem(LS_KEY, String(data.value));
-      el.textContent = fmt(data.value);
-    } catch {
-      clearTimeout(to);
-      // Yedek: her girişte +1
-      const total = Number(localStorage.getItem(LS_KEY) || 0) + 1;
-      localStorage.setItem(LS_KEY, String(total));
-      el.textContent = fmt(total);
-    }
-  }
-
-  // Sayfa görünür olduğunda da çalışsın (geri-ileri önbelleği dahil)
-  window.addEventListener('pageshow', updateVisitorCount);
-  document.addEventListener('DOMContentLoaded', updateVisitorCount);
-})();
 
 qEl.addEventListener('input', updateSuggestions);
 qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
