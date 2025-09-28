@@ -829,16 +829,41 @@ scrollTopBtn.addEventListener('click', scrollToTop);
 footerAnasayfaLink.addEventListener('click', scrollToTop);
 
 function updateVisitorCount() {
-    const countElement = document.getElementById('visitor-count');
-    fetch('https://api.countapi.xyz/hit/rotalink.tr/visits')
-        .then(response => response.json())
-        .then(data => {
-            countElement.textContent = data.value.toLocaleString('tr-TR');
-        })
-        .catch(error => {
-            console.error('Sayaç alınamadı:', error);
-            countElement.textContent = 'sayılamadı';
-        });
+  const el = document.getElementById('visitor-count');
+  const fmt = n => Number(n || 0).toLocaleString('tr-TR');
+
+  const LS_KEY_TOTAL = 'rl_total_visits';
+  const LS_KEY_STAMP = 'rl_total_visits_last';
+  const YEDEK_MS = 12 * 60 * 60 * 1000; // 12 saat
+
+  const ctrl = new AbortController();
+  const tm = setTimeout(() => ctrl.abort(), 2500);
+
+  fetch('https://api.countapi.xyz/update/rotalink.tr/visits?amount=1', {
+    cache: 'no-store',
+    signal: ctrl.signal
+  })
+  .then(r => {
+    clearTimeout(tm);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(d => {
+    localStorage.setItem(LS_KEY_TOTAL, String(d.value));
+    el.textContent = fmt(d.value);
+  })
+  .catch(() => {
+    clearTimeout(tm);
+    let total = Number(localStorage.getItem(LS_KEY_TOTAL) || 0);
+    const last = Number(localStorage.getItem(LS_KEY_STAMP) || 0);
+    const now = Date.now();
+    if (now - last > YEDEK_MS) {
+      total += 1;
+      localStorage.setItem(LS_KEY_TOTAL, String(total));
+      localStorage.setItem(LS_KEY_STAMP, String(now));
+    }
+    el.textContent = fmt(total); // "sayılamadı" yerine her zaman sayı göster
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
