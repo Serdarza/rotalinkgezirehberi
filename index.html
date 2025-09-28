@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="tr">
 <head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6478556288740067"
+     crossorigin="anonymous"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Rotalink Gezi Rehberi</title>
+<title>Rotalink Seyahatin Akıllı Rehberi</title>
 <meta name="description" id="meta-description" content="Türkiye'deki kamu misafirhaneleri, orduevleri, polisevleri, öğretmenevleri ve sosyal tesisler için en güncel gezi rehberi. Şehir arayın, konaklama ve gezi noktalarını keşfedin.">
 <meta name="theme-color" content="#f7faff" />
 <link rel="icon" href="amblem.png" type="image/png">
@@ -298,7 +300,7 @@ textarea { resize: vertical; min-height: 120px; }
 .btn-submit {width: 100%; padding: 14px; font-size: 16px; font-weight: 800;border: 0; border-radius: 10px; background: linear-gradient(135deg, var(--go), var(--ok));color: #fff; cursor: pointer; transition: opacity 0.2s;}
 .btn-submit:hover { opacity: 0.9; }
 .form-info { font-size: 13px; color: var(--mut); text-align: center; margin-top: 12px; }
-footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:var(--mut); display:flex; justify-content:space-between;flex-wrap:wrap; gap:12px; align-items: center; font-size: 14px;}
+footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:var(--mut); display:flex; flex-direction: column; justify-content:space-between;flex-wrap:wrap; gap:12px; align-items: center; font-size: 14px;}
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { transition: color 0.2s; }
 .footer-links a:hover { color: var(--text); }
@@ -433,50 +435,14 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 <div class="container">
 
   <section class="search-hero" id="sehirara">
-    <h2>Şehri Keşfetmeye Başla</h2>
-    <div class="search-wrapper">
-        <div class="inputwrap">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18ZM10,4a6,6,0,1,0,6,6A6.007,6.007,0,0,0,10,4Z"/><path d="M21,22a1,1,0,0,1-.707-0.293l-4-4a1,1,0,0,1,1.414-1.414l4,4A1,1,0,0,1,21,22Z"/></svg>
-            <div class="typing-container"></div>
-            <input id="q" placeholder="" autocomplete="off" />
-            <button class="clearbtn" id="clearBtn" title="Temizle" style="display: none;">×</button>
-            <button class="search-btn" id="searchBtn">Bul</button>
-        </div>
-        <div id="suggestions"></div>
-      </div>
-  </section>
+    </section>
   
   <h2 id="results-title" style="display: none;"></h2>
 
   <div class="tabs" id="tabs" style="display:none">
-    <div class="tab" data-tab="tesis">Tesis</div>
-    <div class="tab" data-tab="gezi">Gezi</div>
-    <div class="tab" data-tab="yemek">Yemek</div>
-    <div class="tab" data-tab="sosyal">Sosyal</div>
-  </div>
-  <div class="tabcontent" id="tab-tesis"><div class="empty">Sonuç yok.</div></div>
-  <div class="tabcontent" id="tab-gezi"><div class="empty">Sonuç yok.</div></div>
-  <div class="tabcontent" id="tab-yemek"><div class="empty">Sonuç yok.</div></div>
-  <div class="tabcontent" id="tab-sosyal"><div class="empty">Sonuç yok.</div></div>
-
+    </div>
   <section class="hero card" id="ozellikler">
-      <div class="hero-text">
-        <h1>RotaLink ile şehirde en doğru noktaya tek dokunuş.</h1>
-        <p><span class="text-highlight">Ordu evleri, polis evleri, öğretmenevleri</span> gibi pek çok kamu misafirhanesini tek ekranda keşfedin. Türkiye’nin dört bir yanındaki <span class="text-highlight">sosyal tesisler</span>, uygun fiyatlı konaklama imkânları, lezzetli yemekler ve dinlenme alanları artık elinizin altında.</p>
-        <p><strong>Arayın</strong>, tek dokunuşla tesis yetkililerine ulaşın. <strong>Paylaş</strong>, bilgileri kolayca sevdiklerinize iletin. <strong>Konum</strong>, yol tarifini açarak dilediğiniz noktaya zahmetsizce ulaşın.</p>
-        <p>RotaLink sayesinde hem şehir içi seyahatlerinizde hem de iş ve tatil yolculuklarınızda <span class="text-highlight">kamu tesislerine</span> kolayca erişin.</p>
-        <a class="btn-store-new" id="indir" href="https://play.google.com/store/apps/details?id=com.serdarza.rotalink" target="_blank" rel="noopener">
-            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.39,5.42,12,2,5.61,5.42,5.58,5.44A10.6,10.6,0,0,0,2,15.21,1,1,0,0,0,3,16H3a1,1,0,0,0,.92-.63,8.6,8.6,0,0,1,16.16,0A1,1,0,0,0,21,16h0a1,1,0,0,0,1-0.79A10.6,10.6,0,0,0,18.42,5.44ZM4.1,14.42a8.62,8.62,0,0,1,1.52-5.3L9.4,12.29,4.51,13.71A1,1,0,0,0,4.1,14.42Zm1.61-6.6-4-2.31L12,2l8.29,3.51-4,2.31L12,5.51ZM14.6,9.12l3.78-2.18a8.62,8.62,0,0,1,1.52,5.3,1,1,0,0,0-.41.71L14.6,12.29Z"/></svg>
-            <div class="text-wrap">
-              <span class="text-label">HEMEN İNDİR</span>
-              <span class="text-store">Google Play</span>
-            </div>
-          </a>
-      </div>
-      <div class="hero-image">
-        <img src="logo.png" alt="RotaLink Uygulama Logosu" class="app-logo">
-      </div>
-  </section>
+      </section>
 
   <footer id="footer">
     <div class="visitor-counter">Bu site <span id="visitor-count">...</span> defa ziyaret edildi.</div>
@@ -492,35 +458,13 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
         <div class="contact-card">
             <h2>Öneri ve Geri Bildirim</h2>
             <form id="contact-form">
-               <div class="form-group"><label for="kategori">Öneri Kategorisi</label><select id="kategori" name="Kategori" required><option value="" disabled selected>Kategori seçin...</option><option value="Yeni Tesis Onerisi">Yeni Tesis Önerisi</option><option value="Yeni Gezi Yeri Onerisi">Yeni Gezi Yeri Önerisi</option><option value="Yeni Yemek Mekani Onerisi">Yeni Yemek Mekanı Önerisi</option><option value="Yeni Sosyal Alan Onerisi">Yeni Sosyal Alan Önerisi</option><option value="Mevcut Bilgide Hata">Mevcut Bilgide Hata Bildirimi</option><option value="Diger">Diğer Görüş ve Öneriler</option></select></div>
-               <div class="form-group"><label for="sehir">Şehir</label><input type="text" id="sehir" name="Sehir" placeholder="örn. Kayseri" required></div>
-               <div class="form-group"><label for="yer_adi">Yer Adı / Konu</label><input type="text" id="yer_adi" name="Yer_Adi" placeholder="örn. Erciyes Kayak Merkezi" required></div>
-               <div class="form-group"><label for="aciklama">Açıklama / Detaylar</label><textarea id="aciklama" name="Aciklama" placeholder="Konum, telefon, web sitesi gibi detayları veya geri bildiriminizi yazın..." required></textarea></div>
-               <div class="form-group"><label for="email">E-posta Adresiniz (İsteğe Bağlı)</label><input type="email" id="email" name="Gonderen_Eposta" placeholder="Geri dönüş yapmamızı isterseniz..."></div>
-               <button type="submit" class="btn-submit">Öneriyi Gönder</button>
-               <p class="form-info">Bu form, önerinizi e-posta programınız aracılığıyla gönderecektir.</p>
-            </form>
+               </form>
         </div>
     </div>
 </div>
 
 <div class="fab-container" id="fab-container">
-    <div class="fab-options">
-        <a href="#" id="fab-history" class="fab-option" target="_blank" rel="noopener">
-            <span class="label">Tarihçe</span>
-            <span class="icon">📜</span>
-        </a>
-        <a href="#" id="fab-pharmacy" class="fab-option" target="_blank" rel="noopener">
-            <span class="label">Nöbetçi Eczane</span>
-            <span class="icon">🌙</span>
-        </a>
-        <a href="#" id="fab-weather" class="fab-option" target="_blank" rel="noopener">
-            <span class="label">Hava Durumu</span>
-            <span class="icon">☀️</span>
-        </a>
     </div>
-    <button class="fab-main" id="fab-main">+</button>
-</div>
 
 <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 
