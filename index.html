@@ -1,11 +1,9 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6478556288740067"
-     crossorigin="anonymous"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Rotalink Seyahatin Akıllı Rehberi</title>
+<title>Rotalink Gezi Rehberi</title>
 <meta name="description" id="meta-description" content="Türkiye'deki kamu misafirhaneleri, orduevleri, polisevleri, öğretmenevleri ve sosyal tesisler için en güncel gezi rehberi. Şehir arayın, konaklama ve gezi noktalarını keşfedin.">
 <meta name="theme-color" content="#f7faff" />
 <link rel="icon" href="amblem.png" type="image/png">
@@ -527,7 +525,6 @@ footer{margin-top:32px; padding-top:14px; border-top:1px solid var(--bd);color:v
 <a href="#" id="scrollTopBtn" title="Yukarı Çık">↑</a>
 
 <script>
-// MOBİL MENÜ KODU
 const menuToggle = document.getElementById('menu-toggle');
 const mainNav = document.getElementById('main-nav');
 menuToggle.addEventListener('click', () => {
@@ -537,18 +534,14 @@ menuToggle.addEventListener('click', () => {
 const navLinks = mainNav.querySelectorAll('a');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
-        // İletişim linki hariç diğerleri menüyü kapatsın
-        if (link.id !== 'iletisim-link') {
+        if (link.id !== 'iletisim-link' && link.id !== 'footer-iletisim-link') {
             mainNav.classList.remove('nav-open');
             menuToggle.classList.remove('open');
         }
     });
 });
 
-// YIL GÜNCELLEME
 document.getElementById('yil').textContent = new Date().getFullYear();
-
-// ANA UYGULAMA MANTIĞI
 const S = {ready:false,data:[],gezi:[],yemek:[],sosyal:[],citySet:new Set(), sortedCities: []};
 async function loadAll(){
   if(S.ready) return;
@@ -558,8 +551,6 @@ async function loadAll(){
   [...d,...g,...y,...s].forEach(it=>{ if(it && it.il) S.citySet.add(it.il.trim()); });
   S.sortedCities = [...S.citySet].sort((a,b)=>a.localeCompare(b,'tr'));
 }
-
-// DOM ELEMENTLERİ
 const qEl = document.getElementById('q');
 const clearBtn = document.getElementById('clearBtn');
 const searchBtn = document.getElementById('searchBtn');
@@ -573,11 +564,10 @@ const defaultTitle = document.title;
 const metaDescription = document.getElementById('meta-description');
 const defaultDescription = metaDescription.getAttribute('content');
 
-// ANİMASYONLU YAZI
 let textIndex = 0;
 let charIndex = 0;
 function type() {
-    if (qEl.value) return; // Kullanıcı yazı yazdıysa animasyonu durdur
+    if (qEl.value) return;
     if (charIndex < placeholderTexts[textIndex].length) {
         typingContainer.textContent += placeholderTexts[textIndex].charAt(charIndex);
         charIndex++;
@@ -598,7 +588,6 @@ function erase() {
     }
 }
 
-// YÜZEN BUTON (FAB) MANTIĞI
 const fabContainer = document.getElementById('fab-container');
 const fabMain = document.getElementById('fab-main');
 const fabWeather = document.getElementById('fab-weather');
@@ -624,7 +613,6 @@ function updateFabLinks(cityName) {
     fabHistory.href = `https://tr.wikipedia.org/wiki/${capitalizedCityName}`;
 }
 
-// YARDIMCI FONKSİYONLAR (LINK OLUŞTURMA VB.)
 function isAppleDevice() { return /iPhone|iPad|iPod/.test(navigator.platform); }
 
 function handleShare(btn) {
@@ -656,8 +644,6 @@ function googleImageHref(isim, il){
   const query = encodeURIComponent((isim||'') + ' ' + (il||''));
   return `https://www.google.com/search?tbm=isch&q=${query}`;
 }
-
-// LİSTELEME FONKSİYONU
 function mountList(el, items, type){
   el.innerHTML = '';
   if(!items || !items.length){ el.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
@@ -717,15 +703,11 @@ function mountList(el, items, type){
   });
   el.appendChild(list);
 }
-
-// SEKME KONTROL
 function activate(tabName){
   tabBtns.forEach(b=>b.classList.toggle('active', b.dataset.tab===tabName));
   ['tesis','gezi','yemek','sosyal'].forEach(name=>{ const el = document.getElementById('tab-'+name); el.classList.toggle('active', name===tabName); });
 }
 tabBtns.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
-
-// ANA ARAMA FONKSİYONU
 function hideSuggestions() { suggestionsEl.style.display = 'none'; suggestionsEl.innerHTML = ''; }
 async function run(){
   await loadAll();
@@ -795,22 +777,6 @@ function checkUrlHashForSearch() {
     }
 }
 
-// SAYFA YÜKLEME VE OLAY DİNLEYİCİLERİ
-document.addEventListener('DOMContentLoaded', () => {
-    type();
-    loadAll().then(checkUrlHashForSearch);
-    updateVisitorCount(); // Ziyaretçi sayacını yükle
-});
-
-qEl.addEventListener('input', updateSuggestions);
-qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
-clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); hideSuggestions(); run(); updateSuggestions(); });
-searchBtn.addEventListener('click', () => { hideSuggestions(); run(); });
-suggestionsEl.addEventListener('click', (e) => {
-    if (e.target.classList.contains('suggestion-item')) { qEl.value = e.target.textContent; hideSuggestions(); run(); updateSuggestions();}
-});
-document.addEventListener('click', (e) => { if (!e.target.closest('.search-wrapper')) { hideSuggestions(); } });
-
 const contactModal = document.getElementById('contact-modal');
 const iletisimLink = document.getElementById('iletisim-link');
 const footerIletisimLink = document.getElementById('footer-iletisim-link');
@@ -862,7 +828,6 @@ function scrollToTop(e) { e.preventDefault(); window.scrollTo({top: 0, behavior:
 scrollTopBtn.addEventListener('click', scrollToTop);
 footerAnasayfaLink.addEventListener('click', scrollToTop);
 
-// ZİYARETÇİ SAYACI
 function updateVisitorCount() {
     const countElement = document.getElementById('visitor-count');
     fetch('https://api.countapi.xyz/hit/rotalink.tr/visits')
@@ -875,6 +840,22 @@ function updateVisitorCount() {
             countElement.textContent = 'sayılamadı';
         });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    type();
+    loadAll().then(checkUrlHashForSearch);
+    updateVisitorCount();
+});
+
+qEl.addEventListener('input', updateSuggestions);
+qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
+clearBtn.addEventListener('click', ()=>{ qEl.value=''; qEl.focus(); hideSuggestions(); run(); updateSuggestions(); });
+searchBtn.addEventListener('click', () => { hideSuggestions(); run(); });
+suggestionsEl.addEventListener('click', (e) => {
+    if (e.target.classList.contains('suggestion-item')) { qEl.value = e.target.textContent; hideSuggestions(); run(); updateSuggestions();}
+});
+document.addEventListener('click', (e) => { if (!e.target.closest('.search-wrapper')) { hideSuggestions(); } });
+
 </script>
 </body>
 </html>
