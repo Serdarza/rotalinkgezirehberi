@@ -828,49 +828,45 @@ function scrollToTop(e) { e.preventDefault(); window.scrollTo({top: 0, behavior:
 scrollTopBtn.addEventListener('click', scrollToTop);
 footerAnasayfaLink.addEventListener('click', scrollToTop);
 
-function updateVisitorCount() {
+(function () {
   const el = document.getElementById('visitor-count');
   const fmt = n => Number(n || 0).toLocaleString('tr-TR');
 
-  const LS_KEY_TOTAL = 'rl_total_visits';
-  const LS_KEY_STAMP = 'rl_total_visits_last';
-  const YEDEK_MS = 12 * 60 * 60 * 1000; // 12 saat
+  // Benzersiz anahtar: alan adı + sayfa yolu
+  const NS  = encodeURIComponent(location.hostname || 'local');
+  const KEY = encodeURIComponent((location.pathname || 'index').replace(/[^\w]/g, '_'));
 
-  const ctrl = new AbortController();
-  const tm = setTimeout(() => ctrl.abort(), 2500);
+  const LS_KEY = `vc_total_${NS}_${KEY}`;
 
-  fetch('https://api.countapi.xyz/update/rotalink.tr/visits?amount=1', {
-    cache: 'no-store',
-    signal: ctrl.signal
-  })
-  .then(r => {
-    clearTimeout(tm);
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(d => {
-    localStorage.setItem(LS_KEY_TOTAL, String(d.value));
-    el.textContent = fmt(d.value);
-  })
-  .catch(() => {
-    clearTimeout(tm);
-    let total = Number(localStorage.getItem(LS_KEY_TOTAL) || 0);
-    const last = Number(localStorage.getItem(LS_KEY_STAMP) || 0);
-    const now = Date.now();
-    if (now - last > YEDEK_MS) {
-      total += 1;
-      localStorage.setItem(LS_KEY_TOTAL, String(total));
-      localStorage.setItem(LS_KEY_STAMP, String(now));
+  async function updateVisitorCount() {
+    // Hızlı timeout
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 2500);
+
+    try {
+      // CountAPI: /hit her çağrıda +1
+      const res = await fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`, {
+        cache: 'no-store',
+        signal: ctrl.signal
+      });
+      clearTimeout(to);
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();               // { value: <toplam> }
+      localStorage.setItem(LS_KEY, String(data.value));
+      el.textContent = fmt(data.value);
+    } catch {
+      clearTimeout(to);
+      // Yedek: her girişte +1
+      const total = Number(localStorage.getItem(LS_KEY) || 0) + 1;
+      localStorage.setItem(LS_KEY, String(total));
+      el.textContent = fmt(total);
     }
-    el.textContent = fmt(total); // "sayılamadı" yerine her zaman sayı göster
-  });
-}
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
-    type();
-    loadAll().then(checkUrlHashForSearch);
-    updateVisitorCount();
-});
+  // Sayfa görünür olduğunda da çalışsın (geri-ileri önbelleği dahil)
+  window.addEventListener('pageshow', updateVisitorCount);
+  document.addEventListener('DOMContentLoaded', updateVisitorCount);
+})();
 
 qEl.addEventListener('input', updateSuggestions);
 qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { hideSuggestions(); run(); } });
