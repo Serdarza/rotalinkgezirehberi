@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { X, MapPin, Phone, Search } from "lucide-react";
 import { PLAY_STORE_URL, APP_STORE_URL } from "@/config/downloads";
-
-const STORAGE_KEY = "rotalink_download_modal_dismissed";
+import {
+  dismissDownloadPrompt,
+  markAppDownloadClicked,
+  shouldShowDownloadPrompt,
+} from "@/lib/downloadPrompt";
 
 export function DownloadModal() {
   const [open, setOpen] = useState(false);
@@ -14,14 +17,19 @@ export function DownloadModal() {
     if (typeof window === "undefined") return;
     if (window.location.pathname.includes("/indir")) return;
     if (window.location.pathname.includes("/sehir/")) return;
-    if (sessionStorage.getItem(STORAGE_KEY)) return;
+    if (!shouldShowDownloadPrompt()) return;
 
     const timer = setTimeout(() => setOpen(true), 1200);
     return () => clearTimeout(timer);
   }, []);
 
   function dismiss() {
-    sessionStorage.setItem(STORAGE_KEY, "1");
+    dismissDownloadPrompt();
+    setOpen(false);
+  }
+
+  function onStoreClick() {
+    markAppDownloadClicked();
     setOpen(false);
   }
 
@@ -84,6 +92,7 @@ export function DownloadModal() {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={onStoreClick}
               className="flex items-center justify-center gap-3 rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
               Google Play&apos;den İndir
@@ -92,6 +101,7 @@ export function DownloadModal() {
               href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={onStoreClick}
               className="flex items-center justify-center gap-3 rounded-2xl border-2 border-slate-200 px-5 py-3.5 text-sm font-semibold text-slate-900 transition hover:border-[#0F62FE] hover:text-[#0F62FE] dark:border-slate-700 dark:text-white"
             >
               App Store&apos;dan İndir

@@ -1,4 +1,7 @@
+"use client";
+
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/config/downloads";
+import { markAppDownloadClicked } from "@/lib/downloadPrompt";
 
 type StoreButtonsProps = {
   size?: "default" | "large";
@@ -53,6 +56,7 @@ export function StoreButtons({
         href={PLAY_STORE_URL}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => markAppDownloadClicked()}
         className={`${btnClass} bg-slate-900 text-white shadow-lg shadow-slate-900/20 dark:bg-white dark:text-slate-900`}
         aria-label="Google Play'den indir"
       >
@@ -69,6 +73,7 @@ export function StoreButtons({
         href={APP_STORE_URL}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => markAppDownloadClicked()}
         className={`${btnClass} border border-slate-200 bg-white text-slate-900 shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:text-white`}
         aria-label="App Store'dan indir"
       >

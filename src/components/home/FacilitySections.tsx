@@ -7,25 +7,11 @@ import { Container, Section, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { CityMap } from "@/components/map/CityMap";
-import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
-import { detectDevice } from "@/lib/device";
 import { getFacilityImageSrc } from "@/lib/facilityImages";
 import { getFacilityPricing, PRICING_NOTE } from "@/config/pricing";
+import { handleFacilityContact } from "@/lib/facilityContact";
 import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
-
-function openAppStore() {
-  const device = detectDevice(navigator.userAgent);
-  if (device === "android") {
-    window.location.href = PLAY_STORE_URL;
-    return;
-  }
-  if (device === "ios") {
-    window.location.href = APP_STORE_URL;
-    return;
-  }
-  window.location.href = DOWNLOAD_PAGE_PATH;
-}
 
 function getDisplayFacilityType(type: string | null | undefined) {
   const normalized = String(type ?? "").trim().toLocaleLowerCase("tr");
@@ -91,7 +77,7 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
         <div className="mt-auto flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={openAppStore}
+            onClick={() => handleFacilityContact(facility.telefon)}
             className="inline-flex items-center gap-1 rounded-xl bg-[#14B8A6] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#0d9488]"
           >
             <Phone className="h-3.5 w-3.5" aria-hidden /> İletişim

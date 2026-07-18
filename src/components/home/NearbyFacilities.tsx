@@ -7,10 +7,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LocateFixed, MapPin, Navigation, Phone } from "lucide-react";
 import { Container, GlassCard, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
-import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
-import { detectDevice } from "@/lib/device";
 import { getFacilityImageSrc } from "@/lib/facilityImages";
 import { getFacilityPricing, PRICING_NOTE } from "@/config/pricing";
+import { handleFacilityContact } from "@/lib/facilityContact";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
@@ -32,19 +31,6 @@ function getDisplayFacilityType(type: string | null | undefined) {
   if (normalized === "polisevi") return "Polisevi";
   if (normalized === "öğretmenevi") return "Öğretmenevi";
   return "Misafirhane";
-}
-
-function openAppStore() {
-  const device = detectDevice(navigator.userAgent);
-  if (device === "android") {
-    window.location.href = PLAY_STORE_URL;
-    return;
-  }
-  if (device === "ios") {
-    window.location.href = APP_STORE_URL;
-    return;
-  }
-  window.location.href = DOWNLOAD_PAGE_PATH;
 }
 
 export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
@@ -166,7 +152,7 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
                         <div className="mt-auto flex flex-wrap gap-2 pt-4">
                           <button
                             type="button"
-                            onClick={openAppStore}
+                            onClick={() => handleFacilityContact(facility.telefon)}
                             className="inline-flex items-center gap-1 rounded-xl bg-[#14B8A6] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#0d9488]"
                           >
                             <Phone className="h-3.5 w-3.5" aria-hidden /> İletişim

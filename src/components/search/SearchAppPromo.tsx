@@ -4,11 +4,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Download, MapPinned, Search, X } from "lucide-react";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/config/downloads";
+import {
+  dismissDownloadPrompt,
+  markAppDownloadClicked,
+  shouldShowDownloadPrompt,
+} from "@/lib/downloadPrompt";
 
 export function SearchAppPromo({ city }: { city: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (!shouldShowDownloadPrompt()) return;
     const timer = window.setTimeout(() => setOpen(true), 650);
     return () => window.clearTimeout(timer);
   }, [city]);
@@ -16,11 +22,21 @@ export function SearchAppPromo({ city }: { city: string }) {
   useEffect(() => {
     if (!open) return;
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") dismiss();
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [open]);
+
+  function dismiss() {
+    dismissDownloadPrompt();
+    setOpen(false);
+  }
+
+  function onStoreClick() {
+    markAppDownloadClicked();
+    setOpen(false);
+  }
 
   if (!open) return null;
 
@@ -31,14 +47,14 @@ export function SearchAppPromo({ city }: { city: string }) {
       aria-modal="true"
       aria-labelledby="search-app-promo-title"
       onClick={(event) => {
-        if (event.target === event.currentTarget) setOpen(false);
+        if (event.target === event.currentTarget) dismiss();
       }}
     >
       <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-slate-900">
         <div className="relative bg-gradient-to-br from-[#0F62FE] via-blue-600 to-[#14B8A6] px-6 pb-7 pt-9 text-center text-white">
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={dismiss}
             className="absolute right-4 top-4 rounded-full bg-white/15 p-2 transition hover:bg-white/25"
             aria-label="Tanıtımı kapat"
           >
@@ -80,6 +96,7 @@ export function SearchAppPromo({ city }: { city: string }) {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={onStoreClick}
               className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900"
             >
               <Download className="h-4 w-4" />
@@ -89,6 +106,7 @@ export function SearchAppPromo({ city }: { city: string }) {
               href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={onStoreClick}
               className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-[#0F62FE] hover:text-[#0F62FE] dark:border-slate-700 dark:text-white"
             >
               <Download className="h-4 w-4" />
@@ -98,7 +116,7 @@ export function SearchAppPromo({ city }: { city: string }) {
 
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={dismiss}
             className="w-full rounded-xl py-2 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-300"
           >
             Sonuçlarda devam et

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { MOBILE_REDIRECT_DELAY_MS } from "@/config/downloads";
+import { markAppDownloadClicked } from "@/lib/downloadPrompt";
 
 type MobileRedirectProps = {
   /** Yönlendirilecek mağaza URL'si */
@@ -21,6 +22,8 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
   );
 
   useEffect(() => {
+    markAppDownloadClicked();
+
     const redirectTimer = setTimeout(() => {
       window.location.href = url;
     }, MOBILE_REDIRECT_DELAY_MS);
@@ -42,12 +45,10 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
       aria-live="polite"
       aria-busy="true"
     >
-      {/* Arka plan */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-sky-950" />
       <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-400/20 blur-3xl" />
 
       <div className="relative z-10 flex w-full max-w-sm flex-col items-center text-center animate-fade-in-up">
-        {/* Logo */}
         <Image
           src="/logo.png"
           alt="Rotalink"
@@ -57,7 +58,6 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
           priority
         />
 
-        {/* Spinner */}
         <div
           className="mb-6 h-14 w-14 animate-spin rounded-full border-4 border-sky-200 border-t-sky-500 dark:border-sky-800 dark:border-t-sky-400"
           role="status"
@@ -73,9 +73,9 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
             : "Yönlendiriliyor..."}
         </p>
 
-        {/* Manuel yedek bağlantı */}
         <a
           href={url}
+          onClick={() => markAppDownloadClicked()}
           className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white dark:text-slate-900"
         >
           Hemen {storeName}&apos;a git
