@@ -22,7 +22,7 @@ import { faqJsonLd } from "@/lib/seo";
 import { FAQ_ITEMS } from "@/config/site";
 
 export default async function HomePage() {
-  const [stats, featured, { cities }] = await Promise.all([
+  const [stats, featured, { cities, tesis }] = await Promise.all([
     getSiteStats(),
     getFeaturedFacilities(8),
     getAllData(),
@@ -38,7 +38,10 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={faqJsonLd(FAQ_ITEMS)} />
-      <HeroSection cities={cities} />
+      <HeroSection
+        cities={cities}
+        facilities={tesis.map(({ isim, il }) => ({ isim, il }))}
+      />
       <StatsSection stats={stats} />
       <PopularCitiesSection />
       <FeaturedFacilitiesSection facilities={featured} />
