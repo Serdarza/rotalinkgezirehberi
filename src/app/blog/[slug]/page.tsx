@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Section";
 import { PageHero } from "@/components/layout/PageHeader";
 import { BLOG_POSTS } from "@/config/site";
+import { getBlogContentComponent } from "@/content/blog";
 import { buildMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -20,14 +21,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) notFound();
 
+  const Content = getBlogContentComponent(slug);
+
   return (
     <>
       <PageHero title={post.title} description={post.excerpt} />
-      <Container className="prose prose-slate max-w-3xl py-16 dark:prose-invert">
-        <p>
-          Bu yazı yakında güncellenecektir. Kamu tesisleri ve seyahat rehberi hakkında
-          detaylı içerikler için bizi takip etmeye devam edin.
-        </p>
+      <Container className="max-w-3xl py-16">
+        {Content ? (
+          <Content />
+        ) : (
+          <p className="text-slate-600 dark:text-slate-400">
+            Bu yazı yakında güncellenecektir. Kamu tesisleri ve seyahat rehberi hakkında
+            detaylı içerikler için bizi takip etmeye devam edin.
+          </p>
+        )}
       </Container>
     </>
   );

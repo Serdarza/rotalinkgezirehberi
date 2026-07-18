@@ -46,8 +46,15 @@ export function DownloadModal() {
           >
             <X className="h-5 w-5" />
           </button>
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20">
-            <Image src="/logo.svg" alt="Rotalink" width={40} height={40} className="brightness-0 invert" />
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg">
+            <Image
+              src="/amblem.png"
+              alt="Rotalink"
+              width={80}
+              height={80}
+              className="h-full w-full object-cover"
+              priority
+            />
           </div>
           <h2 id="download-modal-title" className="text-2xl font-extrabold">
             Rotalink&apos;i İndirin
