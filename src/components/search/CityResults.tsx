@@ -14,6 +14,7 @@ import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
+import { SearchAdPopup } from "@/components/ads/SearchAdPopup";
 import { Breadcrumb } from "@/components/layout/PageHeader";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn } from "@/lib/utils";
@@ -268,6 +269,7 @@ function CityResultsInner({ city, data }: Props) {
 
   return (
     <Container className="py-12">
+      <SearchAdPopup city={city} />
       <Breadcrumb
         items={[
           { label: "Anasayfa", href: "/" },
