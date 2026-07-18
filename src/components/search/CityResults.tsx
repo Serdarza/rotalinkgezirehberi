@@ -139,11 +139,16 @@ function PlaceCard({
 function CityResultsInner({ city, data }: Props) {
   const searchParams = useSearchParams();
   const tipFilter = searchParams.get("tip") ?? undefined;
+  const nameFilter = searchParams.get("q")?.trim();
   const [tab, setTab] = useState<Tab>("tesis");
 
-  const tesis = tipFilter
-    ? data.tesis.filter((t) => t.tip === tipFilter)
-    : data.tesis;
+  const tesis = data.tesis.filter((facility) => {
+    const matchesType = !tipFilter || facility.tip === tipFilter;
+    const matchesName =
+      !nameFilter ||
+      facility.isim.toLocaleLowerCase("tr").includes(nameFilter.toLocaleLowerCase("tr"));
+    return matchesType && matchesName;
+  });
 
   const counts = {
     tesis: tesis.length,
@@ -169,6 +174,7 @@ function CityResultsInner({ city, data }: Props) {
       <p className="mb-8 text-slate-600 dark:text-slate-400">
         {city} ilindeki konaklama, gezi, yemek ve belediye tesisleri
         {tipFilter ? ` · ${tipFilter}` : ""}
+        {nameFilter ? ` · “${nameFilter}”` : ""}
       </p>
 
       {/* Kategori sekmeleri */}

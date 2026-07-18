@@ -16,20 +16,53 @@ const TIP_OPTIONS = [
   { value: "Orduevi", label: "Orduevi" },
 ];
 
-type Props = { cities: string[] };
+type FacilitySearchItem = { isim: string; il: string };
 
-export function HeroSection({ cities }: Props) {
+type Props = {
+  cities: string[];
+  facilities: FacilitySearchItem[];
+};
+
+function normalize(value: string) {
+  return slugifyCity(value).replace(/-/g, " ");
+}
+
+export function HeroSection({ cities, facilities }: Props) {
   const router = useRouter();
-  const [city, setCity] = useState("");
+  const [query, setQuery] = useState("");
   const [tip, setTip] = useState("");
+  const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    if (!city.trim()) return;
-    const slug = slugifyCity(city.trim());
-    const q = tip ? `?tip=${encodeURIComponent(tip)}` : "";
-    startTransition(() => router.push(`/sehir/${slug}${q}`));
+    const value = query.trim();
+    if (!value) return;
+
+    const normalized = normalize(value);
+    const matchedCity =
+      cities.find((city) => normalize(city) === normalized) ??
+      cities.find((city) => normalize(city).startsWith(normalized));
+
+    const matchedFacility =
+      facilities.find((facility) => normalize(facility.isim) === normalized) ??
+      facilities.find((facility) => normalize(facility.isim).includes(normalized));
+
+    const destinationCity = matchedCity ?? matchedFacility?.il;
+    if (!destinationCity) {
+      setError("Eşleşen il veya konaklama tesisi bulunamadı.");
+      return;
+    }
+
+    const params = new URLSearchParams();
+    if (tip) params.set("tip", tip);
+    if (matchedFacility && !matchedCity) params.set("q", matchedFacility.isim);
+
+    setError("");
+    const search = params.toString();
+    startTransition(() =>
+      router.push(`/sehir/${slugifyCity(destinationCity)}${search ? `?${search}` : ""}`)
+    );
   }
 
   return (
@@ -66,23 +99,35 @@ export function HeroSection({ cities }: Props) {
             onSubmit={handleSearch}
             className="mx-auto max-w-3xl rounded-3xl border border-white/20 bg-white/95 p-3 shadow-2xl backdrop-blur-xl dark:bg-slate-900/95 sm:p-4"
             role="search"
-            aria-label="Tesis ara"
+            aria-label="İl veya konaklama tesisi ara"
           >
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative flex-1">
                 <MapPin className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" aria-hidden />
                 <input
-                  list="cities-list"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="İl seçin..."
+                  list="search-suggestions"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    if (error) setError("");
+                  }}
+                  placeholder="İl veya misafirhane arayın..."
                   className="w-full rounded-2xl border border-slate-200 bg-white py-4 pl-12 pr-4 text-slate-900 outline-none focus:border-[#0F62FE] focus:ring-2 focus:ring-[#0F62FE]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                  aria-label="İl"
+                  aria-label="İl veya misafirhane adı"
+                  aria-describedby="search-help"
                   required
                 />
-                <datalist id="cities-list">
+                <datalist id="search-suggestions">
                   {cities.map((c) => (
-                    <option key={c} value={c} />
+                    <option key={`city-${c}`} value={c}>İl</option>
+                  ))}
+                  {facilities.map((facility) => (
+                    <option
+                      key={`${facility.il}-${facility.isim}`}
+                      value={facility.isim}
+                    >
+                      {facility.il} · Konaklama
+                    </option>
                   ))}
                 </datalist>
               </div>
@@ -103,6 +148,17 @@ export function HeroSection({ cities }: Props) {
                 <Search className="h-5 w-5" aria-hidden />
                 {pending ? "Aranıyor..." : "Ara"}
               </Button>
+            </div>
+            <div className="px-2 pt-3 text-left">
+              {error ? (
+                <p className="text-sm font-medium text-red-600 dark:text-red-400" role="alert">
+                  {error}
+                </p>
+              ) : (
+                <p id="search-help" className="text-xs text-slate-500 dark:text-slate-400">
+                  İl adı veya konaklama tesisi yazın; listeden seçim yaparak hızlıca sonuçlara ulaşın.
+                </p>
+              )}
             </div>
           </form>
         </motion.div>
