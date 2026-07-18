@@ -1,42 +1,44 @@
-# Rotalink Next.js App
+# Rotalink — Profesyonel Web Platformu
 
-Production-ready download page and landing experience for Rotalink.
+Next.js ile geliştirilmiş, GitHub Pages üzerinde yayınlanan statik web sitesi.
 
-## Routes
+## Yayınlama (Vercel gerekmez)
 
-| Route | Behavior |
+Site **statik export** olarak derlenir ve GitHub Actions ile `main` dalına otomatik deploy edilir:
+
+1. Kaynak kod `nextjs` dalında tutulur
+2. `nextjs` dalına push → GitHub Action build alır → `out/` klasörü `main` dalına yayınlanır
+3. GitHub Pages kaynağı: **main** dalı, kök dizin
+4. Özel alan adı: `rotalink.tr` (`public/CNAME`)
+
+## Sayfalar
+
+| Sayfa | Açıklama |
 |-------|----------|
-| `/` | Premium desktop landing page |
-| `/indir` | Smart download — auto-redirect on mobile, full page on desktop |
+| `/` | Ana sayfa — hero, istatistikler, şehirler, tesisler, blog, SSS |
+| `/indir` | Mobil: mağazaya yönlendirme · Masaüstü: QR kod + indirme |
+| `/sehir/[sehir]` | Şehir bazlı arama sonuçları |
+| `/hakkimizda`, `/iletisim`, `/blog` | Kurumsal sayfalar |
+| Yasal sayfalar | KVKK, gizlilik, kullanım şartları, çerez politikası |
 
-## Device detection
-
-- **Android** → Google Play (2s spinner, then redirect)
-- **iOS** → App Store (2s spinner, then redirect)
-- **Desktop** → Download page with QR code + store buttons
-
-## Configuration
-
-Edit `src/config/downloads.ts` for store URLs and site settings.
-
-Set environment variable:
-
-```env
-NEXT_PUBLIC_SITE_URL=https://rotalink.tr
-```
-
-## Development
+## Geliştirme
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000/indir](http://localhost:3000/indir)
-
-## Build
+## Yerel statik önizleme
 
 ```bash
 npm run build
-npm start
+npx serve out
 ```
+
+## Ortam değişkeni
+
+```env
+NEXT_PUBLIC_SITE_URL=https://rotalink.tr
+```
+
+GitHub Action bu değeri otomatik ayarlar.

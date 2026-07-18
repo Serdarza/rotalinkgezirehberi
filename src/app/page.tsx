@@ -21,8 +21,6 @@ import {
 import { faqJsonLd } from "@/lib/seo";
 import { FAQ_ITEMS } from "@/config/site";
 
-export const revalidate = 3600;
-
 export default async function HomePage() {
   const [stats, featured, { cities }] = await Promise.all([
     getSiteStats(),

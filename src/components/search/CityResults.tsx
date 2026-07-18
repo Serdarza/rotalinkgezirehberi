@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
 import { Breadcrumb } from "@/components/layout/PageHeader";
@@ -24,10 +25,11 @@ type Props = {
     yemek: YemekMekani[];
     sosyal: SosyalTesis[];
   };
-  tipFilter?: string;
 };
 
-export function CityResults({ city, data, tipFilter }: Props) {
+function CityResultsInner({ city, data }: Props) {
+  const searchParams = useSearchParams();
+  const tipFilter = searchParams.get("tip") ?? undefined;
   const [tab, setTab] = useState<Tab>("tesis");
 
   const tesis = tipFilter
@@ -118,5 +120,17 @@ export function CityResults({ city, data, tipFilter }: Props) {
         </ul>
       )}
     </Container>
+  );
+}
+
+export function CityResults(props: Props) {
+  return (
+    <Suspense
+      fallback={
+        <Container className="py-12 text-center text-slate-500">Yükleniyor...</Container>
+      }
+    >
+      <CityResultsInner {...props} />
+    </Suspense>
   );
 }

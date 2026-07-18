@@ -4,6 +4,8 @@ import { getAllData } from "@/lib/data";
 import { slugifyCity } from "@/lib/utils";
 import type { MetadataRoute } from "next";
 
+export const dynamic = "force-static";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { cities } = await getAllData();
   const base = SITE.url;
