@@ -83,7 +83,7 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
   }, [coords, facilities, limit]);
 
   return (
-    <section className={cn("relative z-10 bg-slate-50 py-14 dark:bg-slate-900/40", className)}>
+    <section id="yakin" className={cn("relative z-10 scroll-mt-24 bg-slate-50 py-14 dark:bg-slate-900/40", className)}>
       <Container>
         <SectionHeading
           eyebrow="Bana Yakın"

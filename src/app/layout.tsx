@@ -2,9 +2,11 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { DownloadModal } from "@/components/layout/DownloadModal";
+import { KamiFab } from "@/components/kami/KamiFab";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SITE } from "@/config/site";
+import { getAllData } from "@/lib/data";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -53,7 +55,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { cities } = await getAllData();
+
   return (
     <html lang="tr" suppressHydrationWarning>
       <body className={`${inter.variable} min-h-dvh bg-white font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}>
@@ -73,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </div>
           <MobileBottomNav />
+          <KamiFab cities={cities} />
         </ThemeProvider>
       </body>
     </html>
