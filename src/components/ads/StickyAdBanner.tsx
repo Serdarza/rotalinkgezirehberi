@@ -40,13 +40,14 @@ export function StickyAdBanner({ storageKey, className }: Props) {
 
   return (
     <>
-      {/* Sticky bar içerik altına çakışmasın */}
-      <div className="h-[112px] sm:h-[120px]" aria-hidden />
+      {/* Sticky bar içerik altına çakışmasın — mobilde alt nav yüksekliği dahil */}
+      <div className="h-[112px] sm:h-[120px] md:h-[112px]" aria-hidden />
+      <div className="h-16 md:hidden" aria-hidden />
 
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-[70] border-t border-slate-200/80 bg-white/95 shadow-[0_-8px_30px_rgba(15,23,42,0.12)] backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/95",
-          "pb-[env(safe-area-inset-bottom)]",
+          "fixed inset-x-0 bottom-16 z-[70] border-t border-slate-200/80 bg-white/95 shadow-[0_-8px_30px_rgba(15,23,42,0.12)] backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/95 md:bottom-0",
+          "pb-[env(safe-area-inset-bottom)] md:pb-[env(safe-area-inset-bottom)]",
           className
         )}
         role="complementary"

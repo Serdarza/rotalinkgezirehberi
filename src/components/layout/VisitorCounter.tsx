@@ -141,7 +141,7 @@ export function VisitorCounter({ className }: { className?: string }) {
     <div
       ref={rootRef}
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-900 via-slate-800 to-[#0F62FE]/80 p-5 text-white shadow-lg shadow-slate-900/20 dark:border-slate-700",
+        "relative min-h-[132px] overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-900 via-slate-800 to-[#0F62FE]/80 p-5 text-white shadow-lg shadow-slate-900/20 dark:border-slate-700",
         className
       )}
       aria-live="polite"

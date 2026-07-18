@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import { slugifyCity } from "@/lib/utils";
@@ -36,10 +37,15 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
 
   return (
-    <div className="flex h-full flex-col rounded-3xl border-l-4 border border-[#0F62FE]/20 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 p-6 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
-      <span className="mb-2 inline-block w-fit rounded-lg bg-[#0F62FE] px-2.5 py-1 text-xs font-bold uppercase text-white shadow-sm">
-        {displayType}
-      </span>
+    <div className="relative flex h-full flex-col rounded-3xl border border-[#0F62FE]/20 border-l-4 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 p-6 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <span className="inline-block w-fit rounded-lg bg-[#0F62FE] px-2.5 py-1 text-xs font-bold uppercase text-white shadow-sm">
+          {displayType}
+        </span>
+        <FavoriteButton
+          facility={{ isim: facility.isim, tip: String(facility.tip ?? ""), il: facility.il }}
+        />
+      </div>
       <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
       <p className="mb-4 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
         <MapPin className="h-4 w-4 shrink-0" aria-hidden />

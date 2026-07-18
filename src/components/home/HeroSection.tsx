@@ -82,13 +82,13 @@ export function HeroSection({ cities, facilities }: Props) {
   }
 
   return (
-    <section className="relative min-h-[92vh] overflow-hidden">
+    <section id="ara" className="relative min-h-[92vh] overflow-hidden scroll-mt-20">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-[#0F62FE]/40" />
       <div
         className="absolute inset-0 bg-cover bg-center opacity-30"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1920&q=80')",
+            "url('https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1200&q=60')",
         }}
         aria-hidden
       />
