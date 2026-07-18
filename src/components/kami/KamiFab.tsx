@@ -51,6 +51,36 @@ const WELCOME: ChatMessage = {
 
 const BUBBLE_DISMISS_KEY = "rotalink_kami_bubble_dismissed";
 
+function playNotificationSound() {
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+    const gain = context.createGain();
+    const oscillator = context.createOscillator();
+    const now = context.currentTime;
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(660, now);
+    oscillator.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start(now);
+    oscillator.stop(now + 0.25);
+    oscillator.addEventListener("ended", () => void context.close());
+  } catch {
+    // Tarayıcı otomatik sesi engellerse sohbet yine normal şekilde açılır.
+  }
+}
+
 export function KamiFab({ cities }: Props) {
   const [open, setOpen] = useState(false);
   const [bubble, setBubble] = useState<string | null>(null);
@@ -66,6 +96,7 @@ export function KamiFab({ cities }: Props) {
       setBubble(
         BUBBLE_MESSAGES[Math.floor(Math.random() * BUBBLE_MESSAGES.length)]
       );
+      playNotificationSound();
     }, 2200);
     return () => window.clearTimeout(timer);
   }, []);
@@ -85,6 +116,7 @@ export function KamiFab({ cities }: Props) {
   }, [messages, thinking, open]);
 
   function toggleOpen() {
+    if (!open) playNotificationSound();
     dismissBubble();
     setOpen((prev) => !prev);
   }
