@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   BedDouble,
@@ -142,6 +142,44 @@ function CityResultsInner({ city, data }: Props) {
   const tipFilter = searchParams.get("tip") ?? undefined;
   const nameFilter = searchParams.get("q")?.trim();
   const [tab, setTab] = useState<Tab>("tesis");
+  /** Sadece görsel vurgu — içerik sekmesi değişmez */
+  const [spotlight, setSpotlight] = useState<Tab | null>(null);
+  const [tourDone, setTourDone] = useState(false);
+
+  useEffect(() => {
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) {
+      setTourDone(true);
+      return;
+    }
+
+    // Konaklama → Gezi → Yemek → Belediye → Konaklama
+    const sequence: Tab[] = ["tesis", "gezi", "yemek", "sosyal", "tesis"];
+    const stepMs = 520;
+    const startDelay = 450;
+    const timers: number[] = [];
+
+    sequence.forEach((key, index) => {
+      timers.push(
+        window.setTimeout(() => {
+          setSpotlight(key);
+          if (index === sequence.length - 1) {
+            timers.push(
+              window.setTimeout(() => {
+                setSpotlight(null);
+                setTourDone(true);
+              }, 380)
+            );
+          }
+        }, startDelay + index * stepMs)
+      );
+    });
+
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [city]);
 
   const tesis = data.tesis.filter((facility) => {
     const matchesType = !tipFilter || facility.tip === tipFilter;
@@ -160,6 +198,13 @@ function CityResultsInner({ city, data }: Props) {
 
   const activeTab = TABS.find((t) => t.key === tab)!;
   const ActiveIcon = activeTab.icon;
+  const visualKey = spotlight ?? tab;
+
+  function handleTabClick(key: Tab) {
+    setSpotlight(null);
+    setTourDone(true);
+    setTab(key);
+  }
 
   return (
     <Container className="py-12">
@@ -187,33 +232,34 @@ function CityResultsInner({ city, data }: Props) {
         <div className="inline-flex min-w-full gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900/80 sm:min-w-0 sm:flex sm:flex-wrap">
           {TABS.map((t) => {
             const Icon = t.icon;
-            const isActive = tab === t.key;
+            const isSelected = tab === t.key;
+            const isLit = visualKey === t.key;
             return (
               <button
                 key={t.key}
                 type="button"
                 role="tab"
-                aria-selected={isActive}
-                onClick={() => setTab(t.key)}
+                aria-selected={isSelected}
+                onClick={() => handleTabClick(t.key)}
                 className={cn(
-                  "group flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-xl px-4 py-3.5 text-sm font-bold transition-all duration-200",
-                  isActive
-                    ? t.activeClass
+                  "group flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-xl px-4 py-3.5 text-sm font-bold transition-all duration-300 ease-out",
+                  isLit
+                    ? cn(t.activeClass, !tourDone && spotlight === t.key && "scale-[1.03]")
                     : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700 dark:hover:text-white"
                 )}
               >
                 <Icon
                   className={cn(
-                    "h-5 w-5 shrink-0",
-                    isActive ? "opacity-100" : "opacity-70 group-hover:opacity-100"
+                    "h-5 w-5 shrink-0 transition-opacity duration-300",
+                    isLit ? "opacity-100" : "opacity-70 group-hover:opacity-100"
                   )}
                   strokeWidth={2.25}
                 />
                 <span>{t.label}</span>
                 <span
                   className={cn(
-                    "rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
-                    isActive
+                    "rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums transition-colors duration-300",
+                    isLit
                       ? t.badgeClass
                       : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
                   )}
@@ -224,6 +270,11 @@ function CityResultsInner({ city, data }: Props) {
             );
           })}
         </div>
+        {!tourDone && (
+          <p className="mt-2 text-center text-xs text-slate-400 sm:text-left" aria-hidden>
+            Diğer kategorileri keşfedebilirsiniz
+          </p>
+        )}
       </div>
 
       {/* Aktif kategori başlığı */}
