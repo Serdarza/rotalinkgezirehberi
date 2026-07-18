@@ -20,11 +20,21 @@ function openAppStore() {
   window.location.href = DOWNLOAD_PAGE_PATH;
 }
 
+function getDisplayFacilityType(type: string | null | undefined) {
+  const normalized = String(type ?? "").trim().toLocaleLowerCase("tr");
+  if (normalized === "orduevi") return "Orduevi";
+  if (normalized === "polisevi") return "Polisevi";
+  if (normalized === "öğretmenevi") return "Öğretmenevi";
+  return "Misafirhane";
+}
+
 export function FacilityCard({ facility }: { facility: Tesis }) {
+  const displayType = getDisplayFacilityType(facility.tip);
+
   return (
     <div className="flex h-full flex-col rounded-3xl border-l-4 border border-[#0F62FE]/20 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 p-6 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
       <span className="mb-2 inline-block w-fit rounded-lg bg-[#0F62FE] px-2.5 py-1 text-xs font-bold uppercase text-white shadow-sm">
-        {facility.tip}
+        {displayType}
       </span>
       <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
       <p className="mb-4 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
