@@ -10,24 +10,43 @@ export function AppDownloadSection() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div className="text-white">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest opacity-80">Mobil Uygulama</p>
+            <p className="mb-2 text-sm font-semibold uppercase tracking-widest opacity-80">
+              Mobil Uygulama
+            </p>
             <h2 className="mb-4 text-3xl font-extrabold sm:text-4xl">{APP_INFO.name}</h2>
             <p className="mb-8 text-lg opacity-90">{APP_INFO.tagline}</p>
             <StoreButtons className="[&_a]:flex-1" />
           </div>
 
           <div className="flex flex-col items-center gap-6">
-            <GlassCard className="w-full max-w-xs border-white/30 bg-white/20 p-8 text-center backdrop-blur-xl">
-              <div className="relative mx-auto mb-4 h-[420px] w-[210px] rounded-[2.5rem] border-4 border-slate-800 bg-slate-900 p-2 shadow-2xl">
-                <div className="h-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-sky-400 to-[#0F62FE]">
-                  <div className="flex h-full flex-col items-center justify-center p-4 text-white">
-                    <Image src="/logo.png" alt="" width={56} height={56} className="mb-4 h-14 w-14 rounded-full object-cover" />
-                    <p className="text-center text-sm font-bold">Rotalink</p>
-                    <p className="mt-2 text-center text-xs opacity-80">Kamu Seyahat Rehberi</p>
+            <GlassCard className="w-full max-w-sm border-white/30 bg-white/20 p-6 text-center backdrop-blur-xl sm:p-8">
+              {/* Telefon çerçevesi */}
+              <div className="relative mx-auto w-[220px] sm:w-[240px]">
+                <div className="relative overflow-hidden rounded-[2.4rem] border-[3px] border-slate-900 bg-slate-900 p-[3px] shadow-2xl shadow-black/40 ring-1 ring-white/20">
+                  {/* Dinamik ada / notch */}
+                  <div
+                    className="pointer-events-none absolute left-1/2 top-2 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-slate-950"
+                    aria-hidden
+                  />
+                  <div className="relative aspect-[9/19.5] overflow-hidden rounded-[2.1rem] bg-slate-900">
+                    <Image
+                      src="/app/phone-screen.png"
+                      alt="Rotalink mobil uygulama ekranı — harita ve tesis arama"
+                      fill
+                      className="object-cover object-top"
+                      sizes="240px"
+                      priority={false}
+                    />
                   </div>
                 </div>
+                {/* Alt speaker çizgisi */}
+                <div
+                  className="mx-auto mt-2 h-1 w-16 rounded-full bg-slate-900/40"
+                  aria-hidden
+                />
               </div>
             </GlassCard>
+
             <div className="rounded-3xl bg-white/20 p-6 backdrop-blur-xl">
               <QrCodeSection />
             </div>
