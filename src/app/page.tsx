@@ -11,6 +11,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { BlogSection } from "@/components/home/BlogSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { AppDownloadSection } from "@/components/home/AppDownloadSection";
+import { AdSection } from "@/components/ads/AdSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FACILITY_CATEGORIES } from "@/config/site";
 import {
@@ -46,7 +47,9 @@ export default async function HomePage() {
       <WeatherWidget />
       <StatsSection stats={stats} />
       <PopularCitiesSection />
+      <AdSection />
       <FeaturedFacilitiesSection facilities={featured} />
+      <AdSection />
       {categories.map((cat) => (
         <CategoryFacilitiesSection
           key={cat.key}

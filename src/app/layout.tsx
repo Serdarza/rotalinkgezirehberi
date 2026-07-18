@@ -7,6 +7,8 @@ import { SITE } from "@/config/site";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
+import { ADSENSE } from "@/config/ads";
 import "./globals.css";
 
 const inter = Inter({
@@ -30,6 +32,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="tr" suppressHydrationWarning>
       <body className={`${inter.variable} min-h-dvh bg-white font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}>
+        <Script
+          id="adsense-script"
+          async
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE.client}`}
+        />
         <ThemeProvider>
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <DownloadModal />
