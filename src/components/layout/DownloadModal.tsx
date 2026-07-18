@@ -13,6 +13,7 @@ export function DownloadModal() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.location.pathname.includes("/indir")) return;
+    if (window.location.pathname.includes("/sehir/")) return;
     if (sessionStorage.getItem(STORAGE_KEY)) return;
 
     const timer = setTimeout(() => setOpen(true), 1200);

@@ -21,6 +21,7 @@ import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { StickyAdBanner } from "@/components/ads/StickyAdBanner";
 import { ShareButton } from "@/components/share/ShareButton";
+import { SearchAppPromo } from "@/components/search/SearchAppPromo";
 import { Breadcrumb } from "@/components/layout/PageHeader";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn, slugifyCity } from "@/lib/utils";
@@ -477,6 +478,7 @@ function CityResultsInner({ city, data }: Props) {
 
   return (
     <Container className="py-12">
+      <SearchAppPromo city={city} />
       <StickyAdBanner storageKey={`rotalink_sticky_ad_${cityPath}`} />
       <Breadcrumb
         items={[
