@@ -9,6 +9,7 @@ import { ShareButton } from "@/components/share/ShareButton";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import { distanceKm, formatDistance } from "@/lib/geo";
+import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 
@@ -48,21 +49,15 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
 
   const requestLocation = useCallback(() => {
-    if (!navigator.geolocation) {
-      setStatus("error");
-      return;
-    }
     setStatus("loading");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+    getCurrentPositionRobust()
+      .then((pos) => {
+        setCoords({ lat: pos.latitude, lon: pos.longitude });
         setStatus("ready");
-      },
-      (err) => {
-        setStatus(err.code === err.PERMISSION_DENIED ? "denied" : "error");
-      },
-      { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 }
-    );
+      })
+      .catch((err) => {
+        setStatus(err instanceof GeoError && err.denied ? "denied" : "error");
+      });
   }, []);
 
   useEffect(() => {

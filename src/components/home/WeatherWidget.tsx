@@ -26,6 +26,7 @@ import {
   type WeatherData,
   type WeatherIconKey,
 } from "@/lib/weather";
+import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn } from "@/lib/utils";
 
 const WEATHER_ICONS: Record<WeatherIconKey, LucideIcon> = {
@@ -66,7 +67,13 @@ export function WeatherWidget({ city, withContainer = true, className }: Props) 
     async (lat: number, lon: number) => {
       setStatus("loading");
       try {
-        const locationData = await reverseGeocode(lat, lon);
+        // Ters geokodlama başarısız olsa bile hava durumunu göster
+        let locationData: LocationData;
+        try {
+          locationData = await reverseGeocode(lat, lon);
+        } catch {
+          locationData = { city: "Konumunuz", latitude: lat, longitude: lon };
+        }
         await applyWeather(locationData);
       } catch {
         setStatus("error");
@@ -92,21 +99,12 @@ export function WeatherWidget({ city, withContainer = true, className }: Props) 
   );
 
   const requestLocation = useCallback(() => {
-    if (!navigator.geolocation) {
-      setStatus("error");
-      return;
-    }
-
     setStatus("loading");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        void loadByCoords(pos.coords.latitude, pos.coords.longitude);
-      },
-      (err) => {
-        setStatus(err.code === err.PERMISSION_DENIED ? "denied" : "error");
-      },
-      { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 }
-    );
+    getCurrentPositionRobust()
+      .then((pos) => loadByCoords(pos.latitude, pos.longitude))
+      .catch((err) => {
+        setStatus(err instanceof GeoError && err.denied ? "denied" : "error");
+      });
   }, [loadByCoords]);
 
   useEffect(() => {
