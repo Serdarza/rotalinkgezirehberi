@@ -68,7 +68,6 @@ export const getSiteStats = cache(async () => {
     cityCount: cities.length || 81,
     facilityCount: tesis.length,
     geziCount: gezi.length,
-    monthlyUsers: "100.000+",
   };
 });
 

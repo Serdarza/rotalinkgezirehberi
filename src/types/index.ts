@@ -44,7 +44,6 @@ export interface SiteStats {
   cityCount: number;
   facilityCount: number;
   geziCount: number;
-  monthlyUsers?: string;
 }
 
 export type CategoryKey =

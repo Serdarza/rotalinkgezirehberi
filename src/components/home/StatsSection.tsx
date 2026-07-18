@@ -1,11 +1,11 @@
 import { Container, GlassCard } from "@/components/ui/Section";
 import type { SiteStats } from "@/types";
 
-export function StatsSection({ stats }: { stats: SiteStats & { monthlyUsers: string } }) {
+export function StatsSection({ stats }: { stats: SiteStats }) {
   const items = [
     { value: String(stats.cityCount), label: "İl" },
     { value: `${stats.facilityCount.toLocaleString("tr-TR")}+`, label: "Kamu Tesisi" },
-    { value: stats.monthlyUsers, label: "Aylık Kullanıcı" },
+    { value: `${stats.geziCount.toLocaleString("tr-TR")}+`, label: "Gezi Yeri" },
   ];
 
   return (
