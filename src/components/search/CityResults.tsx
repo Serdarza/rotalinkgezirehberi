@@ -104,23 +104,23 @@ function EmptyState({ label }: { label: string }) {
 function SearchLinkButton({
   href,
   label,
-  variant = "maps",
+  tone = "gezi",
 }: {
   href: string;
   label: string;
-  variant?: "maps" | "images";
+  tone?: "gezi" | "yemek" | "sosyal";
 }) {
-  const Icon = variant === "images" ? ImageIcon : MapPinned;
+  const Icon = tone === "yemek" ? ImageIcon : MapPinned;
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition",
-        variant === "images"
-          ? "bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 dark:hover:bg-amber-950/70"
-          : "bg-[#0F62FE]/10 text-[#0F62FE] hover:bg-[#0F62FE]/15 dark:bg-[#0F62FE]/20 dark:text-sky-300"
+        "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:opacity-90",
+        tone === "gezi" && "bg-[#14B8A6]",
+        tone === "yemek" && "bg-amber-500",
+        tone === "sosyal" && "bg-violet-600"
       )}
     >
       <Icon className="h-3.5 w-3.5" />
@@ -130,21 +130,49 @@ function SearchLinkButton({
   );
 }
 
+type PlaceCardVariant = "gezi" | "yemek" | "sosyal";
+
+const PLACE_CARD_STYLES: Record<
+  PlaceCardVariant,
+  { card: string; title: string }
+> = {
+  gezi: {
+    card: "border-teal-200 border-l-[#14B8A6] bg-gradient-to-br from-teal-50 via-white to-emerald-50/60 shadow-teal-500/10 hover:shadow-teal-500/20 dark:border-teal-900 dark:border-l-[#14B8A6] dark:from-slate-800 dark:via-slate-800/80 dark:to-teal-950/50",
+    title: "text-teal-900 dark:text-teal-100",
+  },
+  yemek: {
+    card: "border-amber-200 border-l-amber-500 bg-gradient-to-br from-amber-50 via-white to-orange-50/60 shadow-amber-500/10 hover:shadow-amber-500/20 dark:border-amber-900 dark:border-l-amber-500 dark:from-slate-800 dark:via-slate-800/80 dark:to-amber-950/50",
+    title: "text-amber-900 dark:text-amber-100",
+  },
+  sosyal: {
+    card: "border-violet-200 border-l-violet-600 bg-gradient-to-br from-violet-50 via-white to-purple-50/60 shadow-violet-500/10 hover:shadow-violet-500/20 dark:border-violet-900 dark:border-l-violet-500 dark:from-slate-800 dark:via-slate-800/80 dark:to-violet-950/50",
+    title: "text-violet-950 dark:text-violet-100",
+  },
+};
+
 function PlaceCard({
   title,
   description,
   action,
+  variant = "gezi",
 }: {
   title: string;
   description?: string;
   action: ReactNode;
+  variant?: PlaceCardVariant;
 }) {
+  const styles = PLACE_CARD_STYLES[variant];
   return (
-    <li className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700">
+    <li
+      className={cn(
+        "flex flex-col justify-between rounded-2xl border border-l-4 p-5 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg",
+        styles.card
+      )}
+    >
       <div>
-        <h3 className="text-base font-bold text-slate-900 dark:text-white">{title}</h3>
+        <h3 className={cn("text-base font-bold", styles.title)}>{title}</h3>
         {description && (
-          <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
             {description}
           </p>
         )}
@@ -391,11 +419,12 @@ function CityResultsInner({ city, data }: Props) {
                 <PlaceCard
                   title={g.isim}
                   description={g.aciklama}
+                  variant="gezi"
                   action={
                     <SearchLinkButton
                       href={googleMapsUrl(`${g.isim} ${city}`)}
                       label="İncele"
-                      variant="maps"
+                      tone="gezi"
                     />
                   }
                 />
@@ -420,11 +449,12 @@ function CityResultsInner({ city, data }: Props) {
                 <PlaceCard
                   title={y.isim}
                   description={y.aciklama}
+                  variant="yemek"
                   action={
                     <SearchLinkButton
                       href={googleImagesUrl(`${y.isim} ${city}`)}
                       label="İncele"
-                      variant="images"
+                      tone="yemek"
                     />
                   }
                 />
@@ -449,11 +479,12 @@ function CityResultsInner({ city, data }: Props) {
                 <PlaceCard
                   title={s.isim}
                   description={s.aciklama}
+                  variant="sosyal"
                   action={
                     <SearchLinkButton
                       href={googleMapsUrl(`${s.isim} ${city}`)}
                       label="İncele"
-                      variant="maps"
+                      tone="sosyal"
                     />
                   }
                 />

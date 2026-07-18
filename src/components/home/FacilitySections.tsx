@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
-import { Container, Section, SectionHeading, GlassCard } from "@/components/ui/Section";
+import { Container, Section, SectionHeading } from "@/components/ui/Section";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import type { Tesis } from "@/types";
@@ -22,12 +22,12 @@ function openAppStore() {
 
 export function FacilityCard({ facility }: { facility: Tesis }) {
   return (
-    <GlassCard className="flex h-full flex-col transition-transform hover:-translate-y-1">
-      <span className="mb-2 inline-block w-fit rounded-lg bg-[#0F62FE]/10 px-2.5 py-1 text-xs font-bold uppercase text-[#0F62FE]">
+    <div className="flex h-full flex-col rounded-3xl border-l-4 border border-[#0F62FE]/20 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 p-6 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
+      <span className="mb-2 inline-block w-fit rounded-lg bg-[#0F62FE] px-2.5 py-1 text-xs font-bold uppercase text-white shadow-sm">
         {facility.tip}
       </span>
       <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
-      <p className="mb-4 flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mb-4 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
         <MapPin className="h-4 w-4 shrink-0" aria-hidden />
         {facility.il}
       </p>
@@ -43,12 +43,12 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.isim + " " + facility.il)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold dark:border-slate-700"
+          className="inline-flex items-center gap-1 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-slate-700"
         >
           <MapPin className="h-3.5 w-3.5" aria-hidden /> Konum
         </a>
       </div>
-    </GlassCard>
+    </div>
   );
 }
 
