@@ -119,15 +119,7 @@ export function HeroSection({ cities, facilities }: Props) {
                 />
                 <datalist id="search-suggestions">
                   {cities.map((c) => (
-                    <option key={`city-${c}`} value={c}>İl</option>
-                  ))}
-                  {facilities.map((facility) => (
-                    <option
-                      key={`${facility.il}-${facility.isim}`}
-                      value={facility.isim}
-                    >
-                      {facility.il} · Konaklama
-                    </option>
+                    <option key={`city-${c}`} value={c} />
                   ))}
                 </datalist>
               </div>
