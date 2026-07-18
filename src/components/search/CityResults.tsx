@@ -682,15 +682,8 @@ function CityResultsInner({ city, data }: Props) {
       {tab === "tesis" && viewMode === "map" && (
         <>
           {tesis.length ? (
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="h-[380px] lg:sticky lg:top-44 lg:order-2 lg:h-[calc(100vh-14rem)]">
-                <CityMap facilities={tesis} />
-              </div>
-              <div className="grid content-start gap-4 lg:order-1 lg:max-h-[calc(100vh-14rem)] lg:overflow-y-auto lg:pr-2 xl:grid-cols-2">
-                {tesis.map((f, index) => (
-                  <FacilityCard key={f.isim + f.il + f.tip + index} facility={f} />
-                ))}
-              </div>
+            <div className="h-[480px] sm:h-[560px] lg:h-[calc(100vh-16rem)]">
+              <CityMap facilities={tesis} />
             </div>
           ) : (
             <EmptyState
