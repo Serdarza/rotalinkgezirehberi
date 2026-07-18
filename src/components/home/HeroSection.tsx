@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, Building2, BedDouble } from "lucide-react";
+import { Search, MapPin, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -16,14 +16,11 @@ const TIP_OPTIONS = [
   { value: "Orduevi", label: "Orduevi" },
 ];
 
-const MAX_CITY_SUGGESTIONS = 5;
-const MAX_FACILITY_SUGGESTIONS = 4;
+const MAX_CITY_SUGGESTIONS = 6;
 
 type FacilitySearchItem = { isim: string; il: string };
 
-type Suggestion =
-  | { kind: "city"; label: string; city: string }
-  | { kind: "facility"; label: string; city: string; facilityName: string };
+type Suggestion = { kind: "city"; label: string; city: string };
 
 type Props = {
   cities: string[];
@@ -50,7 +47,7 @@ export function HeroSection({ cities, facilities }: Props) {
 
     const n = normalize(q);
 
-    const cityMatches = cities
+    return cities
       .filter((city) => {
         const nc = normalize(city);
         return nc.startsWith(n) || nc.includes(n);
@@ -65,32 +62,7 @@ export function HeroSection({ cities, facilities }: Props) {
       })
       .slice(0, MAX_CITY_SUGGESTIONS)
       .map((city): Suggestion => ({ kind: "city", label: city, city }));
-
-    const facilityMatches = facilities
-      .filter((f) => {
-        const ni = normalize(f.isim);
-        return ni.startsWith(n) || ni.includes(n);
-      })
-      .sort((a, b) => {
-        const na = normalize(a.isim);
-        const nb = normalize(b.isim);
-        const aStarts = na.startsWith(n) ? 0 : 1;
-        const bStarts = nb.startsWith(n) ? 0 : 1;
-        if (aStarts !== bStarts) return aStarts - bStarts;
-        return a.isim.localeCompare(b.isim, "tr");
-      })
-      .slice(0, MAX_FACILITY_SUGGESTIONS)
-      .map(
-        (f): Suggestion => ({
-          kind: "facility",
-          label: f.isim,
-          city: f.il,
-          facilityName: f.isim,
-        })
-      );
-
-    return [...cityMatches, ...facilityMatches];
-  }, [query, cities, facilities]);
+  }, [query, cities]);
 
   useEffect(() => {
     setHighlight(0);
@@ -125,8 +97,7 @@ export function HeroSection({ cities, facilities }: Props) {
     }
 
     if (suggestions[highlight]) {
-      const s = suggestions[highlight];
-      goTo(s.city, s.kind === "facility" ? s.facilityName : undefined);
+      goTo(suggestions[highlight].city);
       return;
     }
 
@@ -180,8 +151,6 @@ export function HeroSection({ cities, facilities }: Props) {
   }
 
   const showDropdown = open && suggestions.length > 0;
-  const cityItems = suggestions.filter((s) => s.kind === "city");
-  const facilityItems = suggestions.filter((s) => s.kind === "facility");
 
   return (
     <section id="ara" className="relative min-h-[92vh] overflow-hidden scroll-mt-20">
@@ -254,66 +223,28 @@ export function HeroSection({ cities, facilities }: Props) {
                     role="listbox"
                     className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
                   >
-                    {cityItems.length > 0 && (
-                      <div>
-                        <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                          İller
-                        </p>
-                        {cityItems.map((s) => {
-                          const index = suggestions.indexOf(s);
-                          return (
-                            <button
-                              key={`city-${s.city}`}
-                              type="button"
-                              role="option"
-                              aria-selected={highlight === index}
-                              onMouseEnter={() => setHighlight(index)}
-                              onClick={() => goTo(s.city)}
-                              className={cn(
-                                "flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition",
-                                highlight === index
-                                  ? "bg-[#0F62FE]/10 text-[#0F62FE]"
-                                  : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-                              )}
-                            >
-                              <MapPin className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-                              <span className="font-semibold">{s.label}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-
-                    {facilityItems.length > 0 && (
-                      <div className={cn(cityItems.length > 0 && "border-t border-slate-100 dark:border-slate-800")}>
-                        <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                          Tesisler
-                        </p>
-                        {facilityItems.map((s) => {
-                          const index = suggestions.indexOf(s);
-                          return (
-                            <button
-                              key={`fac-${s.facilityName}-${s.city}`}
-                              type="button"
-                              role="option"
-                              aria-selected={highlight === index}
-                              onMouseEnter={() => setHighlight(index)}
-                              onClick={() => goTo(s.city, s.facilityName)}
-                              className={cn(
-                                "flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition",
-                                highlight === index
-                                  ? "bg-[#0F62FE]/10 text-[#0F62FE]"
-                                  : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-                              )}
-                            >
-                              <BedDouble className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-                              <span className="min-w-0 flex-1 truncate font-medium">{s.label}</span>
-                              <span className="shrink-0 text-xs text-slate-400">{s.city}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
+                    <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      İller
+                    </p>
+                    {suggestions.map((s, index) => (
+                      <button
+                        key={`city-${s.city}`}
+                        type="button"
+                        role="option"
+                        aria-selected={highlight === index}
+                        onMouseEnter={() => setHighlight(index)}
+                        onClick={() => goTo(s.city)}
+                        className={cn(
+                          "flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition",
+                          highlight === index
+                            ? "bg-[#0F62FE]/10 text-[#0F62FE]"
+                            : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+                        )}
+                      >
+                        <MapPin className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                        <span className="font-semibold">{s.label}</span>
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>
@@ -345,7 +276,7 @@ export function HeroSection({ cities, facilities }: Props) {
                 </p>
               ) : (
                 <p id="search-help" className="text-xs text-slate-500 dark:text-slate-400">
-                  İl veya tesis adı yazın — eşleşen önerilerden seçin.
+                  İl adı yazın — eşleşen illerden seçin.
                 </p>
               )}
             </div>
