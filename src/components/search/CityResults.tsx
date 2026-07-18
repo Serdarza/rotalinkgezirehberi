@@ -10,10 +10,13 @@ import {
   ExternalLink,
   ImageIcon,
   Download,
+  List,
+  Map as MapIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
+import { CityMap } from "@/components/map/CityMap";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { StickyAdBanner } from "@/components/ads/StickyAdBanner";
@@ -351,6 +354,8 @@ function CityResultsInner({ city, data }: Props) {
   /** Sadece görsel vurgu — içerik sekmesi değişmez */
   const [spotlight, setSpotlight] = useState<Tab | null>(null);
   const [tourDone, setTourDone] = useState(false);
+  /** Konaklama görünümü: liste veya harita */
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   const hasDeepLink = Boolean(sekmeParam || tipParam || nameFilter);
 
@@ -591,30 +596,69 @@ function CityResultsInner({ city, data }: Props) {
         </p>
       )}
 
-      <div className="mb-5 flex items-center gap-3">
-        <div
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-xl text-white",
-            tab === "tesis" && "bg-[#0F62FE]",
-            tab === "gezi" && "bg-[#14B8A6]",
-            tab === "yemek" && "bg-amber-500",
-            tab === "sosyal" && "bg-violet-600"
-          )}
-        >
-          <ActiveIcon className="h-5 w-5" />
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-xl text-white",
+              tab === "tesis" && "bg-[#0F62FE]",
+              tab === "gezi" && "bg-[#14B8A6]",
+              tab === "yemek" && "bg-amber-500",
+              tab === "sosyal" && "bg-violet-600"
+            )}
+          >
+            <ActiveIcon className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              {activeTab.label}
+              {tab === "tesis" && filterLabel ? ` · ${filterLabel}` : ""}
+            </h2>
+            <p className="text-sm text-slate-500">
+              {tab === "tesis" ? tesis.length : counts[tab]} sonuç · {city}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-            {activeTab.label}
-            {tab === "tesis" && filterLabel ? ` · ${filterLabel}` : ""}
-          </h2>
-          <p className="text-sm text-slate-500">
-            {tab === "tesis" ? tesis.length : counts[tab]} sonuç · {city}
-          </p>
-        </div>
+
+        {tab === "tesis" && (
+          <div
+            className="inline-flex rounded-2xl border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-900"
+            role="group"
+            aria-label="Görünüm seçimi"
+          >
+            <button
+              type="button"
+              onClick={() => setViewMode("list")}
+              aria-pressed={viewMode === "list"}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition",
+                viewMode === "list"
+                  ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
+                  : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+              )}
+            >
+              <List className="h-4 w-4" aria-hidden />
+              Liste
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("map")}
+              aria-pressed={viewMode === "map"}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition",
+                viewMode === "map"
+                  ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
+                  : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+              )}
+            >
+              <MapIcon className="h-4 w-4" aria-hidden />
+              Harita
+            </button>
+          </div>
+        )}
       </div>
 
-      {tab === "tesis" && (
+      {tab === "tesis" && viewMode === "list" && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tesis.length ? (
             tesis.map((f, index) => (
@@ -633,6 +677,29 @@ function CityResultsInner({ city, data }: Props) {
             />
           )}
         </div>
+      )}
+
+      {tab === "tesis" && viewMode === "map" && (
+        <>
+          {tesis.length ? (
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="h-[380px] lg:sticky lg:top-44 lg:order-2 lg:h-[calc(100vh-14rem)]">
+                <CityMap facilities={tesis} />
+              </div>
+              <div className="grid content-start gap-4 lg:order-1 lg:max-h-[calc(100vh-14rem)] lg:overflow-y-auto lg:pr-2 xl:grid-cols-2">
+                {tesis.map((f, index) => (
+                  <FacilityCard key={f.isim + f.il + f.tip + index} facility={f} />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <EmptyState
+              label="konaklama tesisi"
+              city={city}
+              suggestions={data.tesis.slice(0, 4)}
+            />
+          )}
+        </>
       )}
 
       {tab === "gezi" && (
