@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/ui/Section";
+import { ShareButton } from "@/components/share/ShareButton";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
+import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 
 function openAppStore() {
@@ -30,6 +32,8 @@ function getDisplayFacilityType(type: string | null | undefined) {
 
 export function FacilityCard({ facility }: { facility: Tesis }) {
   const displayType = getDisplayFacilityType(facility.tip);
+  const cityPath = `/sehir/${slugifyCity(facility.il)}`;
+  const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
 
   return (
     <div className="flex h-full flex-col rounded-3xl border-l-4 border border-[#0F62FE]/20 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 p-6 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
@@ -41,7 +45,7 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
         <MapPin className="h-4 w-4 shrink-0" aria-hidden />
         {facility.il}
       </p>
-      <div className="mt-auto flex gap-2">
+      <div className="mt-auto flex flex-wrap gap-2">
         <button
           type="button"
           onClick={openAppStore}
@@ -57,6 +61,12 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
         >
           <MapPin className="h-3.5 w-3.5" aria-hidden /> Konum
         </a>
+        <ShareButton
+          compact
+          title={facility.isim}
+          text={`${facility.isim} (${facility.il}) — Rotalink`}
+          path={sharePath}
+        />
       </div>
     </div>
   );

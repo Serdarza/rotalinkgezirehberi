@@ -14,10 +14,11 @@ import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
-import { SearchAdPopup } from "@/components/ads/SearchAdPopup";
+import { StickyAdBanner } from "@/components/ads/StickyAdBanner";
+import { ShareButton } from "@/components/share/ShareButton";
 import { Breadcrumb } from "@/components/layout/PageHeader";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn, slugifyCity } from "@/lib/utils";
 
 type Tab = "tesis" | "gezi" | "yemek" | "sosyal";
 
@@ -267,23 +268,34 @@ function CityResultsInner({ city, data }: Props) {
     setTab(key);
   }
 
+  const cityPath = `/sehir/${slugifyCity(city)}`;
+
   return (
     <Container className="py-12">
-      <SearchAdPopup city={city} />
+      <StickyAdBanner storageKey={`rotalink_sticky_ad_${cityPath}`} />
       <Breadcrumb
         items={[
           { label: "Anasayfa", href: "/" },
           { label: city },
         ]}
       />
-      <h1 className="mb-2 text-3xl font-extrabold text-slate-900 dark:text-white">
-        {city} — Arama Sonuçları
-      </h1>
-      <p className="mb-6 text-slate-600 dark:text-slate-400">
-        {city} ilindeki konaklama, gezi, yemek ve belediye tesisleri
-        {tipFilter ? ` · ${tipFilter}` : ""}
-        {nameFilter ? ` · “${nameFilter}”` : ""}
-      </p>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="mb-2 text-3xl font-extrabold text-slate-900 dark:text-white">
+            {city} — Arama Sonuçları
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400">
+            {city} ilindeki konaklama, gezi, yemek ve belediye tesisleri
+            {tipFilter ? ` · ${tipFilter}` : ""}
+            {nameFilter ? ` · “${nameFilter}”` : ""}
+          </p>
+        </div>
+        <ShareButton
+          title={`${city} kamu tesisleri — Rotalink`}
+          text={`${city} ilindeki kamu misafirhaneleri, polisevleri, öğretmenevleri ve gezi yerleri Rotalink’te:`}
+          path={cityPath}
+        />
+      </div>
 
       <div className="mb-8">
         <WeatherWidget city={city} withContainer={false} />

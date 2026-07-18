@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
+import { NearbyFacilities } from "@/components/home/NearbyFacilities";
 import { StatsSection } from "@/components/home/StatsSection";
 import { PopularCitiesSection } from "@/components/home/PopularCitiesSection";
 import {
@@ -46,6 +47,21 @@ export default async function HomePage() {
         facilities={tesis.map(({ isim, il }) => ({ isim, il }))}
       />
       <WeatherWidget />
+      <NearbyFacilities
+        facilities={tesis
+          .filter(
+            (t) =>
+              typeof t.latitude === "number" &&
+              typeof t.longitude === "number"
+          )
+          .map(({ isim, tip, il, latitude, longitude }) => ({
+            isim,
+            tip,
+            il,
+            latitude,
+            longitude,
+          }))}
+      />
       <StatsSection stats={stats} />
       <PopularCitiesSection />
       <AdSection />

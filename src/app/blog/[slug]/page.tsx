@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Section";
 import { PageHero } from "@/components/layout/PageHeader";
+import { ShareButton } from "@/components/share/ShareButton";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { BLOG_POSTS } from "@/config/site";
 import { getBlogContentComponent } from "@/content/blog";
 import { buildMetadata } from "@/lib/seo";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
@@ -28,6 +29,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <>
       <PageHero title={post.title} description={post.excerpt} />
       <Container className="max-w-3xl py-16">
+        <div className="mb-8 flex justify-end">
+          <ShareButton
+            title={post.title}
+            text={`${post.title} — Rotalink`}
+            path={`/blog/${slug}`}
+          />
+        </div>
         {Content ? (
           <Content />
         ) : (
