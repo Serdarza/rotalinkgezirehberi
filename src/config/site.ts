@@ -20,7 +20,7 @@ export const SOCIAL_LINKS = [
     id: "facebook",
     label: "Facebook",
     handle: "Rotalink Kamu Seyahat Rehberi",
-    href: "https://www.facebook.com/61578098883880/",
+    href: "https://www.facebook.com/share/192uS1hmg6/",
   },
 ] as const;
 
