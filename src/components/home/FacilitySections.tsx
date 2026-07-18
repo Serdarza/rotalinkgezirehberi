@@ -8,7 +8,7 @@ import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { CityMap } from "@/components/map/CityMap";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
-import { cn, slugifyCity } from "@/lib/utils";
+import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 
 function openAppStore() {
@@ -88,32 +88,19 @@ export function FeaturedFacilitiesSection({ facilities }: { facilities: Tesis[] 
       Number.isFinite(f.longitude)
   );
 
+  if (!withCoords.length) return null;
+
   return (
     <Section id="tesisler" className="bg-slate-50 dark:bg-slate-900/50">
       <Container>
         <SectionHeading
           eyebrow="Öne Çıkanlar"
           title="Öne Çıkan Kamu Tesisleri"
-          description="Türkiye genelinden seçilmiş güncel kamu tesisleri — haritada keşfedin."
+          description="Türkiye genelinden seçilmiş tesisleri haritada keşfedin."
         />
 
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-          {withCoords.length > 0 && (
-            <div className="h-[320px] overflow-hidden rounded-3xl sm:h-[380px] lg:sticky lg:top-24 lg:h-[min(560px,calc(100vh-8rem))] lg:order-2">
-              <CityMap facilities={withCoords} className="h-full rounded-3xl" />
-            </div>
-          )}
-
-          <div
-            className={cn(
-              "grid gap-4 sm:grid-cols-2",
-              withCoords.length > 0 ? "lg:order-1" : "sm:grid-cols-2 lg:grid-cols-4"
-            )}
-          >
-            {facilities.map((f) => (
-              <FacilityCard key={f.isim + f.il} facility={f} />
-            ))}
-          </div>
+        <div className="h-[380px] overflow-hidden rounded-3xl sm:h-[460px] lg:h-[560px]">
+          <CityMap facilities={withCoords} className="h-full rounded-3xl" />
         </div>
 
         <div className="mt-10 text-center">
