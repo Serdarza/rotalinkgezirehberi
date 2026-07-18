@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/ui/Section";
+import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { FOOTER_LINKS, SITE } from "@/config/site";
 import { PLAY_STORE_URL, APP_STORE_URL } from "@/config/downloads";
 
@@ -53,7 +54,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-slate-200 pt-8 text-center text-sm text-slate-500 dark:border-slate-800">
+        <div className="mt-12">
+          <VisitorCounter />
+        </div>
+
+        <div className="mt-8 border-t border-slate-200 pt-8 text-center text-sm text-slate-500 dark:border-slate-800">
           © {new Date().getFullYear()} {SITE.name}. Tüm hakları saklıdır.
         </div>
       </Container>
