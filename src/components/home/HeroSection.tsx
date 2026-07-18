@@ -34,10 +34,12 @@ export function HeroSection({ cities, facilities }: Props) {
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
+  function runSearch() {
     const value = query.trim();
-    if (!value) return;
+    if (!value) {
+      setError("Lütfen bir il veya tesis adı yazın.");
+      return;
+    }
 
     const normalized = normalize(value);
     const matchedCity =
@@ -63,6 +65,20 @@ export function HeroSection({ cities, facilities }: Props) {
     startTransition(() =>
       router.push(`/sehir/${slugifyCity(destinationCity)}${search ? `?${search}` : ""}`)
     );
+  }
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    runSearch();
+  }
+
+  function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== "Enter") return;
+    // Mobilde Enter bir sonraki alana (tesis türü) geçer; bunu engelleyip aramayı başlat
+    e.preventDefault();
+    e.stopPropagation();
+    (e.target as HTMLInputElement).blur();
+    runSearch();
   }
 
   return (
@@ -111,6 +127,11 @@ export function HeroSection({ cities, facilities }: Props) {
                     setQuery(e.target.value);
                     if (error) setError("");
                   }}
+                  onKeyDown={handleSearchKeyDown}
+                  type="search"
+                  enterKeyHint="search"
+                  inputMode="search"
+                  autoComplete="off"
                   placeholder="İl veya misafirhane arayın..."
                   className="w-full rounded-2xl border border-slate-200 bg-white py-4 pl-12 pr-4 text-slate-900 outline-none focus:border-[#0F62FE] focus:ring-2 focus:ring-[#0F62FE]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   aria-label="İl veya misafirhane adı"
@@ -128,6 +149,7 @@ export function HeroSection({ cities, facilities }: Props) {
                 <select
                   value={tip}
                   onChange={(e) => setTip(e.target.value)}
+                  tabIndex={-1}
                   className="w-full appearance-none rounded-2xl border border-slate-200 bg-white py-4 pl-12 pr-4 text-slate-900 outline-none focus:border-[#0F62FE] dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   aria-label="Tesis türü"
                 >
