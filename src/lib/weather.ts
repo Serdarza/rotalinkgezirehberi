@@ -84,3 +84,35 @@ export async function reverseGeocode(lat: number, lon: number): Promise<Location
 
   return { city, district, latitude: lat, longitude: lon };
 }
+
+/** İl adına göre Türkiye koordinatı bulur (Open-Meteo Geocoding) */
+export async function geocodeCity(cityName: string): Promise<LocationData> {
+  const url =
+    `https://geocoding-api.open-meteo.com/v1/search` +
+    `?name=${encodeURIComponent(cityName)}` +
+    `&count=5&language=tr&countryCode=TR`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("İl konumu bulunamadı");
+  const data = await res.json();
+  const results = Array.isArray(data.results) ? data.results : [];
+
+  if (!results.length) {
+    throw new Error(`“${cityName}” için konum bulunamadı`);
+  }
+
+  const normalized = cityName.toLocaleLowerCase("tr");
+  const match =
+    results.find(
+      (r: { name?: string; admin1?: string }) =>
+        (r.name ?? "").toLocaleLowerCase("tr") === normalized ||
+        (r.admin1 ?? "").toLocaleLowerCase("tr") === normalized
+    ) ?? results[0];
+
+  return {
+    city: match.name || cityName,
+    district: match.admin1 && match.admin1 !== match.name ? match.admin1 : undefined,
+    latitude: match.latitude,
+    longitude: match.longitude,
+  };
+}

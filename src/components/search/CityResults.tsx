@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
+import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { Breadcrumb } from "@/components/layout/PageHeader";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn } from "@/lib/utils";
@@ -171,11 +172,15 @@ function CityResultsInner({ city, data }: Props) {
       <h1 className="mb-2 text-3xl font-extrabold text-slate-900 dark:text-white">
         {city} — Arama Sonuçları
       </h1>
-      <p className="mb-8 text-slate-600 dark:text-slate-400">
+      <p className="mb-6 text-slate-600 dark:text-slate-400">
         {city} ilindeki konaklama, gezi, yemek ve belediye tesisleri
         {tipFilter ? ` · ${tipFilter}` : ""}
         {nameFilter ? ` · “${nameFilter}”` : ""}
       </p>
+
+      <div className="mb-8">
+        <WeatherWidget city={city} withContainer={false} />
+      </div>
 
       {/* Kategori sekmeleri */}
       <div className="mb-8 overflow-x-auto pb-1" role="tablist" aria-label="Sonuç kategorileri">
