@@ -1,11 +1,26 @@
+"use client";
+
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { Container, Section, SectionHeading, GlassCard } from "@/components/ui/Section";
-import { phoneHref } from "@/lib/utils";
+import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
+import { detectDevice } from "@/lib/device";
 import type { Tesis } from "@/types";
 
+function openAppStore() {
+  const device = detectDevice(navigator.userAgent);
+  if (device === "android") {
+    window.location.href = PLAY_STORE_URL;
+    return;
+  }
+  if (device === "ios") {
+    window.location.href = APP_STORE_URL;
+    return;
+  }
+  window.location.href = DOWNLOAD_PAGE_PATH;
+}
+
 export function FacilityCard({ facility }: { facility: Tesis }) {
-  const tel = phoneHref(facility.telefon);
   return (
     <GlassCard className="flex h-full flex-col transition-transform hover:-translate-y-1">
       <span className="mb-2 inline-block w-fit rounded-lg bg-[#0F62FE]/10 px-2.5 py-1 text-xs font-bold uppercase text-[#0F62FE]">
@@ -17,11 +32,13 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
         {facility.il}
       </p>
       <div className="mt-auto flex gap-2">
-        {tel && (
-          <a href={tel} className="inline-flex items-center gap-1 rounded-xl bg-[#14B8A6] px-3 py-2 text-xs font-semibold text-white">
-            <Phone className="h-3.5 w-3.5" aria-hidden /> Ara
-          </a>
-        )}
+        <button
+          type="button"
+          onClick={openAppStore}
+          className="inline-flex items-center gap-1 rounded-xl bg-[#14B8A6] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#0d9488]"
+        >
+          <Phone className="h-3.5 w-3.5" aria-hidden /> İletişim
+        </button>
         <a
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.isim + " " + facility.il)}`}
           target="_blank"
