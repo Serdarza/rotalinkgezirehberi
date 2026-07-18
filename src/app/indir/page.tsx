@@ -6,6 +6,9 @@ export const metadata = buildMetadata({
   description:
     "Rotalink mobil uygulamasını Google Play veya App Store üzerinden indirin. Kamu tesisleri ve seyahat rehberi cebinizde.",
   path: "/indir",
+  image: "/logo.png",
+  imageWidth: 512,
+  imageHeight: 512,
 });
 
 /** /indir — mobilde mağazaya yönlendir, masaüstünde indirme sayfası */

@@ -10,14 +10,22 @@ export function buildMetadata({
   description,
   path = "",
   noIndex = false,
+  image = "/og.png",
+  imageWidth = 1200,
+  imageHeight = 630,
 }: {
   title: string;
   description: string;
   path?: string;
   noIndex?: boolean;
+  /** Open Graph / paylaşım görseli (varsayılan: /og.png) */
+  image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 }): Metadata {
   const url = absoluteUrl(path);
-  const ogImage = absoluteUrl("/og.png");
+  const ogImage = absoluteUrl(image);
+  const isLogo = image.includes("logo");
   return {
     title,
     description,
@@ -32,14 +40,14 @@ export function buildMetadata({
       images: [
         {
           url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: SITE.title,
+          width: imageWidth,
+          height: imageHeight,
+          alt: SITE.name,
         },
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: isLogo ? "summary" : "summary_large_image",
       title,
       description,
       images: [ogImage],

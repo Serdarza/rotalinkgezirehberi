@@ -6,6 +6,9 @@ export const metadata: Metadata = buildMetadata({
   title: `${APP_INFO.name} — İndir`,
   description: APP_INFO.description,
   path: "/indir",
+  image: "/logo.png",
+  imageWidth: 512,
+  imageHeight: 512,
 });
 
 export default function IndirLayout({ children }: { children: React.ReactNode }) {
