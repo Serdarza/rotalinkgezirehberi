@@ -10,6 +10,7 @@ import { ShareButton } from "@/components/share/ShareButton";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import { getFacilityImageSrc } from "@/lib/facilityImages";
+import { getFacilityPricing, PRICING_NOTE } from "@/config/pricing";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
@@ -130,6 +131,38 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
                           <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
                           {facility.il}
                         </p>
+                        {(() => {
+                          const pricing = getFacilityPricing(facility.tip);
+                          return (
+                            <div
+                              className="mt-3 space-y-1 rounded-2xl bg-slate-50 px-3 py-2.5 text-xs ring-1 ring-slate-200/70 dark:bg-slate-950/60 dark:ring-slate-700"
+                              title={PRICING_NOTE}
+                            >
+                              <p className="flex items-center justify-between gap-2">
+                                <span className="font-medium text-slate-500 dark:text-slate-400">
+                                  Kamu personeli
+                                </span>
+                                <span className="font-bold tabular-nums text-slate-800 dark:text-slate-100">
+                                  {pricing.kamu}
+                                </span>
+                              </p>
+                              <p className="flex items-center justify-between gap-2">
+                                <span className="font-medium text-slate-500 dark:text-slate-400">
+                                  Sivil misafir
+                                </span>
+                                {pricing.sivil ? (
+                                  <span className="font-bold tabular-nums text-slate-800 dark:text-slate-100">
+                                    {pricing.sivil}
+                                  </span>
+                                ) : (
+                                  <span className="rounded-md bg-red-50 px-1.5 py-0.5 font-semibold text-red-600 dark:bg-red-950/60 dark:text-red-400">
+                                    Konaklayamaz
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                          );
+                        })()}
                         <div className="mt-auto flex flex-wrap gap-2 pt-4">
                           <button
                             type="button"

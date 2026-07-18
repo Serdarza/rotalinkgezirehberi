@@ -10,6 +10,7 @@ import { CityMap } from "@/components/map/CityMap";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import { getFacilityImageSrc } from "@/lib/facilityImages";
+import { getFacilityPricing, PRICING_NOTE } from "@/config/pricing";
 import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 
@@ -39,6 +40,7 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   const cityPath = `/sehir/${slugifyCity(facility.il)}`;
   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
   const imageSrc = getFacilityImageSrc(facility.tip);
+  const pricing = getFacilityPricing(facility.tip);
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/20 border-l-4 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
@@ -59,10 +61,33 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
-        <p className="mb-4 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
+        <p className="mb-3 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
           <MapPin className="h-4 w-4 shrink-0" aria-hidden />
           {facility.il}
         </p>
+        <div
+          className="mb-4 space-y-1 rounded-2xl bg-slate-50 px-3 py-2.5 text-xs ring-1 ring-slate-200/70 dark:bg-slate-900/60 dark:ring-slate-700"
+          title={PRICING_NOTE}
+        >
+          <p className="flex items-center justify-between gap-2">
+            <span className="font-medium text-slate-500 dark:text-slate-400">Kamu personeli</span>
+            <span className="font-bold tabular-nums text-slate-800 dark:text-slate-100">
+              {pricing.kamu}
+            </span>
+          </p>
+          <p className="flex items-center justify-between gap-2">
+            <span className="font-medium text-slate-500 dark:text-slate-400">Sivil misafir</span>
+            {pricing.sivil ? (
+              <span className="font-bold tabular-nums text-slate-800 dark:text-slate-100">
+                {pricing.sivil}
+              </span>
+            ) : (
+              <span className="rounded-md bg-red-50 px-1.5 py-0.5 font-semibold text-red-600 dark:bg-red-950/60 dark:text-red-400">
+                Konaklayamaz
+              </span>
+            )}
+          </p>
+        </div>
         <div className="mt-auto flex flex-wrap gap-2">
           <button
             type="button"
