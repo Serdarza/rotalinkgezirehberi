@@ -10,6 +10,7 @@ import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 const NAV = [
+  { href: "/", label: "Ana Sayfa" },
   { href: "/#sehirler", label: "Şehirler" },
   { href: "/#tesisler", label: "Tesisler" },
   { href: "/#ozellikler", label: "Özellikler" },
