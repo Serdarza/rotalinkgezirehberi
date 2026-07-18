@@ -1,0 +1,85 @@
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/config/downloads";
+
+type StoreButtonsProps = {
+  size?: "default" | "large";
+  className?: string;
+};
+
+function GooglePlayIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-6 w-6 shrink-0"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M3,20.5V3.5C3,2.91,3.34,2.39,3.84,2.15L13.69,12,3.84,21.85C3.34,21.6,3,21.09,3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08,20.75,11.5,20.75,12C20.75,12.5,20.5,12.92,20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+    </svg>
+  );
+}
+
+function AppStoreIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-6 w-6 shrink-0"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M18.71,19.5C17.88,20.74,17,21.95,15.66,21.97C14.32,22,13.89,21.18,12.37,21.18C10.84,21.18,10.37,21.95,9.1,22C7.79,22.05,6.8,20.68,5.96,19.47C4.25,17,2.94,12.45,4.7,9.39C5.57,7.87,7.13,6.91,8.82,6.88C10.1,6.86,11.32,7.75,12.11,7.75C12.89,7.75,14.37,6.68,15.92,6.84C16.57,6.87,18.39,7.1,19.56,8.82C19.47,8.88,17.39,10.1,17.41,12.63C17.44,15.65,20.06,16.66,20.09,16.67C20.06,16.74,19.67,18.11,18.71,19.5M13,3.5C13.73,2.67,14.94,2.04,15.94,2C16.07,3.17,15.6,4.35,14.9,5.19C14.21,6.04,13.07,6.7,11.95,6.61C11.8,5.46,12.36,4.26,13,3.5Z" />
+    </svg>
+  );
+}
+
+const sizeClasses = {
+  default: "px-5 py-3 text-sm gap-3",
+  large: "px-7 py-4 text-base gap-4 min-w-[220px]",
+};
+
+/**
+ * Google Play ve App Store indirme butonları.
+ */
+export function StoreButtons({
+  size = "large",
+  className = "",
+}: StoreButtonsProps) {
+  const btnClass = `inline-flex flex-1 items-center justify-center rounded-2xl font-semibold transition-all duration-200 hover:scale-[1.02] hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 ${sizeClasses[size]}`;
+
+  return (
+    <div
+      className={`flex w-full flex-col gap-3 sm:flex-row sm:justify-center ${className}`}
+    >
+      <a
+        href={PLAY_STORE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${btnClass} bg-slate-900 text-white shadow-lg shadow-slate-900/20 dark:bg-white dark:text-slate-900`}
+        aria-label="Google Play'den indir"
+      >
+        <GooglePlayIcon />
+        <span className="flex flex-col items-start leading-tight">
+          <span className="text-[10px] font-medium uppercase tracking-wider opacity-70">
+            İndir
+          </span>
+          <span>Google Play</span>
+        </span>
+      </a>
+
+      <a
+        href={APP_STORE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${btnClass} border border-slate-200 bg-white text-slate-900 shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:text-white`}
+        aria-label="App Store'dan indir"
+      >
+        <AppStoreIcon />
+        <span className="flex flex-col items-start leading-tight">
+          <span className="text-[10px] font-medium uppercase tracking-wider opacity-70">
+            İndir
+          </span>
+          <span>App Store</span>
+        </span>
+      </a>
+    </div>
+  );
+}
