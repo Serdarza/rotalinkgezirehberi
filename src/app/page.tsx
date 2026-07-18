@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/home/HeroSection";
+import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { StatsSection } from "@/components/home/StatsSection";
 import { PopularCitiesSection } from "@/components/home/PopularCitiesSection";
 import {
@@ -42,6 +43,7 @@ export default async function HomePage() {
         cities={cities}
         facilities={tesis.map(({ isim, il }) => ({ isim, il }))}
       />
+      <WeatherWidget />
       <StatsSection stats={stats} />
       <PopularCitiesSection />
       <FeaturedFacilitiesSection facilities={featured} />

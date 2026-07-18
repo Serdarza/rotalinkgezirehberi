@@ -92,7 +92,7 @@ export function StatsSection({ stats }: { stats: SiteStats }) {
   }, []);
 
   return (
-    <section ref={ref} className="-mt-16 relative z-20 pb-8">
+    <section ref={ref} className="relative z-20 pb-8 pt-2">
       <Container>
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard
