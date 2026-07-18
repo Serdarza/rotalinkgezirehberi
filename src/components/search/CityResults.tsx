@@ -19,6 +19,22 @@ import { cn } from "@/lib/utils";
 
 type Tab = "tesis" | "gezi" | "yemek" | "sosyal";
 
+type KonaklamaFilter = "all" | "Orduevi" | "Öğretmenevi" | "Polisevi";
+
+const KONAKLAMA_FILTERS: { key: KonaklamaFilter; label: string }[] = [
+  { key: "all", label: "Tüm Tesisler" },
+  { key: "Orduevi", label: "Orduevi" },
+  { key: "Öğretmenevi", label: "Öğretmenevi" },
+  { key: "Polisevi", label: "Polisevi" },
+];
+
+function matchesFacilityTip(facilityTip: string | null | undefined, filter: KonaklamaFilter) {
+  if (filter === "all") return true;
+  const tip = String(facilityTip ?? "").toLocaleLowerCase("tr").trim();
+  const needle = filter.toLocaleLowerCase("tr");
+  return tip === needle || tip.includes(needle);
+}
+
 const TABS: {
   key: Tab;
   label: string;
@@ -142,6 +158,14 @@ function CityResultsInner({ city, data }: Props) {
   const tipFilter = searchParams.get("tip") ?? undefined;
   const nameFilter = searchParams.get("q")?.trim();
   const [tab, setTab] = useState<Tab>("tesis");
+  const [konaklamaFilter, setKonaklamaFilter] = useState<KonaklamaFilter>(() => {
+    if (!tipFilter) return "all";
+    const tip = tipFilter.toLocaleLowerCase("tr");
+    if (tip.includes("orduevi")) return "Orduevi";
+    if (tip.includes("öğretmenevi") || tip.includes("ogretmenevi")) return "Öğretmenevi";
+    if (tip.includes("polisevi")) return "Polisevi";
+    return "all";
+  });
   /** Sadece görsel vurgu — içerik sekmesi değişmez */
   const [spotlight, setSpotlight] = useState<Tab | null>(null);
   const [tourDone, setTourDone] = useState(false);
@@ -182,15 +206,22 @@ function CityResultsInner({ city, data }: Props) {
   }, [city]);
 
   const tesis = data.tesis.filter((facility) => {
-    const matchesType = !tipFilter || facility.tip === tipFilter;
+    const matchesType = matchesFacilityTip(facility.tip, konaklamaFilter);
     const matchesName =
       !nameFilter ||
       facility.isim.toLocaleLowerCase("tr").includes(nameFilter.toLocaleLowerCase("tr"));
     return matchesType && matchesName;
   });
 
+  const konaklamaCounts = {
+    all: data.tesis.length,
+    Orduevi: data.tesis.filter((f) => matchesFacilityTip(f.tip, "Orduevi")).length,
+    Öğretmenevi: data.tesis.filter((f) => matchesFacilityTip(f.tip, "Öğretmenevi")).length,
+    Polisevi: data.tesis.filter((f) => matchesFacilityTip(f.tip, "Polisevi")).length,
+  };
+
   const counts = {
-    tesis: tesis.length,
+    tesis: data.tesis.length,
     gezi: data.gezi.length,
     yemek: data.yemek.length,
     sosyal: data.sosyal.length,
@@ -293,17 +324,51 @@ function CityResultsInner({ city, data }: Props) {
         <div>
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">
             {activeTab.label}
+            {tab === "tesis" && konaklamaFilter !== "all" ? ` · ${konaklamaFilter}` : ""}
           </h2>
           <p className="text-sm text-slate-500">
-            {counts[tab]} sonuç · {city}
+            {tab === "tesis" ? tesis.length : counts[tab]} sonuç · {city}
           </p>
         </div>
       </div>
 
       {tab === "tesis" && (
+        <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Konaklama filtresi">
+          {KONAKLAMA_FILTERS.map((filter) => {
+            const active = konaklamaFilter === filter.key;
+            return (
+              <button
+                key={filter.key}
+                type="button"
+                onClick={() => setKonaklamaFilter(filter.key)}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all",
+                  active
+                    ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
+                    : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700"
+                )}
+              >
+                {filter.label}
+                <span
+                  className={cn(
+                    "rounded-full px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
+                    active
+                      ? "bg-white/20 text-white"
+                      : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
+                  )}
+                >
+                  {konaklamaCounts[filter.key]}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {tab === "tesis" && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tesis.length ? (
-            tesis.map((f) => <FacilityCard key={f.isim} facility={f} />)
+            tesis.map((f) => <FacilityCard key={f.isim + f.il + f.tip} facility={f} />)
           ) : (
             <EmptyState label="konaklama tesisi" />
           )}
