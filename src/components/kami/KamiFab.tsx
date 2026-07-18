@@ -110,6 +110,15 @@ export function KamiFab({ cities }: Props) {
     }
   }, []);
 
+  // Balon göründükten ~7 sn sonra otomatik kapanır
+  useEffect(() => {
+    if (!bubble || open) return;
+    const autoClose = window.setTimeout(() => {
+      dismissBubble();
+    }, 7000);
+    return () => window.clearTimeout(autoClose);
+  }, [bubble, open, dismissBubble]);
+
   useEffect(() => {
     if (!open) return;
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
