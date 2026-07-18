@@ -21,7 +21,7 @@ export function AppDownloadSection() {
               <div className="relative mx-auto mb-4 h-[420px] w-[210px] rounded-[2.5rem] border-4 border-slate-800 bg-slate-900 p-2 shadow-2xl">
                 <div className="h-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-sky-400 to-[#0F62FE]">
                   <div className="flex h-full flex-col items-center justify-center p-4 text-white">
-                    <Image src="/logo.svg" alt="" width={48} height={48} className="mb-4" />
+                    <Image src="/logo.png" alt="" width={56} height={56} className="mb-4 h-14 w-14 rounded-full object-cover" />
                     <p className="text-center text-sm font-bold">Rotalink</p>
                     <p className="mt-2 text-center text-xs opacity-80">Kamu Seyahat Rehberi</p>
                   </div>

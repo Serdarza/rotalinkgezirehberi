@@ -1,7 +1,15 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import {
+  BedDouble,
+  MapPinned,
+  UtensilsCrossed,
+  Building2,
+  ExternalLink,
+  ImageIcon,
+} from "lucide-react";
 import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
 import { Breadcrumb } from "@/components/layout/PageHeader";
@@ -10,12 +18,50 @@ import { cn } from "@/lib/utils";
 
 type Tab = "tesis" | "gezi" | "yemek" | "sosyal";
 
-const TABS: { key: Tab; label: string }[] = [
-  { key: "tesis", label: "Tesis" },
-  { key: "gezi", label: "Gezi" },
-  { key: "yemek", label: "Yemek" },
-  { key: "sosyal", label: "Sosyal" },
+const TABS: {
+  key: Tab;
+  label: string;
+  icon: typeof BedDouble;
+  activeClass: string;
+  badgeClass: string;
+}[] = [
+  {
+    key: "tesis",
+    label: "Konaklama",
+    icon: BedDouble,
+    activeClass: "bg-[#0F62FE] text-white shadow-lg shadow-[#0F62FE]/25",
+    badgeClass: "bg-white/20 text-white",
+  },
+  {
+    key: "gezi",
+    label: "Gezi",
+    icon: MapPinned,
+    activeClass: "bg-[#14B8A6] text-white shadow-lg shadow-[#14B8A6]/25",
+    badgeClass: "bg-white/20 text-white",
+  },
+  {
+    key: "yemek",
+    label: "Yemek",
+    icon: UtensilsCrossed,
+    activeClass: "bg-amber-500 text-white shadow-lg shadow-amber-500/25",
+    badgeClass: "bg-white/20 text-white",
+  },
+  {
+    key: "sosyal",
+    label: "Belediye Tesisleri",
+    icon: Building2,
+    activeClass: "bg-violet-600 text-white shadow-lg shadow-violet-600/25",
+    badgeClass: "bg-white/20 text-white",
+  },
 ];
+
+function googleMapsUrl(query: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+function googleImagesUrl(query: string) {
+  return `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
+}
 
 type Props = {
   city: string;
@@ -26,6 +72,69 @@ type Props = {
     sosyal: SosyalTesis[];
   };
 };
+
+function EmptyState({ label }: { label: string }) {
+  return (
+    <div className="col-span-full rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center dark:border-slate-700 dark:bg-slate-900/50">
+      <p className="text-slate-500 dark:text-slate-400">
+        Bu kategoride {label} bulunamadı.
+      </p>
+    </div>
+  );
+}
+
+function SearchLinkButton({
+  href,
+  label,
+  variant = "maps",
+}: {
+  href: string;
+  label: string;
+  variant?: "maps" | "images";
+}) {
+  const Icon = variant === "images" ? ImageIcon : MapPinned;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition",
+        variant === "images"
+          ? "bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 dark:hover:bg-amber-950/70"
+          : "bg-[#0F62FE]/10 text-[#0F62FE] hover:bg-[#0F62FE]/15 dark:bg-[#0F62FE]/20 dark:text-sky-300"
+      )}
+    >
+      <Icon className="h-3.5 w-3.5" />
+      {label}
+      <ExternalLink className="h-3 w-3 opacity-60" />
+    </a>
+  );
+}
+
+function PlaceCard({
+  title,
+  description,
+  action,
+}: {
+  title: string;
+  description?: string;
+  action: ReactNode;
+}) {
+  return (
+    <li className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700">
+      <div>
+        <h3 className="text-base font-bold text-slate-900 dark:text-white">{title}</h3>
+        {description && (
+          <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            {description}
+          </p>
+        )}
+      </div>
+      <div className="mt-4">{action}</div>
+    </li>
+  );
+}
 
 function CityResultsInner({ city, data }: Props) {
   const searchParams = useSearchParams();
@@ -43,6 +152,9 @@ function CityResultsInner({ city, data }: Props) {
     sosyal: data.sosyal.length,
   };
 
+  const activeTab = TABS.find((t) => t.key === tab)!;
+  const ActiveIcon = activeTab.icon;
+
   return (
     <Container className="py-12">
       <Breadcrumb
@@ -55,68 +167,153 @@ function CityResultsInner({ city, data }: Props) {
         {city} — Arama Sonuçları
       </h1>
       <p className="mb-8 text-slate-600 dark:text-slate-400">
-        {city} ilindeki kamu tesisleri ve gezi noktaları
+        {city} ilindeki konaklama, gezi, yemek ve belediye tesisleri
         {tipFilter ? ` · ${tipFilter}` : ""}
       </p>
 
-      <div className="mb-6 flex flex-wrap gap-2 rounded-2xl bg-slate-100 p-1.5 dark:bg-slate-800" role="tablist">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            role="tab"
-            aria-selected={tab === t.key}
-            onClick={() => setTab(t.key)}
-            className={cn(
-              "rounded-xl px-4 py-2.5 text-sm font-semibold transition-all",
-              tab === t.key
-                ? "bg-white text-[#0F62FE] shadow-sm dark:bg-slate-900"
-                : "text-slate-600 dark:text-slate-400"
-            )}
-          >
-            {t.label} ({counts[t.key]})
-          </button>
-        ))}
+      {/* Kategori sekmeleri */}
+      <div className="mb-8 overflow-x-auto pb-1" role="tablist" aria-label="Sonuç kategorileri">
+        <div className="inline-flex min-w-full gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900/80 sm:min-w-0 sm:flex sm:flex-wrap">
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            const isActive = tab === t.key;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setTab(t.key)}
+                className={cn(
+                  "group flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-xl px-4 py-3.5 text-sm font-bold transition-all duration-200",
+                  isActive
+                    ? t.activeClass
+                    : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700 dark:hover:text-white"
+                )}
+              >
+                <Icon
+                  className={cn(
+                    "h-5 w-5 shrink-0",
+                    isActive ? "opacity-100" : "opacity-70 group-hover:opacity-100"
+                  )}
+                  strokeWidth={2.25}
+                />
+                <span>{t.label}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
+                    isActive
+                      ? t.badgeClass
+                      : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
+                  )}
+                >
+                  {counts[t.key]}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Aktif kategori başlığı */}
+      <div className="mb-5 flex items-center gap-3">
+        <div
+          className={cn(
+            "flex h-10 w-10 items-center justify-center rounded-xl text-white",
+            tab === "tesis" && "bg-[#0F62FE]",
+            tab === "gezi" && "bg-[#14B8A6]",
+            tab === "yemek" && "bg-amber-500",
+            tab === "sosyal" && "bg-violet-600"
+          )}
+        >
+          <ActiveIcon className="h-5 w-5" />
+        </div>
+        <div>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+            {activeTab.label}
+          </h2>
+          <p className="text-sm text-slate-500">
+            {counts[tab]} sonuç · {city}
+          </p>
+        </div>
       </div>
 
       {tab === "tesis" && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {tesis.length ? tesis.map((f) => <FacilityCard key={f.isim} facility={f} />) : (
-            <p className="col-span-full text-slate-500">Bu kategoride sonuç bulunamadı.</p>
+          {tesis.length ? (
+            tesis.map((f) => <FacilityCard key={f.isim} facility={f} />)
+          ) : (
+            <EmptyState label="konaklama tesisi" />
           )}
         </div>
       )}
 
       {tab === "gezi" && (
         <ul className="grid gap-4 sm:grid-cols-2">
-          {data.gezi.map((g) => (
-            <li key={g.isim} className="rounded-2xl border border-slate-200 p-5 dark:border-slate-800">
-              <h3 className="font-bold">{g.isim}</h3>
-              {g.aciklama && <p className="mt-1 text-sm text-slate-500">{g.aciklama}</p>}
-            </li>
-          ))}
+          {data.gezi.length ? (
+            data.gezi.map((g) => (
+              <PlaceCard
+                key={g.isim}
+                title={g.isim}
+                description={g.aciklama}
+                action={
+                  <SearchLinkButton
+                    href={googleMapsUrl(`${g.isim} ${city}`)}
+                    label="Google Maps'te Ara"
+                    variant="maps"
+                  />
+                }
+              />
+            ))
+          ) : (
+            <EmptyState label="gezi yeri" />
+          )}
         </ul>
       )}
 
       {tab === "yemek" && (
         <ul className="grid gap-4 sm:grid-cols-2">
-          {data.yemek.map((y) => (
-            <li key={y.isim} className="rounded-2xl border border-slate-200 p-5 dark:border-slate-800">
-              <h3 className="font-bold">{y.isim}</h3>
-              {y.aciklama && <p className="mt-1 text-sm text-slate-500">{y.aciklama}</p>}
-            </li>
-          ))}
+          {data.yemek.length ? (
+            data.yemek.map((y) => (
+              <PlaceCard
+                key={y.isim}
+                title={y.isim}
+                description={y.aciklama}
+                action={
+                  <SearchLinkButton
+                    href={googleImagesUrl(`${y.isim} ${city}`)}
+                    label="Google Görsellerde Ara"
+                    variant="images"
+                  />
+                }
+              />
+            ))
+          ) : (
+            <EmptyState label="yemek mekanı" />
+          )}
         </ul>
       )}
 
       {tab === "sosyal" && (
         <ul className="grid gap-4 sm:grid-cols-2">
-          {data.sosyal.map((s) => (
-            <li key={s.isim} className="rounded-2xl border border-slate-200 p-5 dark:border-slate-800">
-              <h3 className="font-bold">{s.isim}</h3>
-              {s.aciklama && <p className="mt-1 text-sm text-slate-500">{s.aciklama}</p>}
-            </li>
-          ))}
+          {data.sosyal.length ? (
+            data.sosyal.map((s) => (
+              <PlaceCard
+                key={s.isim}
+                title={s.isim}
+                description={s.aciklama}
+                action={
+                  <SearchLinkButton
+                    href={googleMapsUrl(`${s.isim} ${city}`)}
+                    label="Google Maps'te Ara"
+                    variant="maps"
+                  />
+                }
+              />
+            ))
+          ) : (
+            <EmptyState label="belediye tesisi" />
+          )}
         </ul>
       )}
     </Container>

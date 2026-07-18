@@ -25,7 +25,7 @@ export function Header() {
       <Container>
         <div className="flex h-16 items-center justify-between lg:h-[72px]">
           <Link href="/" className="flex items-center gap-3" aria-label={`${SITE.name} anasayfa`}>
-            <Image src="/logo.svg" alt="" width={36} height={36} className="h-9 w-9" priority />
+            <Image src="/logo.png" alt="" width={36} height={36} className="h-9 w-9 rounded-full object-cover" priority />
             <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
               {SITE.name}
             </span>

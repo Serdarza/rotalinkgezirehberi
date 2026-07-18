@@ -20,16 +20,14 @@ export function DesktopDownloadPage() {
       {/* Üst bar */}
       <header className="relative z-20 flex items-center justify-between px-6 py-5 sm:px-10">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-sky-500 to-cyan-400 shadow-md">
-            <Image
-              src="/logo.svg"
-              alt=""
-              width={40}
-              height={40}
-              className="h-8 w-8"
-              priority
-            />
-          </div>
+          <Image
+            src="/logo.png"
+            alt=""
+            width={40}
+            height={40}
+            className="h-10 w-10 rounded-full object-cover shadow-md"
+            priority
+          />
           <span className="text-sm font-bold tracking-tight text-slate-800 dark:text-white">
             {APP_INFO.shortName}
           </span>
@@ -46,16 +44,14 @@ export function DesktopDownloadPage() {
               {/* Sol: metin + butonlar */}
               <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-left">
                 {/* Logo */}
-                <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[1.75rem] bg-gradient-to-br from-sky-500 to-cyan-400 shadow-2xl shadow-sky-500/40">
-                  <Image
-                    src="/logo.svg"
-                    alt="Rotalink logosu"
-                    width={72}
-                    height={72}
-                    className="h-16 w-16"
-                    priority
-                  />
-                </div>
+                <Image
+                  src="/logo.png"
+                  alt="Rotalink logosu"
+                  width={96}
+                  height={96}
+                  className="mb-6 h-24 w-24 rounded-full object-cover shadow-2xl shadow-sky-500/40"
+                  priority
+                />
 
                 <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
                   {APP_INFO.name}

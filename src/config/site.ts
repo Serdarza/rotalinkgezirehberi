@@ -22,7 +22,7 @@ export const POPULAR_CITIES = [
   "İzmir",
   "Antalya",
   "Bursa",
-  "Kayseri",
+  "Düzce",
   "Trabzon",
   "Gaziantep",
 ] as const;

@@ -4,57 +4,61 @@ import { cache } from "react";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { FACILITY_CATEGORIES } from "@/config/site";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+/** Tek kaynak: uygulama master veritabanı */
+const MASTER_DB_PATH = path.join(process.cwd(), "data", "master_database.json");
 
-async function readJson<T>(file: string): Promise<T> {
-  const raw = await readFile(path.join(DATA_DIR, file), "utf-8");
-  return JSON.parse(raw) as T;
-}
+type MasterDatabase = {
+  tesisler: Tesis[];
+  geziler: GeziYeri[];
+  yemekler: YemekMekani[];
+  sosyal: SosyalTesis[];
+};
+
+const loadMasterDatabase = cache(async (): Promise<MasterDatabase> => {
+  try {
+    const raw = await readFile(MASTER_DB_PATH, "utf-8");
+    const data = JSON.parse(raw) as Partial<MasterDatabase>;
+    return {
+      tesisler: Array.isArray(data.tesisler) ? data.tesisler : [],
+      geziler: Array.isArray(data.geziler) ? data.geziler : [],
+      yemekler: Array.isArray(data.yemekler) ? data.yemekler : [],
+      sosyal: Array.isArray(data.sosyal) ? data.sosyal : [],
+    };
+  } catch {
+    return { tesisler: [], geziler: [], yemekler: [], sosyal: [] };
+  }
+});
 
 export const getTesisData = cache(async (): Promise<Tesis[]> => {
-  try {
-    return await readJson<Tesis[]>("data.json");
-  } catch {
-    return [];
-  }
+  const db = await loadMasterDatabase();
+  return db.tesisler;
 });
 
 export const getGeziData = cache(async (): Promise<GeziYeri[]> => {
-  try {
-    return await readJson<GeziYeri[]>("gezi.json");
-  } catch {
-    return [];
-  }
+  const db = await loadMasterDatabase();
+  return db.geziler;
 });
 
 export const getYemekData = cache(async (): Promise<YemekMekani[]> => {
-  try {
-    return await readJson<YemekMekani[]>("yemek.json");
-  } catch {
-    return [];
-  }
+  const db = await loadMasterDatabase();
+  return db.yemekler;
 });
 
 export const getSosyalData = cache(async (): Promise<SosyalTesis[]> => {
-  try {
-    return await readJson<SosyalTesis[]>("sosyal.json");
-  } catch {
-    return [];
-  }
+  const db = await loadMasterDatabase();
+  return db.sosyal;
 });
 
 export const getAllData = cache(async () => {
-  const [tesis, gezi, yemek, sosyal] = await Promise.all([
-    getTesisData(),
-    getGeziData(),
-    getYemekData(),
-    getSosyalData(),
-  ]);
+  const db = await loadMasterDatabase();
+  const { tesisler: tesis, geziler: gezi, yemekler: yemek, sosyal } = db;
+
   const citySet = new Set<string>();
   [...tesis, ...gezi, ...yemek, ...sosyal].forEach((item) => {
     if (item.il) citySet.add(item.il.trim());
   });
   const cities = [...citySet].sort((a, b) => a.localeCompare(b, "tr"));
+
   return { tesis, gezi, yemek, sosyal, cities };
 });
 
@@ -94,7 +98,5 @@ export async function getFacilitiesByCategory(
 }
 
 export function getCategoryTips(key: string) {
-  return (
-    FACILITY_CATEGORIES.find((c) => c.key === key)?.tips ?? []
-  );
+  return FACILITY_CATEGORIES.find((c) => c.key === key)?.tips ?? [];
 }

@@ -27,6 +27,7 @@ export interface GeziYeri {
 export interface YemekMekani {
   isim: string;
   il: string;
+  adres?: string;
   aciklama?: string;
 }
 
@@ -35,6 +36,7 @@ export interface SosyalTesis {
   il: string;
   ilce?: string;
   belediye?: string;
+  adres?: string;
   aciklama?: string;
 }
 

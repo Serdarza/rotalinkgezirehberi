@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { MOBILE_REDIRECT_DELAY_MS } from "@/config/downloads";
 
 type MobileRedirectProps = {
@@ -47,11 +48,14 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
 
       <div className="relative z-10 flex w-full max-w-sm flex-col items-center text-center animate-fade-in-up">
         {/* Logo */}
-        <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-500 to-cyan-400 shadow-xl shadow-sky-500/30">
-          <span className="text-3xl font-extrabold text-white" aria-hidden="true">
-            R
-          </span>
-        </div>
+        <Image
+          src="/logo.png"
+          alt="Rotalink"
+          width={80}
+          height={80}
+          className="mb-8 h-20 w-20 rounded-full object-cover shadow-xl shadow-sky-500/30"
+          priority
+        />
 
         {/* Spinner */}
         <div

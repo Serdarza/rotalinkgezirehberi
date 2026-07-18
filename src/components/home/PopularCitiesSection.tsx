@@ -6,14 +6,20 @@ import { POPULAR_CITIES } from "@/config/site";
 
 const CITY_IMAGES: Record<string, string> = {
   İstanbul: "photo-1524231757912-21f4fe3a7200",
-  Ankara: "photo-1601925260368-ae2f83cf8b7f",
-  İzmir: "photo-1569336410210-0354a3de603e",
-  Antalya: "photo-1506905925346-21bda4d32df4",
-  Bursa: "photo-1590073242678-70eeef2182d7",
-  Kayseri: "photo-1541438641304-7aa1bddedd0d",
-  Trabzon: "photo-1605647540924-852290fbf7b2",
-  Gaziantep: "photo-1591604129939-f1efa4d8f1f3",
+  Ankara: "/cities/ankara.png",
+  İzmir: "/cities/izmir.png",
+  Antalya: "/cities/antalya.png",
+  Bursa: "/cities/bursa.png",
+  Düzce: "/cities/duzce.png",
+  Trabzon: "/cities/trabzon.png",
+  Gaziantep: "/cities/gaziantep.png",
 };
+
+function getCityImageSrc(city: string): string {
+  const image = CITY_IMAGES[city] ?? "photo-1524231757912-21f4fe3a7200";
+  if (image.startsWith("/")) return image;
+  return `https://images.unsplash.com/${image}?w=600&q=80`;
+}
 
 export function PopularCitiesSection() {
   return (
@@ -33,7 +39,7 @@ export function PopularCitiesSection() {
             >
               <div className="aspect-[4/3] relative">
                 <Image
-                  src={`https://images.unsplash.com/${CITY_IMAGES[city] ?? "photo-1524231757912-21f4fe3a7200"}?w=600&q=80`}
+                  src={getCityImageSrc(city)}
                   alt={city}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
