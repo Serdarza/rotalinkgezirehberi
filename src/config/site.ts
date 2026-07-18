@@ -125,20 +125,20 @@ export const BLOG_POSTS = [
     slug: "kamu-misafirhanesi-rehberi",
     title: "Kamu Misafirhaneleri: Bilmeniz Gerekenler",
     excerpt: "Kamu misafirhanelerine nasıl erişilir, nelere dikkat edilmeli?",
-    date: "2026-03-01",
+    date: "2026-07-18",
   },
   {
     slug: "ogretmenevi-konaklama",
     title: "Öğretmenevi ile Ekonomik Konaklama",
     excerpt: "Öğretmenevlerinin avantajları ve kullanım koşulları.",
-    date: "2026-02-15",
+    date: "2026-07-18",
   },
   {
     slug: "turkiye-seyahat-ipuclari",
     title: "Türkiye'de Kamu Tesisleriyle Seyahat",
     excerpt:
       "81 ilde kamu tesisleriyle pratik keşif rehberi: fiyat aralıkları, rezervasyon ipuçları ve önerilen rotalar.",
-    date: "2026-01-20",
+    date: "2026-07-18",
   },
 ] as const;
 

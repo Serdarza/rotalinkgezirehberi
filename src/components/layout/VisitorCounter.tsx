@@ -162,7 +162,7 @@ export function VisitorCounter({ className }: { className?: string }) {
 
         <div className="text-center sm:text-left">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55">
-            Canlı ziyaretçi sayacı
+            Toplam Ziyaretçi
           </p>
           <p className="mt-1 text-3xl font-extrabold tabular-nums tracking-tight sm:text-4xl">
             {status === "loading" && count === 0 ? (
