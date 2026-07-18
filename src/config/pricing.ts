@@ -18,7 +18,7 @@ export const PRICING_NOTE = "Fiyatlar yaklaşıktır; tesise ve oda tipine göre
 
 const PRICING: Record<string, FacilityPricing> = {
   orduevi: {
-    kamu: "140 – 1.405 TL",
+    kamu: "400 – 1.405 TL",
     sivil: null,
   },
   polisevi: {
