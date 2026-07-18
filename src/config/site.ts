@@ -150,7 +150,6 @@ export const FOOTER_LINKS = {
     { href: "/sik-sorulan-sorular", label: "Sık Sorulan Sorular" },
   ],
   yasal: [
-    { href: "/kvkk", label: "KVKK" },
     { href: "/gizlilik-politikasi", label: "Gizlilik Politikası" },
     { href: "/kullanim-sartlari", label: "Kullanım Şartları" },
     { href: "/cerez-politikasi", label: "Çerez Politikası" },

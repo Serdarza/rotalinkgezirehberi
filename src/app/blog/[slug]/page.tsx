@@ -4,6 +4,7 @@ import { PageHero } from "@/components/layout/PageHeader";
 import { BLOG_POSTS } from "@/config/site";
 import { getBlogContentComponent } from "@/content/blog";
 import { buildMetadata } from "@/lib/seo";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
@@ -35,6 +36,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             detaylı içerikler için bizi takip etmeye devam edin.
           </p>
         )}
+        <AdSenseUnit variant="banner" className="mt-12" />
       </Container>
     </>
   );

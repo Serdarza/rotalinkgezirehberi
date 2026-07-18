@@ -287,6 +287,8 @@ function CityResultsInner({ city, data }: Props) {
         <WeatherWidget city={city} withContainer={false} />
       </div>
 
+      <AdSenseUnit variant="banner" className="mb-8" />
+
       {/* Kategori sekmeleri */}
       <div className="mb-8 overflow-x-auto pb-1" role="tablist" aria-label="Sonuç kategorileri">
         <div className="inline-flex min-w-full gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900/80 sm:min-w-0 sm:flex sm:flex-wrap">
@@ -428,7 +430,7 @@ function CityResultsInner({ city, data }: Props) {
                     />
                   }
                 />
-                {(index + 1) % 8 === 0 && index < data.gezi.length - 1 && (
+                {(index + 1) % 6 === 0 && index < data.gezi.length - 1 && (
                   <li className="col-span-full list-none">
                     <AdSenseUnit variant="inFeed" />
                   </li>
@@ -458,7 +460,7 @@ function CityResultsInner({ city, data }: Props) {
                     />
                   }
                 />
-                {(index + 1) % 8 === 0 && index < data.yemek.length - 1 && (
+                {(index + 1) % 6 === 0 && index < data.yemek.length - 1 && (
                   <li className="col-span-full list-none">
                     <AdSenseUnit variant="inFeed" />
                   </li>
@@ -488,7 +490,7 @@ function CityResultsInner({ city, data }: Props) {
                     />
                   }
                 />
-                {(index + 1) % 8 === 0 && index < data.sosyal.length - 1 && (
+                {(index + 1) % 6 === 0 && index < data.sosyal.length - 1 && (
                   <li className="col-span-full list-none">
                     <AdSenseUnit variant="inFeed" />
                   </li>

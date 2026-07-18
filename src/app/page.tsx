@@ -22,6 +22,7 @@ import {
 } from "@/lib/data";
 import { faqJsonLd } from "@/lib/seo";
 import { FAQ_ITEMS } from "@/config/site";
+import { Fragment } from "react";
 
 export default async function HomePage() {
   const [stats, featured, { cities, tesis }] = await Promise.all([
@@ -50,18 +51,21 @@ export default async function HomePage() {
       <AdSection />
       <FeaturedFacilitiesSection facilities={featured} />
       <AdSection />
-      {categories.map((cat) => (
-        <CategoryFacilitiesSection
-          key={cat.key}
-          id={cat.key}
-          title={cat.title}
-          description={cat.description}
-          facilities={cat.facilities}
-        />
+      {categories.map((cat, index) => (
+        <Fragment key={cat.key}>
+          <CategoryFacilitiesSection
+            id={cat.key}
+            title={cat.title}
+            description={cat.description}
+            facilities={cat.facilities}
+          />
+          {(index === 1 || index === 3) && <AdSection />}
+        </Fragment>
       ))}
       <FeaturesSection />
       <TestimonialsSection />
       <BlogSection />
+      <AdSection />
       <FAQSection />
       <AppDownloadSection />
     </>

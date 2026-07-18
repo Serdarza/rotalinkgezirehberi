@@ -9,14 +9,6 @@ export const LEGAL_PAGES = [
     ],
   },
   {
-    slug: "kvkk",
-    title: "KVKK Aydınlatma Metni",
-    content: [
-      "6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında veri sorumlusu Rotalink'tir.",
-      "KVKK kapsamındaki haklarınız için bizimle iletişime geçebilirsiniz.",
-    ],
-  },
-  {
     slug: "kullanim-sartlari",
     title: "Kullanım Şartları",
     content: [
