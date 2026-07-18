@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/ui/Section";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { FOOTER_LINKS, SITE } from "@/config/site";
 import { PLAY_STORE_URL, APP_STORE_URL } from "@/config/downloads";
 
@@ -18,6 +19,12 @@ export function Footer() {
             <p className="mb-6 max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-400">
               {SITE.description}
             </p>
+            <div className="mb-5">
+              <p className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Bizi takip edin
+              </p>
+              <SocialLinks />
+            </div>
             <div className="flex flex-wrap gap-3">
               <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" className="rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white dark:bg-white dark:text-slate-900">
                 Google Play

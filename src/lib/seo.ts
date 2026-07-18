@@ -1,4 +1,4 @@
-import { SITE } from "@/config/site";
+import { SITE, SOCIAL_LINKS } from "@/config/site";
 import type { Metadata } from "next";
 
 export function absoluteUrl(path = ""): string {
@@ -56,6 +56,7 @@ export function organizationJsonLd() {
     url: SITE.url,
     description: SITE.description,
     email: SITE.email,
+    sameAs: SOCIAL_LINKS.map((s) => s.href),
   };
 }
 

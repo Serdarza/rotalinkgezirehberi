@@ -8,6 +8,22 @@ export const SITE = {
   email: "rotalinkinfo@gmail.com",
 } as const;
 
+/** Resmi sosyal medya hesapları (mobil uygulama ile aynı). */
+export const SOCIAL_LINKS = [
+  {
+    id: "instagram",
+    label: "Instagram",
+    handle: "@rotalink_tr",
+    href: "https://www.instagram.com/rotalink_tr/",
+  },
+  {
+    id: "facebook",
+    label: "Facebook",
+    handle: "Rotalink Kamu Seyahat Rehberi",
+    href: "https://www.facebook.com/61578098883880/",
+  },
+] as const;
+
 export const COLORS = {
   primary: "#0F62FE",
   secondary: "#14B8A6",
