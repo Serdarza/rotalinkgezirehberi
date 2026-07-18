@@ -136,7 +136,8 @@ export const BLOG_POSTS = [
   {
     slug: "turkiye-seyahat-ipuclari",
     title: "Türkiye'de Kamu Tesisleriyle Seyahat",
-    excerpt: "81 ilde kamu tesislerini keşfetmenin pratik yolları.",
+    excerpt:
+      "81 ilde kamu tesisleriyle pratik keşif rehberi: fiyat aralıkları, rezervasyon ipuçları ve önerilen rotalar.",
     date: "2026-01-20",
   },
 ] as const;
