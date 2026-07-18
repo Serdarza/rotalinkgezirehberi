@@ -45,17 +45,11 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-200 dark:bg-slate-700">
         <Image
           src={imageSrc}
-          alt=""
+          alt={displayType}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition duration-500 hover:scale-[1.03]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-        <div className="absolute left-3 top-3 flex items-start justify-between gap-2">
-          <span className="inline-block w-fit rounded-lg bg-[#0F62FE] px-2.5 py-1 text-xs font-bold uppercase text-white shadow-sm">
-            {displayType}
-          </span>
-        </div>
         <div className="absolute right-3 top-3">
           <FavoriteButton
             facility={{ isim: facility.isim, tip: String(facility.tip ?? ""), il: facility.il }}

@@ -112,15 +112,11 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
                         <div className="relative aspect-[16/10] w-full bg-slate-200 dark:bg-slate-700">
                           <Image
                             src={getFacilityImageSrc(facility.tip)}
-                            alt=""
+                            alt={getDisplayFacilityType(facility.tip)}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             className="object-cover"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                          <span className="absolute left-3 top-3 rounded-lg bg-[#0F62FE] px-2.5 py-1 text-[11px] font-bold uppercase text-white">
-                            {getDisplayFacilityType(facility.tip)}
-                          </span>
                           <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold tabular-nums text-[#0f766e] shadow-sm dark:bg-slate-900/90 dark:text-teal-300">
                             <Navigation className="h-3 w-3" aria-hidden />
                             {formatDistance(facility.distance)}
