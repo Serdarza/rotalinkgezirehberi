@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, Suspense, useEffect, useState, type ReactNode } from "react";
-import { useSearchParams } from "next/navigation";
+import { Fragment, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BedDouble,
   MapPinned,
@@ -31,11 +31,73 @@ const KONAKLAMA_FILTERS: { key: KonaklamaFilter; label: string }[] = [
   { key: "Polisevi", label: "Polisevi" },
 ];
 
+/** URL ?sekme= değeri ↔ iç sekme anahtarı */
+const TAB_TO_SEKME: Record<Tab, string> = {
+  tesis: "konaklama",
+  gezi: "gezi",
+  yemek: "yemek",
+  sosyal: "sosyal",
+};
+
+const SEKME_TO_TAB: Record<string, Tab> = {
+  konaklama: "tesis",
+  tesis: "tesis",
+  gezi: "gezi",
+  yemek: "yemek",
+  sosyal: "sosyal",
+  belediye: "sosyal",
+};
+
+function parseTabFromParams(sekme: string | null): Tab {
+  if (!sekme) return "tesis";
+  return SEKME_TO_TAB[sekme.toLocaleLowerCase("tr")] ?? "tesis";
+}
+
+function parseKonaklamaFilter(tip: string | null | undefined): KonaklamaFilter {
+  if (!tip) return "all";
+  const value = tip.toLocaleLowerCase("tr");
+  if (value.includes("orduevi")) return "Orduevi";
+  if (value.includes("öğretmenevi") || value.includes("ogretmenevi")) return "Öğretmenevi";
+  if (value.includes("polisevi")) return "Polisevi";
+  return "all";
+}
+
 function matchesFacilityTip(facilityTip: string | null | undefined, filter: KonaklamaFilter) {
   if (filter === "all") return true;
   const tip = String(facilityTip ?? "").toLocaleLowerCase("tr").trim();
   const needle = filter.toLocaleLowerCase("tr");
   return tip === needle || tip.includes(needle);
+}
+
+function shareCopy(city: string, tab: Tab, konaklamaFilter: KonaklamaFilter) {
+  if (tab === "gezi") {
+    return {
+      title: `${city} gezi yerleri — Rotalink`,
+      text: `${city} ilindeki gezi yerleri Rotalink’te:`,
+    };
+  }
+  if (tab === "yemek") {
+    return {
+      title: `${city} yemek mekanları — Rotalink`,
+      text: `${city} ilindeki yemek mekanları Rotalink’te:`,
+    };
+  }
+  if (tab === "sosyal") {
+    return {
+      title: `${city} belediye tesisleri — Rotalink`,
+      text: `${city} ilindeki belediye sosyal tesisleri Rotalink’te:`,
+    };
+  }
+  if (konaklamaFilter !== "all") {
+    return {
+      title: `${city} ${konaklamaFilter} — Rotalink`,
+      text: `${city} ilindeki ${konaklamaFilter} listesi Rotalink’te:`,
+    };
+  }
+  return {
+    title: `${city} kamu tesisleri — Rotalink`,
+    text: `${city} ilindeki kamu misafirhaneleri, polisevleri, öğretmenevleri ve gezi yerleri Rotalink’te:`,
+  };
 }
 
 const TABS: {
@@ -119,15 +181,15 @@ function SearchLinkButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:opacity-90",
-        tone === "gezi" && "bg-[#14B8A6]",
-        tone === "yemek" && "bg-amber-500",
-        tone === "sosyal" && "bg-violet-600"
+        "inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold text-white transition",
+        tone === "gezi" && "bg-[#14B8A6] hover:bg-[#0d9488]",
+        tone === "yemek" && "bg-amber-500 hover:bg-amber-600",
+        tone === "sosyal" && "bg-violet-600 hover:bg-violet-700"
       )}
     >
-      <Icon className="h-3.5 w-3.5" />
+      <Icon className="h-3.5 w-3.5" aria-hidden />
       {label}
-      <ExternalLink className="h-3 w-3 opacity-60" />
+      <ExternalLink className="h-3 w-3 opacity-80" aria-hidden />
     </a>
   );
 }
@@ -185,23 +247,79 @@ function PlaceCard({
 }
 
 function CityResultsInner({ city, data }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const tipFilter = searchParams.get("tip") ?? undefined;
-  const nameFilter = searchParams.get("q")?.trim();
-  const [tab, setTab] = useState<Tab>("tesis");
-  const [konaklamaFilter, setKonaklamaFilter] = useState<KonaklamaFilter>(() => {
-    if (!tipFilter) return "all";
-    const tip = tipFilter.toLocaleLowerCase("tr");
-    if (tip.includes("orduevi")) return "Orduevi";
-    if (tip.includes("öğretmenevi") || tip.includes("ogretmenevi")) return "Öğretmenevi";
-    if (tip.includes("polisevi")) return "Polisevi";
-    return "all";
-  });
+
+  const tipParam = searchParams.get("tip");
+  const sekmeParam = searchParams.get("sekme");
+  const nameFilter = searchParams.get("q")?.trim() || undefined;
+
+  const tab = parseTabFromParams(sekmeParam);
+  const konaklamaFilter = parseKonaklamaFilter(tipParam);
+  /** Chip dışı tip (ör. Kamu Misafirhanesi) URL'den gelsin */
+  const customTip =
+    tipParam && konaklamaFilter === "all" && tipParam.trim() ? tipParam.trim() : undefined;
+
+  const cityPath = `/sehir/${slugifyCity(city)}`;
+  const sharePath = (() => {
+    const params = new URLSearchParams();
+    if (tab !== "tesis") {
+      params.set("sekme", TAB_TO_SEKME[tab]);
+    }
+    if (tab === "tesis") {
+      if (konaklamaFilter !== "all") params.set("tip", konaklamaFilter);
+      else if (customTip) params.set("tip", customTip);
+    }
+    if (nameFilter) params.set("q", nameFilter);
+    const qs = params.toString();
+    return qs ? `${cityPath}?${qs}` : cityPath;
+  })();
+  const share =
+    tab === "tesis" && customTip
+      ? {
+          title: `${city} ${customTip} — Rotalink`,
+          text: `${city} ilindeki ${customTip} listesi Rotalink’te:`,
+        }
+      : shareCopy(city, tab, konaklamaFilter);
+
   /** Sadece görsel vurgu — içerik sekmesi değişmez */
   const [spotlight, setSpotlight] = useState<Tab | null>(null);
   const [tourDone, setTourDone] = useState(false);
 
+  const hasDeepLink = Boolean(sekmeParam || tipParam || nameFilter);
+
+  function replaceQuery(next: { tab?: Tab; tip?: KonaklamaFilter }) {
+    const nextTab = next.tab ?? tab;
+    const nextTip =
+      next.tip !== undefined
+        ? next.tip
+        : nextTab === "tesis"
+          ? konaklamaFilter
+          : "all";
+    const params = new URLSearchParams();
+
+    if (nextTab !== "tesis") {
+      params.set("sekme", TAB_TO_SEKME[nextTab]);
+    }
+    if (nextTab === "tesis" && nextTip !== "all") {
+      params.set("tip", nextTip);
+    }
+    if (nameFilter) {
+      params.set("q", nameFilter);
+    }
+
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }
+
   useEffect(() => {
+    // Paylaşılan / filtrelenmiş linkte sekme turunu atla
+    if (hasDeepLink) {
+      setTourDone(true);
+      return;
+    }
+
     const reduceMotion =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -211,7 +329,6 @@ function CityResultsInner({ city, data }: Props) {
       return;
     }
 
-    // Konaklama → Gezi → Yemek → Belediye → Konaklama
     const sequence: Tab[] = ["tesis", "gezi", "yemek", "sosyal", "tesis"];
     const stepMs = 520;
     const startDelay = 450;
@@ -234,15 +351,23 @@ function CityResultsInner({ city, data }: Props) {
     });
 
     return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [city]);
+  }, [city, hasDeepLink]);
 
-  const tesis = data.tesis.filter((facility) => {
-    const matchesType = matchesFacilityTip(facility.tip, konaklamaFilter);
-    const matchesName =
-      !nameFilter ||
-      facility.isim.toLocaleLowerCase("tr").includes(nameFilter.toLocaleLowerCase("tr"));
-    return matchesType && matchesName;
-  });
+  const tesis = useMemo(
+    () =>
+      data.tesis.filter((facility) => {
+        const matchesType = customTip
+          ? String(facility.tip ?? "")
+              .toLocaleLowerCase("tr")
+              .includes(customTip.toLocaleLowerCase("tr"))
+          : matchesFacilityTip(facility.tip, konaklamaFilter);
+        const matchesName =
+          !nameFilter ||
+          facility.isim.toLocaleLowerCase("tr").includes(nameFilter.toLocaleLowerCase("tr"));
+        return matchesType && matchesName;
+      }),
+    [data.tesis, konaklamaFilter, nameFilter, customTip]
+  );
 
   const konaklamaCounts = {
     all: data.tesis.length,
@@ -265,10 +390,20 @@ function CityResultsInner({ city, data }: Props) {
   function handleTabClick(key: Tab) {
     setSpotlight(null);
     setTourDone(true);
-    setTab(key);
+    replaceQuery({
+      tab: key,
+      tip: key === "tesis" ? konaklamaFilter : "all",
+    });
   }
 
-  const cityPath = `/sehir/${slugifyCity(city)}`;
+  function handleKonaklamaFilter(filter: KonaklamaFilter) {
+    setSpotlight(null);
+    setTourDone(true);
+    replaceQuery({ tab: "tesis", tip: filter });
+  }
+
+  const filterLabel =
+    konaklamaFilter !== "all" ? konaklamaFilter : customTip;
 
   return (
     <Container className="py-12">
@@ -285,16 +420,19 @@ function CityResultsInner({ city, data }: Props) {
             {city} — Arama Sonuçları
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
-            {city} ilindeki konaklama, gezi, yemek ve belediye tesisleri
-            {tipFilter ? ` · ${tipFilter}` : ""}
+            {city} ilindeki{" "}
+            {tab === "gezi"
+              ? "gezi yerleri"
+              : tab === "yemek"
+                ? "yemek mekanları"
+                : tab === "sosyal"
+                  ? "belediye tesisleri"
+                  : "konaklama, gezi, yemek ve belediye tesisleri"}
+            {filterLabel && tab === "tesis" ? ` · ${filterLabel}` : ""}
             {nameFilter ? ` · “${nameFilter}”` : ""}
           </p>
         </div>
-        <ShareButton
-          title={`${city} kamu tesisleri — Rotalink`}
-          text={`${city} ilindeki kamu misafirhaneleri, polisevleri, öğretmenevleri ve gezi yerleri Rotalink’te:`}
-          path={cityPath}
-        />
+        <ShareButton title={share.title} text={share.text} path={sharePath} />
       </div>
 
       <div className="mb-8">
@@ -303,7 +441,6 @@ function CityResultsInner({ city, data }: Props) {
 
       <AdSenseUnit variant="banner" className="mb-8" />
 
-      {/* Kategori sekmeleri */}
       <div className="mb-8 overflow-x-auto pb-1" role="tablist" aria-label="Sonuç kategorileri">
         <div className="inline-flex min-w-full gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900/80 sm:min-w-0 sm:flex sm:flex-wrap">
           {TABS.map((t) => {
@@ -353,7 +490,6 @@ function CityResultsInner({ city, data }: Props) {
         )}
       </div>
 
-      {/* Aktif kategori başlığı */}
       <div className="mb-5 flex items-center gap-3">
         <div
           className={cn(
@@ -369,7 +505,7 @@ function CityResultsInner({ city, data }: Props) {
         <div>
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">
             {activeTab.label}
-            {tab === "tesis" && konaklamaFilter !== "all" ? ` · ${konaklamaFilter}` : ""}
+            {tab === "tesis" && filterLabel ? ` · ${filterLabel}` : ""}
           </h2>
           <p className="text-sm text-slate-500">
             {tab === "tesis" ? tesis.length : counts[tab]} sonuç · {city}
@@ -385,7 +521,7 @@ function CityResultsInner({ city, data }: Props) {
               <button
                 key={filter.key}
                 type="button"
-                onClick={() => setKonaklamaFilter(filter.key)}
+                onClick={() => handleKonaklamaFilter(filter.key)}
                 className={cn(
                   "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all",
                   active
