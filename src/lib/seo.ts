@@ -17,7 +17,7 @@ export function buildMetadata({
   noIndex?: boolean;
 }): Metadata {
   const url = absoluteUrl(path);
-  const ogImage = absoluteUrl("/logo.png");
+  const ogImage = absoluteUrl("/og.png");
   return {
     title,
     description,
@@ -32,14 +32,14 @@ export function buildMetadata({
       images: [
         {
           url: ogImage,
-          width: 512,
-          height: 512,
+          width: 1200,
+          height: 630,
           alt: SITE.title,
         },
       ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
       images: [ogImage],
