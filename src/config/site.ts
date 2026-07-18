@@ -68,8 +68,8 @@ export const FACILITY_CATEGORIES = [
 export const FEATURES = [
   { title: "Haritalı Yol Tarifi", icon: "MapPin" },
   { title: "Telefon Bilgileri", icon: "Phone" },
-  { title: "Rezervasyon Bilgileri", icon: "CalendarCheck" },
-  { title: "Ücret Bilgileri", icon: "Wallet" },
+  { title: "Belediye Sosyal Tesisleri", icon: "Building2" },
+  { title: "Gezi Yerleri", icon: "Compass" },
   { title: "Favorilere Ekle", icon: "Heart" },
   { title: "Hızlı Arama", icon: "Search" },
   { title: "Filtreleme", icon: "SlidersHorizontal" },

@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import {
-  MapPin, Phone, CalendarCheck, Wallet, Heart, Search,
+  MapPin, Phone, Building2, Compass, Heart, Search,
   SlidersHorizontal, RefreshCw, type LucideIcon,
 } from "lucide-react";
 import { Container, Section, SectionHeading, GlassCard } from "@/components/ui/Section";
 import { FEATURES } from "@/config/site";
 
 const ICONS: Record<string, LucideIcon> = {
-  MapPin, Phone, CalendarCheck, Wallet, Heart, Search, SlidersHorizontal, RefreshCw,
+  MapPin, Phone, Building2, Compass, Heart, Search, SlidersHorizontal, RefreshCw,
 };
 
 export function FeaturesSection() {
