@@ -259,7 +259,7 @@ function CityResultsInner({ city, data }: Props) {
                 action={
                   <SearchLinkButton
                     href={googleMapsUrl(`${g.isim} ${city}`)}
-                    label="Google Maps'te Ara"
+                    label="İncele"
                     variant="maps"
                   />
                 }
@@ -282,7 +282,7 @@ function CityResultsInner({ city, data }: Props) {
                 action={
                   <SearchLinkButton
                     href={googleImagesUrl(`${y.isim} ${city}`)}
-                    label="Google Görsellerde Ara"
+                    label="İncele"
                     variant="images"
                   />
                 }
@@ -305,7 +305,7 @@ function CityResultsInner({ city, data }: Props) {
                 action={
                   <SearchLinkButton
                     href={googleMapsUrl(`${s.isim} ${city}`)}
-                    label="Google Maps'te Ara"
+                    label="İncele"
                     variant="maps"
                   />
                 }
