@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { LocateFixed, MapPin, Navigation, Phone } from "lucide-react";
@@ -8,6 +9,7 @@ import { Container, GlassCard, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
+import { getFacilityImageSrc } from "@/lib/facilityImages";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
@@ -106,16 +108,25 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
                   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
                   return (
                     <li key={`${facility.isim}-${facility.il}-${index}`}>
-                      <article className="flex h-full flex-col rounded-3xl border border-[#0F62FE]/15 border-l-4 border-l-[#0F62FE] bg-white p-5 shadow-md shadow-blue-500/10 dark:border-[#0F62FE]/25 dark:bg-slate-900">
-                        <div className="mb-3 flex items-start justify-between gap-3">
-                          <span className="rounded-lg bg-[#0F62FE] px-2.5 py-1 text-[11px] font-bold uppercase text-white">
+                      <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/15 border-l-4 border-l-[#0F62FE] bg-white shadow-md shadow-blue-500/10 dark:border-[#0F62FE]/25 dark:bg-slate-900">
+                        <div className="relative aspect-[16/10] w-full bg-slate-200 dark:bg-slate-700">
+                          <Image
+                            src={getFacilityImageSrc(facility.tip)}
+                            alt=""
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                          <span className="absolute left-3 top-3 rounded-lg bg-[#0F62FE] px-2.5 py-1 text-[11px] font-bold uppercase text-white">
                             {getDisplayFacilityType(facility.tip)}
                           </span>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#14B8A6]/10 px-2.5 py-1 text-xs font-bold tabular-nums text-[#0f766e] dark:text-teal-300">
+                          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold tabular-nums text-[#0f766e] shadow-sm dark:bg-slate-900/90 dark:text-teal-300">
                             <Navigation className="h-3 w-3" aria-hidden />
                             {formatDistance(facility.distance)}
                           </span>
                         </div>
+                        <div className="flex flex-1 flex-col p-5">
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                           {facility.isim}
                         </h3>
@@ -143,6 +154,7 @@ export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
                             text={`${facility.isim} (${facility.il}) — Rotalink`}
                             path={sharePath}
                           />
+                        </div>
                         </div>
                       </article>
                     </li>
