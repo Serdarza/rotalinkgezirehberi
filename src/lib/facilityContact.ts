@@ -1,23 +1,13 @@
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
-import { markAppDownloadClicked } from "@/lib/downloadPrompt";
+import { hasAppDownloadClicked, markAppDownloadClicked } from "@/lib/downloadPrompt";
 
 function toTelHref(telefon: string) {
   const digits = telefon.replace(/[^\d+]/g, "");
   return digits ? `tel:${digits}` : null;
 }
 
-/**
- * İletişim: telefon varsa doğrudan ara.
- * Yoksa mağazaya yönlendir ve indirme popup’larını bir daha gösterme.
- */
-export function handleFacilityContact(telefon?: string | null) {
-  const tel = telefon?.trim() ? toTelHref(telefon.trim()) : null;
-  if (tel) {
-    window.location.href = tel;
-    return;
-  }
-
+function goToStore() {
   markAppDownloadClicked();
   const device = detectDevice(navigator.userAgent);
   if (device === "android") {
@@ -29,4 +19,25 @@ export function handleFacilityContact(telefon?: string | null) {
     return;
   }
   window.location.href = DOWNLOAD_PAGE_PATH;
+}
+
+/**
+ * İletişim butonu:
+ * - Uygulama henüz indirilmediyse → her zaman mağazaya yönlendir
+ * - İndirme tıklanmışsa ve telefon varsa → ara
+ * - İndirme tıklanmışsa ama telefon yoksa → mağaza
+ */
+export function handleFacilityContact(telefon?: string | null) {
+  if (!hasAppDownloadClicked()) {
+    goToStore();
+    return;
+  }
+
+  const tel = telefon?.trim() ? toTelHref(telefon.trim()) : null;
+  if (tel) {
+    window.location.href = tel;
+    return;
+  }
+
+  goToStore();
 }

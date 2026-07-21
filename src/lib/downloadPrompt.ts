@@ -2,12 +2,12 @@
  * İndirme yönlendirme frekansı — tek merkez.
  *
  * - Kullanıcı Play/App Store’a tıkladıysa: bir daha otomatik popup gösterme.
- * - “Şimdi değil” dediyse: 30 gün sessiz kal.
+ * - “Şimdi değil” dediyse: 2 gün sessiz kal.
  */
 
 const DOWNLOADED_KEY = "rotalink_app_download_clicked";
 const DISMISSED_KEY = "rotalink_download_prompt_dismissed_at";
-const DISMISS_DAYS = 30;
+const DISMISS_DAYS = 2;
 
 function canUseStorage() {
   return typeof window !== "undefined";

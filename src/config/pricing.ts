@@ -35,8 +35,8 @@ const PRICING: Record<string, FacilityPricing> = {
   },
   /** Diğer tüm kamu misafirhaneleri (taban) */
   misafirhane: {
-    kamu: "120 TL ve üzeri",
-    sivil: "180 TL ve üzeri",
+    kamu: "400 TL ve üzeri",
+    sivil: "750 TL ve üzeri",
   },
 };
 
