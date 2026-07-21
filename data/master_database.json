@@ -29114,14 +29114,17 @@
       "longitude": 31.178940230585656
     },
     {
-      "isim": "Düzce Öğretmenevi",
-      "tip": "Öğretmenevi",
-      "il": "Düzce",
-      "adres": "Azmimilli Mahallesi. Gazhane Caddesi. No: 70-1. Merkez-Düzce",
-      "telefon": "(0 380) 523 73 60",
-      "latitude": 40.83352444061536,
-      "longitude": 31.16520462476148
-    },
+  "isim": "Düzce Öğretmenevi",
+  "tip": "Öğretmenevi",
+  "il": "Düzce",
+  "adres": "Azmimilli Mahallesi. Gazhane Caddesi. No: 70-1. Merkez-Düzce",
+  "telefon": "(0 380) 523 73 60",
+  "latitude": 40.83352444061536,
+  "longitude": 31.16520462476148,
+  "fiyat_sivil": "1.500 – 2.650 TL",
+  "fiyat_kamu_personeli": "750 – 1.600 TL",
+  "fiyat_kurum_personeli": "750 – 1.600 TL"
+},
     {
       "isim": "Yığılca Öğretmenevi",
       "tip": "Öğretmenevi",
@@ -29150,14 +29153,17 @@
       "longitude": 31.14791059407398
     },
     {
-      "isim": "Düzce Polis Evi",
-      "tip": "Polisevi",
-      "il": "Düzce",
-      "adres": "Camikebir Mahallesi Fevzi Çakmak Sok. No:17 -Düzce",
-      "telefon": "(0 380) 524 73 19",
-      "latitude": 40.83874279502164,
-      "longitude": 31.158398022909275
-    },
+  "isim": "Düzce Polis Evi",
+  "tip": "Polisevi",
+  "il": "Düzce",
+  "adres": "Camikebir Mahallesi Fevzi Çakmak Sok. No:17 -Düzce",
+  "telefon": "(0 380) 524 73 19",
+  "latitude": 40.83874279502164,
+  "longitude": 31.158398022909275,
+  "fiyat_sivil": null,
+  "fiyat_kamu_personeli": "848 – 1.550 TL",
+  "fiyat_kurum_personeli": "848 – 1.550 TL"
+},
     {
       "isim": "Aķçakoca Orman İşletme Müdürlüğü Misafirhanesi",
       "tip": "Orman Misafirhanesi",
