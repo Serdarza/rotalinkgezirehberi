@@ -29114,14 +29114,14 @@
       "longitude": 31.178940230585656
     },
     {
-      "isim": "Düzce Öğretmenevi",
-      "tip": "Öğretmenevi",
-      "il": "Düzce",
-      "adres": "Azmimilli Mahallesi. Gazhane Caddesi. No: 70-1. Merkez-Düzce",
-      "telefon": "(0 380) 523 73 60",
-      "latitude": 40.83352444061536,
-      "longitude": 31.16520462476148
-    },
+  "isim": "Düzce Öğretmenevi",
+  "tip": "Öğretmenevi",
+  "il": "Düzce",
+  "adres": "Azmimilli Mahallesi. Gazhane Caddesi. No: 70-1. Merkez-Düzce",
+  "telefon": "(0 380) 523 73 60",
+  "latitude": 40.83352444061536,
+  "longitude": 31.16520462476148
+},
     {
       "isim": "Yığılca Öğretmenevi",
       "tip": "Öğretmenevi",
@@ -29150,14 +29150,14 @@
       "longitude": 31.14791059407398
     },
     {
-      "isim": "Düzce Polis Evi",
-      "tip": "Polisevi",
-      "il": "Düzce",
-      "adres": "Camikebir Mahallesi Fevzi Çakmak Sok. No:17 -Düzce",
-      "telefon": "(0 380) 524 73 19",
-      "latitude": 40.83874279502164,
-      "longitude": 31.158398022909275
-    },
+  "isim": "Düzce Polis Evi",
+  "tip": "Polisevi",
+  "il": "Düzce",
+  "adres": "Camikebir Mahallesi Fevzi Çakmak Sok. No:17 -Düzce",
+  "telefon": "(0 380) 524 73 19",
+  "latitude": 40.83874279502164,
+  "longitude": 31.158398022909275
+},
     {
       "isim": "Aķçakoca Orman İşletme Müdürlüğü Misafirhanesi",
       "tip": "Orman Misafirhanesi",
