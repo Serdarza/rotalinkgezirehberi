@@ -21,6 +21,11 @@ function goToStore() {
   window.location.href = DOWNLOAD_PAGE_PATH;
 }
 
+/** Fiyat kilidi / iletişim: mağazaya yönlendir. */
+export function redirectToAppStore() {
+  goToStore();
+}
+
 /**
  * İletişim butonu:
  * - Uygulama henüz indirilmediyse → her zaman mağazaya yönlendir
