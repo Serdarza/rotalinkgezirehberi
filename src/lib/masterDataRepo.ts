@@ -228,17 +228,42 @@ async function fetchRemoteVersion(): Promise<string | null> {
   return null;
 }
 
-/** GitHub / CDN öncelikli — güncelleme için. */
-async function downloadRemoteAndApply(): Promise<boolean> {
+/** Günde 1 kez HEAD ile sürüm kontrolü; ~2 MB dosya sadece etag değişince iner. */
+const UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const LAST_CHECK_KEY = `${CACHE_VERSION_KEY}_checked_at`;
+
+function shouldCheckRemote(): boolean {
+  try {
+    const last = Number(localStorage.getItem(LAST_CHECK_KEY) ?? "0");
+    return !Number.isFinite(last) || Date.now() - last >= UPDATE_CHECK_INTERVAL_MS;
+  } catch {
+    return false;
+  }
+}
+
+function markRemoteChecked() {
+  try {
+    localStorage.setItem(LAST_CHECK_KEY, String(Date.now()));
+  } catch {
+    // ignore
+  }
+}
+
+/** Sadece etag değiştiyse tam dosyayı indirir (jsDelivr → raw GitHub). */
+async function updateFromRemoteIfChanged() {
+  markRemoteChecked();
+  const remote = await fetchRemoteVersion();
+  if (!remote) return;
+  const local = localStorage.getItem(CACHE_VERSION_KEY);
+  if (local === remote) return;
+
   const data =
     (await fetchJson(CDN_URL)) ??
     (await fetchJson(RAW_URL)) ??
     (await fetchJson(RAW_URL_ALT));
-  if (!data) return false;
+  if (!data) return;
   applyDecoded(data);
-  const version = (await fetchRemoteVersion()) ?? "remote";
-  await writeLocalCache(data, version);
-  return true;
+  await writeLocalCache(data, remote);
 }
 
 async function loadBundledAndApply(): Promise<boolean> {
@@ -250,7 +275,9 @@ async function loadBundledAndApply(): Promise<boolean> {
 }
 
 /**
- * Flutter `ensureLocalDataReady` karşılığı — önce cache/gömülü, sonra GitHub.
+ * Flutter `ensureLocalDataReady` karşılığı:
+ * Cache API → site gömülü dosya → (ilk kurulumda) GitHub.
+ * Remote yalnızca günde 1 kez, o da sürüm değişmişse indirilir.
  */
 export function ensureMasterDataLoaded(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
@@ -260,21 +287,21 @@ export function ensureMasterDataLoaded(): Promise<void> {
     const cached = await readLocalCache();
     if (cached) {
       applyDecoded(cached);
-    } else {
-      await loadBundledAndApply();
+    } else if (!(await loadBundledAndApply())) {
+      // Gömülü dosya da yoksa ilk kurulum GitHub'dan
+      const data =
+        (await fetchJson(CDN_URL)) ??
+        (await fetchJson(RAW_URL)) ??
+        (await fetchJson(RAW_URL_ALT));
+      if (data) {
+        applyDecoded(data);
+        await writeLocalCache(data, (await fetchRemoteVersion()) ?? "remote");
+        markRemoteChecked();
+      }
+      return;
     }
 
-    void (async () => {
-      // Hızlı ilk boya sonrası: gömülü dosya ile doldur, sonra GitHub sürümü
-      if (!ready) await loadBundledAndApply();
-
-      const remote = await fetchRemoteVersion();
-      const local = localStorage.getItem(CACHE_VERSION_KEY);
-      if (remote && local && remote === local) return;
-
-      const ok = await downloadRemoteAndApply();
-      if (!ok && !ready) await loadBundledAndApply();
-    })();
+    if (shouldCheckRemote()) void updateFromRemoteIfChanged();
   })().catch(() => {
     // sessiz — build-time props fallback
   });

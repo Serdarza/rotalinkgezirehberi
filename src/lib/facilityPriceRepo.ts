@@ -169,17 +169,45 @@ async function fetchRemoteVersion(): Promise<string | null> {
   }
 }
 
-async function downloadAndApply() {
-  const data =
-    (await fetchJson(LOCAL_URL)) ??
-    (await fetchJson(CDN_URL)) ??
-    (await fetchJson(RAW_URL));
-  if (!data) return;
-  applyDecoded(data);
-  const version = (await fetchRemoteVersion()) ?? "bundled";
-  writeLocalCache(data, version);
+/** Günde 1 kez HEAD ile sürüm kontrolü; değişiklik yoksa hiçbir şey indirilmez. */
+const UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const LAST_CHECK_KEY = `${CACHE_VERSION_KEY}_checked_at`;
+
+function shouldCheckRemote(): boolean {
+  try {
+    const last = Number(localStorage.getItem(LAST_CHECK_KEY) ?? "0");
+    return !Number.isFinite(last) || Date.now() - last >= UPDATE_CHECK_INTERVAL_MS;
+  } catch {
+    return false;
+  }
 }
 
+function markRemoteChecked() {
+  try {
+    localStorage.setItem(LAST_CHECK_KEY, String(Date.now()));
+  } catch {
+    // ignore
+  }
+}
+
+/** Sadece etag değiştiyse tam dosyayı indirir (jsDelivr → raw GitHub). */
+async function updateFromRemoteIfChanged() {
+  markRemoteChecked();
+  const remote = await fetchRemoteVersion();
+  if (!remote) return;
+  const local = localStorage.getItem(CACHE_VERSION_KEY);
+  if (local === remote) return;
+
+  const data = (await fetchJson(CDN_URL)) ?? (await fetchJson(RAW_URL));
+  if (!data) return;
+  applyDecoded(data);
+  writeLocalCache(data, remote);
+}
+
+/**
+ * localStorage → site gömülü dosya → (ilk kurulumda) GitHub.
+ * Remote yalnızca günde 1 kez, o da sürüm değişmişse indirilir.
+ */
 export function ensureFacilityPricesLoaded(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
   if (loadPromise) return loadPromise;
@@ -188,20 +216,23 @@ export function ensureFacilityPricesLoaded(): Promise<void> {
     const cached = readLocalCache();
     if (cached) {
       applyDecoded(cached);
-      void (async () => {
-        const bundled = await fetchJson(LOCAL_URL);
-        if (bundled) {
-          applyDecoded(bundled);
-          writeLocalCache(bundled, "bundled");
+    } else {
+      const bundled = await fetchJson(LOCAL_URL);
+      if (bundled) {
+        applyDecoded(bundled);
+        writeLocalCache(bundled, "bundled");
+      } else {
+        const data = (await fetchJson(CDN_URL)) ?? (await fetchJson(RAW_URL));
+        if (data) {
+          applyDecoded(data);
+          writeLocalCache(data, (await fetchRemoteVersion()) ?? "remote");
+          markRemoteChecked();
         }
-        const remote = await fetchRemoteVersion();
-        const local = localStorage.getItem(CACHE_VERSION_KEY);
-        if (remote && local && remote === local) return;
-        if (remote) await downloadAndApply();
-      })();
-      return;
+        return;
+      }
     }
-    await downloadAndApply();
+
+    if (shouldCheckRemote()) void updateFromRemoteIfChanged();
   })().catch(() => {
     // sessiz
   });
