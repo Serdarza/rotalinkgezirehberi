@@ -5,6 +5,7 @@ import { DownloadModal } from "@/components/layout/DownloadModal";
 import { KamiFab } from "@/components/kami/KamiFab";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { FacilityImageBootstrap } from "@/components/providers/FacilityImageBootstrap";
 import { SITE } from "@/config/site";
 import { getAllData } from "@/lib/data";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
@@ -69,6 +70,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE.client}`}
         />
         <ThemeProvider>
+          <FacilityImageBootstrap />
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <DownloadModal />
           <Header />

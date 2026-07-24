@@ -7,9 +7,9 @@ import { Container, Section, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { CityMap } from "@/components/map/CityMap";
-import { getFacilityImageSrc } from "@/lib/facilityImages";
 import { getFacilityPricing, PRICING_NOTE } from "@/config/pricing";
 import { handleFacilityContact } from "@/lib/facilityContact";
+import { useFacilityCardImage } from "@/hooks/useFacilityCardImage";
 import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 
@@ -25,7 +25,7 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   const displayType = getDisplayFacilityType(facility.tip);
   const cityPath = `/sehir/${slugifyCity(facility.il)}`;
   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
-  const imageSrc = getFacilityImageSrc(facility.tip);
+  const imageSrc = useFacilityCardImage(facility);
   const pricing = getFacilityPricing(facility.tip);
 
   return (
@@ -33,10 +33,11 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-200 dark:bg-slate-700">
         <Image
           src={imageSrc}
-          alt={displayType}
+          alt={facility.isim}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition duration-500 hover:scale-[1.03]"
+          unoptimized={imageSrc.startsWith("http")}
         />
         <div className="absolute right-3 top-3">
           <FavoriteButton

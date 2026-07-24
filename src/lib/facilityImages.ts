@@ -1,4 +1,8 @@
-/** Kategori bazlı tesis görselleri — tek tek fotoğraf takibi yok. */
+/**
+ * Kategori bazlı varsayılan tesis görselleri.
+ * Gerçek tesis fotoğrafları GitHub `tesisler_gorseller.json` üzerinden
+ * `facilityImageRepo` + `useFacilityCardImage` ile gelir; eşleşme yoksa buraya düşer.
+ */
 
 export type FacilityImageKey = "orduevi" | "polisevi" | "ogretmenevi" | "misafirhane";
 
