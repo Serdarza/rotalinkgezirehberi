@@ -13,6 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Download, Send, X } from "lucide-react";
 import { buildKamiReply, KAMI_CHIPS, type KamiLink } from "@/lib/kami";
 import { cn } from "@/lib/utils";
+import { useMasterData } from "@/hooks/useMasterData";
 
 type ChatMessage = {
   id: string;
@@ -81,7 +82,9 @@ function playNotificationSound() {
   }
 }
 
-export function KamiFab({ cities }: Props) {
+export function KamiFab({ cities: buildCities }: Props) {
+  const master = useMasterData();
+  const cities = master.ready && master.cities.length ? master.cities : buildCities;
   const [open, setOpen] = useState(false);
   const [bubble, setBubble] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);

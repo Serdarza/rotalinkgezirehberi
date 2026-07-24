@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { cn, slugifyCity } from "@/lib/utils";
+import { useMasterData } from "@/hooks/useMasterData";
 
 const TIP_OPTIONS = [
   { value: "", label: "Tüm Tesis Türleri" },
@@ -31,8 +32,14 @@ function normalize(value: string) {
   return slugifyCity(value).replace(/-/g, " ");
 }
 
-export function HeroSection({ cities, facilities }: Props) {
+export function HeroSection({ cities: buildCities, facilities: buildFacilities }: Props) {
   const router = useRouter();
+  const master = useMasterData();
+  const cities = master.ready && master.cities.length ? master.cities : buildCities;
+  const facilities =
+    master.ready && master.tesis.length
+      ? master.tesis.map(({ isim, il }) => ({ isim, il }))
+      : buildFacilities;
   const [query, setQuery] = useState("");
   const [tip, setTip] = useState("");
   const [error, setError] = useState("");

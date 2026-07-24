@@ -26,6 +26,7 @@ import { Breadcrumb } from "@/components/layout/PageHeader";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn, slugifyCity } from "@/lib/utils";
 import { POPULAR_CITIES } from "@/config/site";
+import { useCityMasterData } from "@/hooks/useMasterData";
 
 type Tab = "tesis" | "gezi" | "yemek" | "sosyal";
 
@@ -315,7 +316,8 @@ function PlaceCard({
   );
 }
 
-function CityResultsInner({ city, data }: Props) {
+function CityResultsInner({ city, data: buildData }: Props) {
+  const data = useCityMasterData(city, buildData);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

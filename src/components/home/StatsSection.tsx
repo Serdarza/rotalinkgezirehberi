@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Container, GlassCard } from "@/components/ui/Section";
 import type { SiteStats } from "@/types";
+import { useMasterData } from "@/hooks/useMasterData";
 
 function formatNumber(value: number) {
   return Math.round(value).toLocaleString("tr-TR");
@@ -70,6 +71,15 @@ function StatCard({
 }
 
 export function StatsSection({ stats }: { stats: SiteStats }) {
+  const master = useMasterData();
+  const liveStats: SiteStats =
+    master.ready && master.tesis.length
+      ? {
+          cityCount: master.cities.length || stats.cityCount,
+          facilityCount: master.tesis.length,
+          geziCount: master.gezi.length,
+        }
+      : stats;
   const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -96,20 +106,20 @@ export function StatsSection({ stats }: { stats: SiteStats }) {
       <Container>
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard
-            target={stats.cityCount}
+            target={liveStats.cityCount}
             label="İl"
             active={inView}
             delay={0}
           />
           <StatCard
-            target={stats.facilityCount}
+            target={liveStats.facilityCount}
             label="Kamu Tesisi"
             suffix="+"
             active={inView}
             delay={120}
           />
           <StatCard
-            target={stats.geziCount}
+            target={liveStats.geziCount}
             label="Gezi Yeri"
             suffix="+"
             active={inView}

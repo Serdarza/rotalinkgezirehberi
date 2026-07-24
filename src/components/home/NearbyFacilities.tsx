@@ -14,6 +14,7 @@ import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
+import { useMasterData } from "@/hooks/useMasterData";
 
 type Status = "idle" | "loading" | "ready" | "denied" | "error";
 
@@ -83,7 +84,16 @@ function NearbyFacilityCard({ facility }: { facility: NearbyItem }) {
   );
 }
 
-export function NearbyFacilities({ facilities, limit = 6, className }: Props) {
+export function NearbyFacilities({ facilities: buildFacilities, limit = 6, className }: Props) {
+  const master = useMasterData();
+  const facilities =
+    master.ready && master.tesis.length
+      ? master.tesis.filter(
+          (t) =>
+            typeof t.latitude === "number" &&
+            typeof t.longitude === "number"
+        )
+      : buildFacilities;
   const [status, setStatus] = useState<Status>("idle");
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
 

@@ -12,6 +12,7 @@ import { handleFacilityContact } from "@/lib/facilityContact";
 import { useFacilityCardImage } from "@/hooks/useFacilityCardImage";
 import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
+import { useMasterData } from "@/hooks/useMasterData";
 
 function getDisplayFacilityType(type: string | null | undefined) {
   const normalized = String(type ?? "").trim().toLocaleLowerCase("tr");
@@ -80,7 +81,10 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   );
 }
 
-export function FeaturedFacilitiesSection({ facilities }: { facilities: Tesis[] }) {
+export function FeaturedFacilitiesSection({ facilities: buildFacilities }: { facilities: Tesis[] }) {
+  const master = useMasterData();
+  const facilities =
+    master.ready && master.tesis.length ? master.tesis.slice(0, 8) : buildFacilities;
   const withCoords = facilities.filter(
     (f) =>
       typeof f.latitude === "number" &&
@@ -117,14 +121,23 @@ export function FeaturedFacilitiesSection({ facilities }: { facilities: Tesis[] 
 export function CategoryFacilitiesSection({
   title,
   description,
-  facilities,
+  facilities: buildFacilities,
+  tips,
   id,
 }: {
   title: string;
   description: string;
   facilities: Tesis[];
+  tips?: readonly string[];
   id?: string;
 }) {
+  const master = useMasterData();
+  const liveFacilities =
+    master.ready && master.tesis.length && tips?.length
+      ? master.tesis.filter((t) => tips.includes(t.tip)).slice(0, 6)
+      : null;
+  const facilities =
+    liveFacilities && liveFacilities.length ? liveFacilities : buildFacilities;
   if (!facilities.length) return null;
   return (
     <Section id={id} className="bg-white dark:bg-slate-950">

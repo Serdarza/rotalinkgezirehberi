@@ -73,6 +73,7 @@ export default async function HomePage() {
             id={cat.key}
             title={cat.title}
             description={cat.description}
+            tips={cat.tips}
             facilities={cat.facilities}
           />
           {(index === 1 || index === 3) && <AdSection />}
