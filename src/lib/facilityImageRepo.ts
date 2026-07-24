@@ -1,19 +1,24 @@
 /**
- * Tesis görselleri — Flutter ile aynı kaynak:
- * GitHub `Serdarza/rotalink-data` → tesisler_gorseller.json
- * Eşleştirme: normalize(il) + normalize(isim)
- * Google Maps API yok; Bunny CDN URL'leri kullanılır.
+ * Tesis görselleri — Flutter ile aynı mantık, Google Maps/Places YOK.
+ *
+ * Kaynak sırası (ücretsiz):
+ * 1) Siteye gömülü `/data/tesisler_gorseller.json` (build önbelleği)
+ * 2) localStorage
+ * 3) GitHub / jsDelivr (Bunny CDN URL listesi)
+ *
+ * Fotoğraflar `rotalink-media.b-cdn.net` üzerinden gelir; runtime Google çekimi yok.
  */
 
 import { facilityMatchKey } from "@/lib/searchNormalize";
 
+const LOCAL_URL = "/data/tesisler_gorseller.json";
 const RAW_URL =
   "https://raw.githubusercontent.com/Serdarza/rotalink-data/refs/heads/main/tesisler_gorseller.json";
 const CDN_URL =
   "https://cdn.jsdelivr.net/gh/Serdarza/rotalink-data@main/tesisler_gorseller.json";
 
-const CACHE_KEY = "rotalink_tesisler_gorseller_v1";
-const CACHE_VERSION_KEY = "rotalink_tesisler_gorseller_version";
+const CACHE_KEY = "rotalink_tesisler_gorseller_v2";
+const CACHE_VERSION_KEY = "rotalink_tesisler_gorseller_version_v2";
 const MAX_URLS = 3;
 
 type IndexMap = Map<string, string[]>;
@@ -38,7 +43,12 @@ function parseUrls(row: Record<string, unknown>): string[] {
   const out: string[] = [];
   for (const item of raw) {
     const s = String(item ?? "").trim();
-    if (s.startsWith("http")) out.push(s);
+    // Google Places / Maps runtime URL'lerini reddet
+    if (!s.startsWith("http")) continue;
+    if (/maps\.googleapis\.com|maps\.gstatic\.com|lh3\.googleusercontent\.com/i.test(s)) {
+      continue;
+    }
+    out.push(s);
     if (out.length >= MAX_URLS) break;
   }
   return out;
@@ -79,7 +89,10 @@ function applyDecoded(root: unknown) {
 
 async function fetchJson(url: string): Promise<unknown | null> {
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, {
+      // site gömülü dosya uzun cache; remote için no-store
+      cache: url.startsWith("/") ? "force-cache" : "no-store",
+    });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -122,15 +135,19 @@ async function fetchRemoteVersion(): Promise<string | null> {
 }
 
 async function downloadAndApply() {
-  const data = (await fetchJson(CDN_URL)) ?? (await fetchJson(RAW_URL));
+  // 1) Site gömülü → 2) CDN → 3) raw GitHub
+  const data =
+    (await fetchJson(LOCAL_URL)) ??
+    (await fetchJson(CDN_URL)) ??
+    (await fetchJson(RAW_URL));
   if (!data) return;
   applyDecoded(data);
-  const version = await fetchRemoteVersion();
+  const version = (await fetchRemoteVersion()) ?? "bundled";
   writeLocalCache(data, version);
 }
 
 /**
- * Flutter `ensureLocalDataReady` karşılığı — bir kez yükler, sonra etag ile günceller.
+ * Flutter `ensureLocalDataReady` karşılığı — önce site önbelleği, sonra remote.
  */
 export function ensureFacilityImagesLoaded(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
@@ -140,12 +157,17 @@ export function ensureFacilityImagesLoaded(): Promise<void> {
     const cached = readLocalCache();
     if (cached) {
       applyDecoded(cached);
-      // arka planda sürüm kontrolü
+      // arka planda: önce gömülü dosya, gerekirse remote güncelle
       void (async () => {
+        const bundled = await fetchJson(LOCAL_URL);
+        if (bundled) {
+          applyDecoded(bundled);
+          writeLocalCache(bundled, "bundled");
+        }
         const remote = await fetchRemoteVersion();
         const local = localStorage.getItem(CACHE_VERSION_KEY);
         if (remote && local && remote === local) return;
-        await downloadAndApply();
+        if (remote) await downloadAndApply();
       })();
       return;
     }

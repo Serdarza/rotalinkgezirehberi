@@ -1,18 +1,18 @@
 /**
- * Tesis fiyatları — Flutter ile aynı kaynak:
- * GitHub `Serdarza/rotalink-data` → fiyatlar.json
- * Eşleştirme: normalize(il) + normalize(isim)
+ * Tesis fiyatları — Flutter ile aynı mantık.
+ * Kaynak sırası: site gömülü `/data/fiyatlar.json` → localStorage → GitHub/jsDelivr.
  */
 
 import { facilityMatchKey } from "@/lib/searchNormalize";
 
+const LOCAL_URL = "/data/fiyatlar.json";
 const RAW_URL =
   "https://raw.githubusercontent.com/Serdarza/rotalink-data/refs/heads/main/fiyatlar.json";
 const CDN_URL =
   "https://cdn.jsdelivr.net/gh/Serdarza/rotalink-data@main/fiyatlar.json";
 
-const CACHE_KEY = "rotalink_fiyatlar_v1";
-const CACHE_VERSION_KEY = "rotalink_fiyatlar_version";
+const CACHE_KEY = "rotalink_fiyatlar_v2";
+const CACHE_VERSION_KEY = "rotalink_fiyatlar_version_v2";
 
 export type FacilityPriceEntry = {
   il: string;
@@ -125,7 +125,9 @@ function applyDecoded(root: unknown) {
 
 async function fetchJson(url: string): Promise<unknown | null> {
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, {
+      cache: url.startsWith("/") ? "force-cache" : "no-store",
+    });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -168,10 +170,13 @@ async function fetchRemoteVersion(): Promise<string | null> {
 }
 
 async function downloadAndApply() {
-  const data = (await fetchJson(CDN_URL)) ?? (await fetchJson(RAW_URL));
+  const data =
+    (await fetchJson(LOCAL_URL)) ??
+    (await fetchJson(CDN_URL)) ??
+    (await fetchJson(RAW_URL));
   if (!data) return;
   applyDecoded(data);
-  const version = await fetchRemoteVersion();
+  const version = (await fetchRemoteVersion()) ?? "bundled";
   writeLocalCache(data, version);
 }
 
@@ -184,10 +189,15 @@ export function ensureFacilityPricesLoaded(): Promise<void> {
     if (cached) {
       applyDecoded(cached);
       void (async () => {
+        const bundled = await fetchJson(LOCAL_URL);
+        if (bundled) {
+          applyDecoded(bundled);
+          writeLocalCache(bundled, "bundled");
+        }
         const remote = await fetchRemoteVersion();
         const local = localStorage.getItem(CACHE_VERSION_KEY);
         if (remote && local && remote === local) return;
-        await downloadAndApply();
+        if (remote) await downloadAndApply();
       })();
       return;
     }
