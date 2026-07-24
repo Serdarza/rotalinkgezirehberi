@@ -2,11 +2,13 @@
 
 import { useEffect } from "react";
 import { ensureFacilityImagesLoaded } from "@/lib/facilityImageRepo";
+import { ensureFacilityPricesLoaded } from "@/lib/facilityPriceRepo";
 
-/** Uygulama açılışında tesis görsel indeksini önceden yükler (Flutter splash benzeri). */
+/** Flutter splash benzeri: görsel + fiyat indekslerini önceden yükler. */
 export function FacilityImageBootstrap() {
   useEffect(() => {
     void ensureFacilityImagesLoaded();
+    void ensureFacilityPricesLoaded();
   }, []);
   return null;
 }
