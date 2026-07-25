@@ -111,35 +111,50 @@ function shareCopy(city: string, tab: Tab, konaklamaFilter: KonaklamaFilter) {
 const TABS: {
   key: Tab;
   label: string;
+  shortLabel: string;
+  hint: string;
   icon: typeof BedDouble;
+  iconWrap: string;
   activeClass: string;
   badgeClass: string;
 }[] = [
   {
     key: "tesis",
     label: "Konaklama",
+    shortLabel: "Konaklama",
+    hint: "Misafirhane · Polisevi",
     icon: BedDouble,
+    iconWrap: "bg-[#0F62FE]/12 text-[#0F62FE]",
     activeClass: "bg-[#0F62FE] text-white shadow-lg shadow-[#0F62FE]/25",
     badgeClass: "bg-white/20 text-white",
   },
   {
     key: "gezi",
     label: "Gezi",
+    shortLabel: "Gezi",
+    hint: "Gezilecek yerler",
     icon: MapPinned,
+    iconWrap: "bg-teal-500/12 text-[#0d9488]",
     activeClass: "bg-[#14B8A6] text-white shadow-lg shadow-[#14B8A6]/25",
     badgeClass: "bg-white/20 text-white",
   },
   {
     key: "yemek",
     label: "Yemek",
+    shortLabel: "Yemek",
+    hint: "Yöresel lezzetler",
     icon: UtensilsCrossed,
+    iconWrap: "bg-amber-500/12 text-amber-600",
     activeClass: "bg-amber-500 text-white shadow-lg shadow-amber-500/25",
     badgeClass: "bg-white/20 text-white",
   },
   {
     key: "sosyal",
     label: "Belediye Tesisleri",
+    shortLabel: "Belediye",
+    hint: "Sosyal tesisler",
     icon: Building2,
+    iconWrap: "bg-violet-500/12 text-violet-600",
     activeClass: "bg-violet-600 text-white shadow-lg shadow-violet-600/25",
     badgeClass: "bg-white/20 text-white",
   },
@@ -516,8 +531,81 @@ function CityResultsInner({ city, data: buildData }: Props) {
       <AdSenseUnit variant="banner" className="mb-8" />
 
       <div className="sticky top-16 z-40 -mx-4 mb-6 space-y-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95 sm:-mx-6 sm:px-6 lg:top-[72px]">
-        <div className="overflow-x-auto pb-1" role="tablist" aria-label="Sonuç kategorileri">
-          <div className="inline-flex min-w-full gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900/80 sm:min-w-0 sm:flex sm:flex-wrap">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:hidden">
+          Kategori seçin
+        </p>
+
+        {/* Mobil: 2×2 kart ızgarası — yan yana sıkışmayı önler */}
+        <div
+          className="grid grid-cols-2 gap-2.5 sm:hidden"
+          role="tablist"
+          aria-label="Sonuç kategorileri"
+        >
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            const isSelected = tab === t.key;
+            const isLit = visualKey === t.key;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                onClick={() => handleTabClick(t.key)}
+                className={cn(
+                  "relative flex min-h-[88px] flex-col items-start gap-2 rounded-2xl border p-3.5 text-left transition-all duration-300 ease-out",
+                  isLit
+                    ? cn(
+                        t.activeClass,
+                        "border-transparent",
+                        !tourDone && spotlight === t.key && "scale-[1.02]"
+                      )
+                    : "border-slate-200 bg-white text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                )}
+              >
+                <div className="flex w-full items-start justify-between gap-2">
+                  <span
+                    className={cn(
+                      "flex h-9 w-9 items-center justify-center rounded-xl",
+                      isLit ? "bg-white/20 text-white" : t.iconWrap
+                    )}
+                  >
+                    <Icon className="h-5 w-5" strokeWidth={2.25} aria-hidden />
+                  </span>
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
+                      isLit
+                        ? t.badgeClass
+                        : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                    )}
+                  >
+                    {counts[t.key]}
+                  </span>
+                </div>
+                <span className="text-[15px] font-extrabold leading-tight tracking-tight">
+                  {t.shortLabel}
+                </span>
+                <span
+                  className={cn(
+                    "text-[11px] font-medium leading-snug",
+                    isLit ? "text-white/80" : "text-slate-400 dark:text-slate-500"
+                  )}
+                >
+                  {t.hint}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Tablet / masaüstü: yatay segment */}
+        <div
+          className="hidden overflow-x-auto pb-1 sm:block"
+          role="tablist"
+          aria-label="Sonuç kategorileri"
+        >
+          <div className="flex min-w-0 flex-wrap gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900/80">
             {TABS.map((t) => {
               const Icon = t.icon;
               const isSelected = tab === t.key;
@@ -561,7 +649,11 @@ function CityResultsInner({ city, data: buildData }: Props) {
         </div>
 
         {tab === "tesis" && (
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Konaklama filtresi">
+          <div
+            className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible"
+            role="group"
+            aria-label="Konaklama filtresi"
+          >
             {KONAKLAMA_FILTERS.map((filter) => {
               const active = konaklamaFilter === filter.key;
               return (
@@ -570,7 +662,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
                   type="button"
                   onClick={() => handleKonaklamaFilter(filter.key)}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all",
+                    "inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all",
                     active
                       ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
                       : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700"
