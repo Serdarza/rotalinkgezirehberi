@@ -112,19 +112,15 @@ const TABS: {
   key: Tab;
   label: string;
   shortLabel: string;
-  hint: string;
   icon: typeof BedDouble;
-  iconWrap: string;
   activeClass: string;
   badgeClass: string;
 }[] = [
   {
     key: "tesis",
     label: "Konaklama",
-    shortLabel: "Konaklama",
-    hint: "Misafirhane · Polisevi",
+    shortLabel: "Konak",
     icon: BedDouble,
-    iconWrap: "bg-[#0F62FE]/12 text-[#0F62FE]",
     activeClass: "bg-[#0F62FE] text-white shadow-lg shadow-[#0F62FE]/25",
     badgeClass: "bg-white/20 text-white",
   },
@@ -132,9 +128,7 @@ const TABS: {
     key: "gezi",
     label: "Gezi",
     shortLabel: "Gezi",
-    hint: "Gezilecek yerler",
     icon: MapPinned,
-    iconWrap: "bg-teal-500/12 text-[#0d9488]",
     activeClass: "bg-[#14B8A6] text-white shadow-lg shadow-[#14B8A6]/25",
     badgeClass: "bg-white/20 text-white",
   },
@@ -142,9 +136,7 @@ const TABS: {
     key: "yemek",
     label: "Yemek",
     shortLabel: "Yemek",
-    hint: "Yöresel lezzetler",
     icon: UtensilsCrossed,
-    iconWrap: "bg-amber-500/12 text-amber-600",
     activeClass: "bg-amber-500 text-white shadow-lg shadow-amber-500/25",
     badgeClass: "bg-white/20 text-white",
   },
@@ -152,9 +144,7 @@ const TABS: {
     key: "sosyal",
     label: "Belediye Tesisleri",
     shortLabel: "Belediye",
-    hint: "Sosyal tesisler",
     icon: Building2,
-    iconWrap: "bg-violet-500/12 text-violet-600",
     activeClass: "bg-violet-600 text-white shadow-lg shadow-violet-600/25",
     badgeClass: "bg-white/20 text-white",
   },
@@ -494,7 +484,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
     konaklamaFilter !== "all" ? konaklamaFilter : customTip;
 
   return (
-    <Container className="py-12">
+    <Container className="py-5 sm:py-12">
       <SearchAppPromo city={city} />
       <StickyAdBanner storageKey={`rotalink_sticky_ad_${cityPath}`} />
       <Breadcrumb
@@ -503,12 +493,12 @@ function CityResultsInner({ city, data: buildData }: Props) {
           { label: city },
         ]}
       />
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="mb-3 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div>
-          <h1 className="mb-2 text-3xl font-extrabold text-slate-900 dark:text-white">
-            {city} — Arama Sonuçları
+          <h1 className="mb-1 text-2xl font-extrabold text-slate-900 dark:text-white sm:mb-2 sm:text-3xl">
+            {city}
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="hidden text-slate-600 dark:text-slate-400 sm:block">
             {city} ilindeki{" "}
             {tab === "gezi"
               ? "gezi yerleri"
@@ -520,24 +510,25 @@ function CityResultsInner({ city, data: buildData }: Props) {
             {filterLabel && tab === "tesis" ? ` · ${filterLabel}` : ""}
             {nameFilter ? ` · “${nameFilter}”` : ""}
           </p>
+          <p className="text-sm text-slate-500 sm:hidden">
+            {tab === "tesis" ? tesis.length : counts[tab]} sonuç
+            {filterLabel && tab === "tesis" ? ` · ${filterLabel}` : ""}
+            {nameFilter ? ` · “${nameFilter}”` : ""}
+          </p>
         </div>
         <ShareButton title={share.title} text={share.text} path={sharePath} />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-3 hidden sm:mb-8 sm:block">
         <WeatherWidget city={city} withContainer={false} />
       </div>
 
-      <AdSenseUnit variant="banner" className="mb-8" />
+      <AdSenseUnit variant="banner" className="mb-3 sm:mb-8" />
 
-      <div className="sticky top-16 z-40 -mx-4 mb-6 space-y-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95 sm:-mx-6 sm:px-6 lg:top-[72px]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:hidden">
-          Kategori seçin
-        </p>
-
-        {/* Mobil: 2×2 kart ızgarası — yan yana sıkışmayı önler */}
+      <div className="sticky top-16 z-40 -mx-4 mb-3 border-b border-slate-200/80 bg-white/95 px-3 py-2 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95 sm:-mx-6 sm:mb-6 sm:space-y-3 sm:px-6 sm:py-3 lg:top-[72px]">
+        {/* Mobil: tek satır kompakt sekmeler */}
         <div
-          className="grid grid-cols-2 gap-2.5 sm:hidden"
+          className="grid grid-cols-4 gap-1 sm:hidden"
           role="tablist"
           aria-label="Sonuç kategorileri"
         >
@@ -553,53 +544,37 @@ function CityResultsInner({ city, data: buildData }: Props) {
                 aria-selected={isSelected}
                 onClick={() => handleTabClick(t.key)}
                 className={cn(
-                  "relative flex min-h-[88px] flex-col items-start gap-2 rounded-2xl border p-3.5 text-left transition-all duration-300 ease-out",
+                  "relative flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 transition-all duration-200",
                   isLit
                     ? cn(
                         t.activeClass,
-                        "border-transparent",
-                        !tourDone && spotlight === t.key && "scale-[1.02]"
+                        !tourDone && spotlight === t.key && "scale-[1.03]"
                       )
-                    : "border-slate-200 bg-white text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                    : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
                 )}
               >
-                <div className="flex w-full items-start justify-between gap-2">
+                <span className="relative">
+                  <Icon className="h-4 w-4" strokeWidth={2.4} aria-hidden />
                   <span
                     className={cn(
-                      "flex h-9 w-9 items-center justify-center rounded-xl",
-                      isLit ? "bg-white/20 text-white" : t.iconWrap
-                    )}
-                  >
-                    <Icon className="h-5 w-5" strokeWidth={2.25} aria-hidden />
-                  </span>
-                  <span
-                    className={cn(
-                      "rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums",
+                      "absolute -right-2.5 -top-1.5 min-w-[16px] rounded-full px-1 text-[9px] font-bold leading-4 tabular-nums",
                       isLit
-                        ? t.badgeClass
-                        : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                        ? "bg-white/25 text-white"
+                        : "bg-white text-slate-500 ring-1 ring-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600"
                     )}
                   >
                     {counts[t.key]}
                   </span>
-                </div>
-                <span className="text-[15px] font-extrabold leading-tight tracking-tight">
-                  {t.shortLabel}
                 </span>
-                <span
-                  className={cn(
-                    "text-[11px] font-medium leading-snug",
-                    isLit ? "text-white/80" : "text-slate-400 dark:text-slate-500"
-                  )}
-                >
-                  {t.hint}
+                <span className="max-w-full truncate text-[11px] font-bold leading-tight">
+                  {t.shortLabel}
                 </span>
               </button>
             );
           })}
         </div>
 
-        {/* Tablet / masaüstü: yatay segment */}
+        {/* Tablet / masaüstü */}
         <div
           className="hidden overflow-x-auto pb-1 sm:block"
           role="tablist"
@@ -650,7 +625,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
 
         {tab === "tesis" && (
           <div
-            className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible"
+            className="mt-2 -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-0 sm:flex-wrap sm:gap-2 sm:overflow-visible"
             role="group"
             aria-label="Konaklama filtresi"
           >
@@ -662,7 +637,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
                   type="button"
                   onClick={() => handleKonaklamaFilter(filter.key)}
                   className={cn(
-                    "inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all",
+                    "inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all sm:gap-2 sm:px-4 sm:py-2 sm:text-sm",
                     active
                       ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
                       : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700"
@@ -671,7 +646,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
                   {filter.label}
                   <span
                     className={cn(
-                      "rounded-full px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
+                      "rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums sm:text-[11px]",
                       active
                         ? "bg-white/20 text-white"
                         : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
@@ -687,13 +662,13 @@ function CityResultsInner({ city, data: buildData }: Props) {
       </div>
 
       {!tourDone && (
-        <p className="mb-4 text-center text-xs text-slate-400 sm:text-left" aria-hidden>
+        <p className="mb-2 hidden text-center text-xs text-slate-400 sm:mb-4 sm:block sm:text-left" aria-hidden>
           Diğer kategorileri keşfedebilirsiniz
         </p>
       )}
 
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-5 sm:gap-3">
+        <div className="hidden items-center gap-3 sm:flex">
           <div
             className={cn(
               "flex h-10 w-10 items-center justify-center rounded-xl text-white",
@@ -718,7 +693,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
 
         {tab === "tesis" && (
           <div
-            className="inline-flex rounded-2xl border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-900"
+            className="ml-auto inline-flex rounded-2xl border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-900"
             role="group"
             aria-label="Görünüm seçimi"
           >
@@ -727,7 +702,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
               onClick={() => setViewMode("list")}
               aria-pressed={viewMode === "list"}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition",
+                "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition sm:px-4 sm:py-2 sm:text-sm",
                 viewMode === "list"
                   ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
                   : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
@@ -741,7 +716,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
               onClick={() => setViewMode("map")}
               aria-pressed={viewMode === "map"}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition",
+                "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition sm:px-4 sm:py-2 sm:text-sm",
                 viewMode === "map"
                   ? "bg-[#0F62FE] text-white shadow-md shadow-[#0F62FE]/25"
                   : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
