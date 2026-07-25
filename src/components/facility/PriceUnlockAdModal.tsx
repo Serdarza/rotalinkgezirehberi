@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { CREDITS_PER_REWARD } from "@/lib/priceUnlockStore";
 
-const MIN_WATCH_SECONDS = 5;
+const MIN_WATCH_SECONDS = 30;
 
 type Props = {
   open: boolean;
@@ -65,8 +65,8 @@ export function PriceUnlockAdModal({
               Fiyat bilgisini aç
             </h2>
             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              {facilityName} — kısa bir reklam sonrası {CREDITS_PER_REWARD} tesis
-              hakkı kazanırsınız.
+              {facilityName} — 30 saniyelik reklam sonrası {CREDITS_PER_REWARD}{" "}
+              tesis hakkı kazanırsınız.
             </p>
           </div>
           <button

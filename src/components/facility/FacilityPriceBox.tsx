@@ -132,7 +132,7 @@ export function FacilityPriceBox({ il, isim, className }: Props) {
                 {downloaded
                   ? credits > 0
                     ? `Kalan hakkınız: ${credits} tesis. Bu tesisin fiyatını açabilirsiniz.`
-                    : "Kısa bir reklam izleyerek 5 tesisin fiyat bilgisini açabilirsiniz."
+                    : "30 saniyelik reklam izleyerek 5 tesisin fiyat bilgisini açabilirsiniz."
                   : "Fiyatları görmek için Rotalink uygulamasını indirin."}
               </p>
             </div>
