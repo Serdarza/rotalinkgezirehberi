@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   title: { default: SITE.title, template: `%s | ${SITE.name}` },
   description: SITE.description,
   keywords: ["rotalink", "kamu misafirhanesi", "polisevi", "öğretmenevi", "orduevi", "seyahat rehberi"],
+  other: {
+    "google-adsense-account": ADSENSE.client,
+  },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],
     apple: [{ url: "/apple-touch-icon.png" }],
