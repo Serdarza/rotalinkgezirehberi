@@ -23,6 +23,7 @@ import { StickyAdBanner } from "@/components/ads/StickyAdBanner";
 import { ShareButton } from "@/components/share/ShareButton";
 import { SearchAppPromo } from "@/components/search/SearchAppPromo";
 import { Breadcrumb } from "@/components/layout/PageHeader";
+import { CityGuideSection } from "@/components/search/CityGuideSection";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn, slugifyCity } from "@/lib/utils";
 import { POPULAR_CITIES } from "@/config/site";
@@ -518,6 +519,8 @@ function CityResultsInner({ city, data: buildData }: Props) {
         </div>
         <ShareButton title={share.title} text={share.text} path={sharePath} />
       </div>
+
+      <CityGuideSection city={city} data={data} />
 
       <div className="mb-3 hidden sm:mb-8 sm:block">
         <WeatherWidget city={city} withContainer={false} />

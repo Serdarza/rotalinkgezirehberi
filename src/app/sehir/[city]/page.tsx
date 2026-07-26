@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { CityResults } from "@/components/search/CityResults";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getAllData, getFacilitiesByCity } from "@/lib/data";
+import { buildCityGuide, countFacilityTips } from "@/lib/cityGuide";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { cityFromSlug, capitalizeCity, slugifyCity } from "@/lib/utils";
 
@@ -19,9 +20,20 @@ export async function generateMetadata({ params }: Props) {
   const { cities } = await getAllData();
   const city = cityFromSlug(slug, cities);
   if (!city) return {};
+
+  const data = await getFacilitiesByCity(city);
+  const tips = countFacilityTips(data.tesis);
+  const guide = buildCityGuide(city, {
+    konaklama: data.tesis.length,
+    ...tips,
+    gezi: data.gezi.length,
+    yemek: data.yemek.length,
+    belediye: data.sosyal.length,
+  });
+
   return buildMetadata({
-    title: `${city} Kamu Tesisleri ve Gezi Rehberi`,
-    description: `${city} ilindeki orduevleri, polisevleri, öğretmenevleri ve gezilecek yerler — Rotalink.`,
+    title: `${city} Kamu Tesisleri, Öğretmenevi ve Gezi Rehberi`,
+    description: guide.lead.slice(0, 155),
     path: `/sehir/${slug}`,
   });
 }
