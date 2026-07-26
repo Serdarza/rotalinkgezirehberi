@@ -1,57 +1,27 @@
-import Link from "next/link";
 import { Container, Section, SectionHeading } from "@/components/ui/Section";
-import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
-import { slugifyCity } from "@/lib/utils";
+import {
+  BelediyeSosyalList,
+  type BelediyeItem,
+} from "@/components/home/BelediyeSosyalList";
 import type { SosyalTesis } from "@/types";
 
-type Group = {
-  city: string;
-  items: SosyalTesis[];
-};
+/** Statik HTML'i şişirmemek için il başına taşınan kayıt sayısı. */
+const PREVIEW_PER_CITY = 6;
+const SUMMARY_MAX_LENGTH = 220;
 
-function groupByCity(items: SosyalTesis[]): Group[] {
-  const map = new Map<string, SosyalTesis[]>();
-  for (const item of items) {
-    const city = (item.il || "").trim();
-    if (!city) continue;
-    const list = map.get(city) ?? [];
-    list.push(item);
-    map.set(city, list);
-  }
-  return [...map.entries()]
-    .map(([city, list]) => ({ city, items: list }))
-    .sort((a, b) => a.city.localeCompare(b.city, "tr"));
-}
+const DEFAULT_CITY = "Ankara";
 
-function hasLocation(s: SosyalTesis) {
-  if (s.adres?.trim()) return true;
-  return (
-    typeof s.latitude === "number" &&
-    typeof s.longitude === "number" &&
-    Number.isFinite(s.latitude) &&
-    Number.isFinite(s.longitude)
-  );
-}
-
-function locationText(s: SosyalTesis): string | null {
-  const parts: string[] = [];
-  if (s.adres?.trim()) parts.push(s.adres.trim());
-  if (
-    typeof s.latitude === "number" &&
-    typeof s.longitude === "number" &&
-    Number.isFinite(s.latitude) &&
-    Number.isFinite(s.longitude)
-  ) {
-    parts.push(`Konum: ${s.latitude.toFixed(5)}, ${s.longitude.toFixed(5)}`);
-  }
-  if (s.ilce?.trim()) parts.push(`${s.ilce.trim()} ilçesi`);
-  if (s.belediye?.trim()) parts.push(s.belediye.trim());
-  return parts.length ? parts.join(" · ") : null;
+function trim(text?: string) {
+  const value = text?.trim();
+  if (!value) return undefined;
+  return value.length > SUMMARY_MAX_LENGTH
+    ? `${value.slice(0, SUMMARY_MAX_LENGTH - 1).trimEnd()}…`
+    : value;
 }
 
 /**
- * Ana sayfada belediye sosyal tesislerini açık metin olarak listeler.
- * Konum (adres / koordinat) varsa metne dahil edilir — kart değil, okunabilir içerik.
+ * Belediye sosyal tesislerini ana sayfada açık metin olarak sunar.
+ * Kullanıcı konumuna göre en yakın 5 tesis listelenir, kalanlar tıklamayla açılır.
  */
 export function BelediyeSosyalSection({
   facilities,
@@ -60,19 +30,35 @@ export function BelediyeSosyalSection({
 }) {
   if (!facilities.length) return null;
 
-  const withLocation = facilities.filter(hasLocation);
-  const source = withLocation.length ? withLocation : facilities;
-  const groups = groupByCity(source);
+  const byCity = new Map<string, SosyalTesis[]>();
+  for (const item of facilities) {
+    const city = item.il?.trim();
+    if (!city || !item.isim?.trim()) continue;
+    const list = byCity.get(city) ?? [];
+    list.push(item);
+    byCity.set(city, list);
+  }
+  if (!byCity.size) return null;
 
-  // Ana sayfa yükünü makul tut: iller sıralı, her ilden birkaç örnek + toplam sayım.
-  const featured = groups
-    .map((g) => ({
-      ...g,
-      items: g.items.slice(0, 4),
-      total: g.items.length,
-    }))
-    .filter((g) => g.items.length > 0)
-    .slice(0, 24);
+  const totals: Record<string, number> = {};
+  const preview: BelediyeItem[] = [];
+
+  for (const [city, list] of byCity) {
+    totals[city] = list.length;
+    for (const item of list.slice(0, PREVIEW_PER_CITY)) {
+      preview.push({
+        isim: item.isim.trim(),
+        il: city,
+        ilce: item.ilce?.trim() || undefined,
+        adres: item.adres?.trim() || undefined,
+        aciklama: trim(item.aciklama),
+      });
+    }
+  }
+
+  const defaultCity = totals[DEFAULT_CITY]
+    ? DEFAULT_CITY
+    : [...byCity.keys()].sort((a, b) => a.localeCompare(b, "tr"))[0];
 
   return (
     <Section
@@ -82,55 +68,15 @@ export function BelediyeSosyalSection({
       <Container className="max-w-4xl">
         <SectionHeading
           eyebrow="Belediye Sosyal Tesisleri"
-          title="Türkiye genelinde belediye sosyal tesisleri"
-          description="Belediye sosyal tesisleri; restoran, kafe, dinlenme ve spor alanları sunan kamu işletmeleridir. Aşağıda konum bilgisi bulunan tesisler açık metin olarak listelenmiştir."
+          title="Size en yakın belediye sosyal tesisleri"
+          description="Belediye sosyal tesisleri; restoran, kafe, dinlenme ve spor alanları sunan, halka açık kamu işletmeleridir. Konumunuza izin verirseniz bulunduğunuz ildeki en yakın 5 tesisi listeleriz; kalanları tek dokunuşla açabilirsiniz."
         />
 
-        <div className="space-y-8">
-          {featured.map((group) => (
-            <article key={group.city} className="border-b border-slate-100 pb-8 last:border-0 dark:border-slate-800">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                <Link
-                  href={`/sehir/${slugifyCity(group.city)}?sekme=sosyal`}
-                  className="hover:text-[#0F62FE]"
-                >
-                  {group.city}
-                </Link>
-                <span className="ml-2 text-sm font-medium text-slate-400">
-                  {group.total} tesis
-                </span>
-              </h3>
-
-              <div className="mt-3 space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300 sm:text-[15px]">
-                {group.items.map((s) => {
-                  const loc = locationText(s);
-                  return (
-                    <p key={`${group.city}-${s.isim}`}>
-                      <strong className="font-semibold text-slate-900 dark:text-white">
-                        {s.isim}
-                      </strong>
-                      {loc ? ` — ${loc}.` : "."}
-                      {s.aciklama?.trim() ? ` ${s.aciklama.trim()}` : ""}
-                    </p>
-                  );
-                })}
-                {group.total > group.items.length && (
-                  <p className="text-sm text-slate-500">
-                    <Link
-                      href={`/sehir/${slugifyCity(group.city)}?sekme=sosyal`}
-                      className="font-semibold text-[#0F62FE] hover:underline"
-                    >
-                      {group.city} belediye sosyal tesislerinin tamamını gör
-                      ({group.total}) →
-                    </Link>
-                  </p>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <SourceDisclaimer className="mt-10" />
+        <BelediyeSosyalList
+          preview={preview}
+          totals={totals}
+          defaultCity={defaultCity}
+        />
       </Container>
     </Section>
   );

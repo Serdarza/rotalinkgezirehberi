@@ -31,7 +31,12 @@ body {
 input,
 textarea,
 select,
-[contenteditable="true"] {
+address,
+[contenteditable="true"],
+[data-copyable],
+.allow-copy,
+a[href^="tel:"],
+a[href^="mailto:"] {
   -webkit-user-select: text;
   user-select: text;
 }

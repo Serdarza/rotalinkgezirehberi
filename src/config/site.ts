@@ -158,8 +158,6 @@ export const BLOG_POSTS = [
   },
 ] as const;
 
-import { PRIVACY_POLICY_URL } from "@/config/legal";
-
 export const FOOTER_LINKS = {
   kurumsal: [
     { href: "/hakkimizda", label: "Hakkımızda" },
@@ -170,7 +168,7 @@ export const FOOTER_LINKS = {
     { href: "/sik-sorulan-sorular", label: "Sık Sorulan Sorular" },
   ],
   yasal: [
-    { href: PRIVACY_POLICY_URL, label: "Gizlilik Politikası" },
+    { href: "/gizlilik-politikasi", label: "Gizlilik Politikası" },
     { href: "/kullanim-sartlari", label: "Kullanım Şartları" },
     { href: "/cerez-politikasi", label: "Çerez Politikası" },
   ],

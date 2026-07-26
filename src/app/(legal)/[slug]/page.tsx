@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { LEGAL_PAGES } from "@/config/legal";
+import { SITE } from "@/config/site";
 import LegalContent from "./LegalContent";
 
 export function generateStaticParams() {
@@ -12,7 +13,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!page) return {};
   return {
     title: page.title,
-    description: page.title,
+    description: page.description,
+    alternates: { canonical: `${SITE.url}/${page.slug}` },
+    openGraph: {
+      title: `${page.title} | ${SITE.name}`,
+      description: page.description,
+      url: `${SITE.url}/${page.slug}`,
+    },
   };
 }
 
