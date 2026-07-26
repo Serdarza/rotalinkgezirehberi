@@ -49,11 +49,30 @@ export function Footer() {
           <div>
             <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">Yasal</h3>
             <ul className="space-y-3">
-              {FOOTER_LINKS.yasal.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-slate-600 hover:text-[#0F62FE] dark:text-slate-400">{l.label}</Link>
-                </li>
-              ))}
+              {FOOTER_LINKS.yasal.map((l) => {
+                const external = /^https?:\/\//i.test(l.href);
+                return (
+                  <li key={l.href}>
+                    {external ? (
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-slate-600 hover:text-[#0F62FE] dark:text-slate-400"
+                      >
+                        {l.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={l.href}
+                        className="text-sm text-slate-600 hover:text-[#0F62FE] dark:text-slate-400"
+                      >
+                        {l.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
             <p className="mt-6">
               <a href={`mailto:${SITE.email}`} className="text-sm font-medium text-[#0F62FE]">{SITE.email}</a>

@@ -1,11 +1,14 @@
+export const PRIVACY_POLICY_URL =
+  "https://docs.google.com/document/d/1_AsP4bDt7BuKebFhpLY-657rf31Bmy_hi-57zYo2jgU/edit?tab=t.0";
+
 export const LEGAL_PAGES = [
   {
     slug: "gizlilik-politikasi",
     title: "Gizlilik Politikası",
+    externalUrl: PRIVACY_POLICY_URL,
     content: [
-      "Rotalink olarak kişisel verilerinizin güvenliğine önem veriyoruz.",
-      "Toplanan veriler yalnızca hizmet kalitesini artırmak amacıyla kullanılır.",
-      "Üçüncü taraflarla izniniz olmadan paylaşılmaz.",
+      "Gizlilik politikamız Google Docs üzerinde yayınlanmaktadır.",
+      "Sayfa otomatik yönlendirilmezse aşağıdaki bağlantıyı kullanın.",
     ],
   },
   {
