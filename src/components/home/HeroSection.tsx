@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { StatsSection } from "@/components/home/StatsSection";
+import { HomeHolidayChip } from "@/components/home/HomeHolidayChip";
 import { cn, slugifyCity } from "@/lib/utils";
 import { useMasterData } from "@/hooks/useMasterData";
 import type { SiteStats } from "@/types";
@@ -295,6 +296,8 @@ export function HeroSection({
               )}
             </div>
           </form>
+
+          <HomeHolidayChip />
 
           <StatsSection stats={stats} embedded />
         </motion.div>

@@ -299,6 +299,19 @@ export function formatHolidayRange(holiday: PublicHoliday): string {
   return `${dayA} – ${dayB} ${b.getFullYear()}`;
 }
 
+/** Ana sayfa chip için kısa tarih: "30 Ağustos" / "27 – 30 Mayıs" */
+export function formatHolidayShort(holiday: PublicHoliday): string {
+  const a = holidayDate(holiday.start);
+  const b = holidayDate(holiday.end);
+  if (holiday.start === holiday.end) {
+    return `${a.getDate()} ${MONTHS_TR[a.getMonth()]}`;
+  }
+  if (a.getMonth() === b.getMonth()) {
+    return `${a.getDate()} – ${b.getDate()} ${MONTHS_TR[a.getMonth()]}`;
+  }
+  return `${a.getDate()} ${MONTHS_TR[a.getMonth()]} – ${b.getDate()} ${MONTHS_TR[b.getMonth()]}`;
+}
+
 export function holidayMonthLabel(holiday: PublicHoliday): string {
   return MONTHS_TR[holidayDate(holiday.start).getMonth()];
 }
