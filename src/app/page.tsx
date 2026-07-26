@@ -9,6 +9,7 @@ import {
 } from "@/components/home/FacilitySections";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { CampaignsSection } from "@/components/home/CampaignsSection";
 import { BlogSection } from "@/components/home/BlogSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { AppDownloadSection } from "@/components/home/AppDownloadSection";
@@ -21,15 +22,17 @@ import {
   getFacilitiesByCategory,
   getSiteStats,
 } from "@/lib/data";
+import { getFeaturedCampaigns } from "@/lib/kampanyaRepo";
 import { faqJsonLd } from "@/lib/seo";
 import { FAQ_ITEMS } from "@/config/site";
 import { Fragment } from "react";
 
 export default async function HomePage() {
-  const [stats, featured, { cities, tesis }] = await Promise.all([
+  const [stats, featured, { cities, tesis }, campaigns] = await Promise.all([
     getSiteStats(),
     getFeaturedFacilities(8),
     getAllData(),
+    getFeaturedCampaigns(6),
   ]);
 
   const categories = await Promise.all(
@@ -81,6 +84,7 @@ export default async function HomePage() {
       ))}
       <FeaturesSection />
       <TestimonialsSection />
+      <CampaignsSection campaigns={campaigns} />
       <BlogSection />
       <AdSection />
       <FAQSection />

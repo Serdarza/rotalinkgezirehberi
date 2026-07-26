@@ -164,6 +164,7 @@ export const FOOTER_LINKS = {
   kurumsal: [
     { href: "/hakkimizda", label: "Hakkımızda" },
     { href: "/iletisim", label: "İletişim" },
+    { href: "/kampanyalar", label: "Keşfet — Kampanyalar" },
     { href: "/blog", label: "Blog" },
     { href: "/sik-sorulan-sorular", label: "Sık Sorulan Sorular" },
   ],

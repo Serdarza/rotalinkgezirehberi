@@ -14,7 +14,7 @@ const NAV = [
   { href: "/", label: "Ana Sayfa" },
   { href: "/#sehirler", label: "Şehirler" },
   { href: "/#tesisler", label: "Tesisler" },
-  { href: "/#ozellikler", label: "Özellikler" },
+  { href: "/kampanyalar", label: "Keşfet" },
   { href: "/blog", label: "Blog" },
   { href: "/sik-sorulan-sorular", label: "SSS" },
 ];

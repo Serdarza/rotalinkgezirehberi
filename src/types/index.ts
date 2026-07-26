@@ -46,6 +46,17 @@ export interface SiteStats {
   geziCount: number;
 }
 
+/** Flutter Campaign — GitHub kampanya.json */
+export interface Campaign {
+  id: string;
+  title: string;
+  organization: string;
+  summary: string;
+  linkUrl: string | null;
+  createdAt: string | null;
+  tags: string[];
+}
+
 export type CategoryKey =
   | "misafirhane"
   | "polisevi"
