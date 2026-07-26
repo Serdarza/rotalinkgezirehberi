@@ -26,7 +26,7 @@ export function PopularCitiesSection() {
     <Section id="sehirler" className="bg-white dark:bg-slate-950">
       <Container>
         <SectionHeading
-          eyebrow="Keşfet"
+          eyebrow="Şehirler"
           title="Popüler Şehirler"
           description="En çok aranan illerde kamu tesislerini hemen keşfedin."
         />

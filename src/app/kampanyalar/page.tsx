@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Megaphone } from "lucide-react";
 import { Container } from "@/components/ui/Section";
 import { PageHero, Breadcrumb } from "@/components/layout/PageHeader";
-import { CampaignCard } from "@/components/home/CampaignsSection";
+import { CampaignGrid } from "@/components/home/CampaignsSection";
+import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { getCampaigns } from "@/lib/kampanyaRepo";
 import { SITE } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Keşfet — Kamu Personeli Kampanyaları",
+  title: "Kampanyalar — Kamu Personeline Özel İndirimler",
   description:
-    "Öğretmen, TSK, emniyet ve kamu çalışanlarına özel güncel indirim ve kampanyalar. Rotalink Keşfet ile resmi fırsatları takip edin.",
+    "Öğretmen, TSK, emniyet, jandarma ve kamu çalışanlarına özel güncel indirim ve kampanyalar. Kampanya detaylarını Rotalink'te okuyun.",
   openGraph: {
-    title: "Keşfet — Kamu Personeli Kampanyaları | Rotalink",
+    title: "Kampanyalar — Kamu Personeline Özel İndirimler | Rotalink",
     description:
-      "Mobil uygulamadaki Keşfet kampanyaları web’de: kamu personeline özel indirimler ve fırsatlar.",
+      "Kamu personeline özel indirimler, protokoller ve fırsatlar tek sayfada.",
     url: `${SITE.url}/kampanyalar`,
   },
 };
@@ -25,41 +26,33 @@ export default async function KampanyalarPage() {
   return (
     <>
       <PageHero
-        title="Keşfet — Kampanyalar"
-        description="Kamu personeline özel güncel indirimler, protokoller ve fırsatlar. Mobil Rotalink uygulamasındaki Keşfet içeriğinin web karşılığı."
+        title="Kampanyalar"
+        description="Kamu personeline özel güncel indirimler, protokoller ve fırsatlar. Her kampanyanın tüm koşullarını sitemizde okuyabilirsiniz."
       />
       <Container className="max-w-6xl py-10 sm:py-14">
         <Breadcrumb
-          items={[
-            { label: "Anasayfa", href: "/" },
-            { label: "Kampanyalar" },
-          ]}
+          items={[{ label: "Anasayfa", href: "/" }, { label: "Kampanyalar" }]}
         />
 
-        <article className="mb-10 space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0F62FE] text-white">
-              <Megaphone className="h-5 w-5" aria-hidden />
-            </span>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Bu sayfa ne işe yarar?
-            </h2>
-          </div>
+        <article className="mb-8 space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            Kamu çalışanlarına özel kampanyalar nedir?
+          </h2>
           <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-            Rotalink Keşfet; öğretmenler, TSK ve emniyet mensupları, jandarma,
-            kamu kurumları personeli ile ailelerine sunulan{" "}
+            Türkiye’de birçok kurum; öğretmenler, Türk Silahlı Kuvvetleri,
+            emniyet ve jandarma mensupları, infaz koruma memurları ve diğer kamu
+            personeli için{" "}
             <strong className="font-semibold text-slate-800 dark:text-slate-100">
-              resmi veya protokol kaynaklı kampanyaları
+              protokollü indirim ve avantaj programları
             </strong>{" "}
-            tek yerde toplar. Konaklama ararken aynı anda indirimli ulaşım,
-            iletişim, alışveriş ve hizmet fırsatlarını da görebilirsiniz.
+            yürütür. Bu fırsatlar; ulaşım, araç kiralama, iletişim, giyim,
+            konaklama ve market alışverişi gibi geniş bir alanı kapsar.
           </p>
           <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-            Listelenen başlıklar mobil uygulamadaki Keşfet bölümüyle aynı
-            kaynaktan gelir. Kampanya şartları, süreleri ve kimlik ibrazı
-            koşulları ilgili kuruma aittir; Rotalink bilgilendirme amaçlı
-            derleme yapar. Güncel koşullar için her karttaki resmi bağlantıyı
-            kontrol edin.
+            Rotalink bu kampanyaları tek listede toplar; kampanya başlığına
+            dokunduğunuzda indirim oranı, kapsam, geçerlilik ve yararlanma
+            koşullarını sitemizde okuyabilir, ardından kurumun resmi sayfasına
+            geçebilirsiniz.
           </p>
           <ul className="grid gap-2 text-sm text-slate-600 dark:text-slate-300 sm:grid-cols-2">
             <li className="rounded-2xl bg-slate-50 px-4 py-3 dark:bg-slate-800/60">
@@ -69,13 +62,15 @@ export default async function KampanyalarPage() {
               TSK, emniyet ve jandarma indirimleri
             </li>
             <li className="rounded-2xl bg-slate-50 px-4 py-3 dark:bg-slate-800/60">
-              Araç kiralama ve ulaşım kampanyaları
+              Araç kiralama, kargo ve ulaşım fırsatları
             </li>
             <li className="rounded-2xl bg-slate-50 px-4 py-3 dark:bg-slate-800/60">
-              Alışveriş ve kurumsal protokol fırsatları
+              Alışveriş ve kurumsal protokol avantajları
             </li>
           </ul>
         </article>
+
+        <AdSenseUnit variant="banner" className="mb-8" />
 
         {campaigns.length ? (
           <>
@@ -92,14 +87,11 @@ export default async function KampanyalarPage() {
                 href="/indir"
                 className="text-sm font-semibold text-[#0F62FE] hover:underline"
               >
-                Uygulamada Keşfet →
+                Uygulamada takip et →
               </Link>
             </div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {campaigns.map((c) => (
-                <CampaignCard key={c.id} campaign={c} />
-              ))}
-            </div>
+
+            <CampaignGrid campaigns={campaigns} />
           </>
         ) : (
           <div className="rounded-3xl border border-dashed border-slate-300 px-6 py-12 text-center dark:border-slate-700">
@@ -112,10 +104,7 @@ export default async function KampanyalarPage() {
           </div>
         )}
 
-        <p className="mt-10 text-center text-xs leading-relaxed text-slate-400">
-          Bilgiler bilgilendirme amaçlıdır. Kampanya koşulları, geçerlilik
-          tarihleri ve yararlanma şartları kampanyayı sunan kuruma aittir.
-        </p>
+        <SourceDisclaimer className="mt-10" />
       </Container>
     </>
   );

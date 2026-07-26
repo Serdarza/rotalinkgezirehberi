@@ -49,9 +49,12 @@ export interface SiteStats {
 /** Flutter Campaign — GitHub kampanya.json */
 export interface Campaign {
   id: string;
+  slug: string;
   title: string;
   organization: string;
   summary: string;
+  /** Açıklamanın paragraf/madde satırları (detay sayfası için). */
+  paragraphs: string[];
   linkUrl: string | null;
   createdAt: string | null;
   tags: string[];

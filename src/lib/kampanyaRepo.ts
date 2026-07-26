@@ -8,6 +8,7 @@
 import { readFile } from "fs/promises";
 import path from "path";
 import type { Campaign } from "@/types";
+import { slugifyCity } from "@/lib/utils";
 
 const LOCAL_URL = "/data/kampanya.json";
 const RAW_URL =
@@ -46,6 +47,19 @@ function parseTags(row: Record<string, unknown>, organization: string): string[]
   return out;
 }
 
+/** Açıklamayı satır/paragraflara böler (kampanya.json içinde \n ile listelenir). */
+function parseParagraphs(summary: string): string[] {
+  return summary
+    .split(/\r?\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function buildSlug(title: string, index: number): string {
+  const base = slugifyCity(title).slice(0, 70).replace(/-+$/, "");
+  return base || `kampanya-${index}`;
+}
+
 function parseCampaign(raw: unknown, index: number): Campaign | null {
   if (!raw || typeof raw !== "object") return null;
   const row = raw as Record<string, unknown>;
@@ -60,9 +74,11 @@ function parseCampaign(raw: unknown, index: number): Campaign | null {
 
   return {
     id,
+    slug: buildSlug(title, index),
     title,
     organization,
     summary,
+    paragraphs: parseParagraphs(summary),
     linkUrl,
     createdAt:
       createdAt && !Number.isNaN(createdAt.getTime())
@@ -78,9 +94,17 @@ export function parseKampanyalar(root: unknown): Campaign[] {
   if (!Array.isArray(list)) return [];
 
   const out: Campaign[] = [];
+  const usedSlugs = new Set<string>();
   list.forEach((item, index) => {
     const campaign = parseCampaign(item, index);
-    if (campaign) out.push(campaign);
+    if (!campaign) return;
+    let slug = campaign.slug;
+    let suffix = 2;
+    while (usedSlugs.has(slug)) {
+      slug = `${campaign.slug}-${suffix++}`;
+    }
+    usedSlugs.add(slug);
+    out.push({ ...campaign, slug });
   });
 
   out.sort((a, b) => {
@@ -134,4 +158,20 @@ export async function getCampaigns(): Promise<Campaign[]> {
 export async function getFeaturedCampaigns(limit = 6): Promise<Campaign[]> {
   const all = await getCampaigns();
   return all.slice(0, limit);
+}
+
+export async function getCampaignBySlug(
+  slug: string
+): Promise<Campaign | null> {
+  const all = await getCampaigns();
+  return all.find((c) => c.slug === slug) ?? null;
+}
+
+/** Detay sayfasında "diğer kampanyalar" için. */
+export async function getRelatedCampaigns(
+  slug: string,
+  limit = 3
+): Promise<Campaign[]> {
+  const all = await getCampaigns();
+  return all.filter((c) => c.slug !== slug).slice(0, limit);
 }

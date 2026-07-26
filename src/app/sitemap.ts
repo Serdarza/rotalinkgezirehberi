@@ -1,6 +1,7 @@
 import { SITE, BLOG_POSTS } from "@/config/site";
 import { LEGAL_PAGES } from "@/config/legal";
 import { getAllData } from "@/lib/data";
+import { getCampaigns } from "@/lib/kampanyaRepo";
 import { slugifyCity } from "@/lib/utils";
 import type { MetadataRoute } from "next";
 
@@ -8,6 +9,7 @@ export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { cities } = await getAllData();
+  const campaigns = await getCampaigns();
   const base = SITE.url;
 
   const staticPages = [
@@ -16,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/hakkimizda",
     "/iletisim",
     "/kampanyalar",
+    "/resmi-tatiller",
     "/blog",
     "/sik-sorulan-sorular",
     ...LEGAL_PAGES.map((p) => `/${p.slug}`),
@@ -31,6 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...cities.map((city) => ({
       url: `${base}/sehir/${slugifyCity(city)}`,
       lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...campaigns.map((c) => ({
+      url: `${base}/kampanyalar/${c.slug}`,
+      lastModified: c.createdAt ? new Date(c.createdAt) : new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })),
