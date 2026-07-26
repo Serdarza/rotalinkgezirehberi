@@ -184,7 +184,7 @@ export function BelediyeSosyalList({ preview, totals, defaultCity }: Props) {
               {loc ? (
                 <>
                   {" — "}
-                  <span data-copyable="true">{loc}</span>.
+                  <span>{loc}</span>.
                 </>
               ) : (
                 "."

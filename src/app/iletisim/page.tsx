@@ -48,7 +48,6 @@ export default function IletisimPage() {
             <a
               href={`mailto:${SITE.email}`}
               className="mt-1 block text-sm font-semibold text-[#0F62FE] hover:underline"
-              data-copyable="true"
             >
               {SITE.email}
             </a>

@@ -62,7 +62,6 @@ export default function LegalContent({ page }: { page: LegalPageConfig }) {
             <a
               href={`mailto:${SITE.email}`}
               className="font-semibold text-[#0F62FE] hover:underline"
-              data-copyable="true"
             >
               {SITE.email}
             </a>{" "}
