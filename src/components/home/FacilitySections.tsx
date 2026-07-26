@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { MapPin, Phone } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { FacilityPriceBox } from "@/components/facility/FacilityPriceBox";
 import { CityMap } from "@/components/map/CityMap";
+import { CachedMediaImage } from "@/components/media/CachedMediaImage";
 import { handleFacilityContact } from "@/lib/facilityContact";
 import { useFacilityCardImage } from "@/hooks/useFacilityCardImage";
 import { slugifyCity } from "@/lib/utils";
@@ -31,13 +31,12 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/20 border-l-4 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-200 dark:bg-slate-700">
-        <Image
+        <CachedMediaImage
           src={imageSrc}
           alt={facility.isim}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition duration-500 hover:scale-[1.03]"
-          unoptimized={imageSrc.startsWith("http")}
         />
         <div className="absolute right-3 top-3">
           <FavoriteButton

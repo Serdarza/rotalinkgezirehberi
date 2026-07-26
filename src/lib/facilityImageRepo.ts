@@ -19,6 +19,8 @@ const CDN_URL =
 
 const CACHE_KEY = "rotalink_tesisler_gorseller_v2";
 const CACHE_VERSION_KEY = "rotalink_tesisler_gorseller_version_v2";
+const CACHE_NAME = "rotalink_tesis_gorseller_index_v2";
+const CACHE_REQ = "/__rotalink__/tesisler_gorseller.json";
 const MAX_URLS = 3;
 
 type IndexMap = Map<string, string[]>;
@@ -90,8 +92,8 @@ function applyDecoded(root: unknown) {
 async function fetchJson(url: string): Promise<unknown | null> {
   try {
     const res = await fetch(url, {
-      // site gömülü dosya uzun cache; remote için no-store
-      cache: url.startsWith("/") ? "force-cache" : "no-store",
+      // Hem gömülü hem CDN: tarayıcı HTTP cache'ini kullan; sürüm kontrolü ayrı HEAD ile
+      cache: "force-cache",
     });
     if (!res.ok) return null;
     return await res.json();
@@ -100,7 +102,16 @@ async function fetchJson(url: string): Promise<unknown | null> {
   }
 }
 
-function readLocalCache(): unknown | null {
+async function readLocalCache(): Promise<unknown | null> {
+  try {
+    if ("caches" in window) {
+      const cache = await caches.open(CACHE_NAME);
+      const res = await cache.match(CACHE_REQ);
+      if (res) return await res.json();
+    }
+  } catch {
+    // fall through
+  }
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
@@ -110,12 +121,36 @@ function readLocalCache(): unknown | null {
   }
 }
 
-function writeLocalCache(data: unknown, version: string | null) {
+async function writeLocalCache(data: unknown, version: string | null) {
   try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
     if (version) localStorage.setItem(CACHE_VERSION_KEY, version);
   } catch {
-    // quota / private mode
+    // ignore
+  }
+
+  try {
+    if ("caches" in window) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(
+        CACHE_REQ,
+        new Response(JSON.stringify(data), {
+          headers: { "Content-Type": "application/json" },
+        })
+      );
+    }
+  } catch {
+    // quota
+  }
+
+  // Küçük yedek — büyük dosya localStorage'a sığmazsa sessizce geçer
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  } catch {
+    try {
+      localStorage.removeItem(CACHE_KEY);
+    } catch {
+      // ignore
+    }
   }
 }
 
@@ -166,7 +201,7 @@ async function updateFromRemoteIfChanged() {
   const data = (await fetchJson(CDN_URL)) ?? (await fetchJson(RAW_URL));
   if (!data) return;
   applyDecoded(data);
-  writeLocalCache(data, remote);
+  await writeLocalCache(data, remote);
 }
 
 /**
@@ -179,20 +214,20 @@ export function ensureFacilityImagesLoaded(): Promise<void> {
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
-    const cached = readLocalCache();
+    const cached = await readLocalCache();
     if (cached) {
       applyDecoded(cached);
     } else {
       const bundled = await fetchJson(LOCAL_URL);
       if (bundled) {
         applyDecoded(bundled);
-        writeLocalCache(bundled, "bundled");
+        await writeLocalCache(bundled, "bundled");
       } else {
         // Gömülü dosya yoksa ilk kurulum GitHub'dan
         const data = (await fetchJson(CDN_URL)) ?? (await fetchJson(RAW_URL));
         if (data) {
           applyDecoded(data);
-          writeLocalCache(data, (await fetchRemoteVersion()) ?? "remote");
+          await writeLocalCache(data, (await fetchRemoteVersion()) ?? "remote");
           markRemoteChecked();
         }
         return;

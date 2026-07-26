@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { LocateFixed, MapPin, Navigation, Phone } from "lucide-react";
 import { Container, GlassCard, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { FacilityPriceBox } from "@/components/facility/FacilityPriceBox";
+import { CachedMediaImage } from "@/components/media/CachedMediaImage";
 import { handleFacilityContact } from "@/lib/facilityContact";
 import { useFacilityCardImage } from "@/hooks/useFacilityCardImage";
 import { distanceKm, formatDistance } from "@/lib/geo";
@@ -34,13 +34,12 @@ function NearbyFacilityCard({ facility }: { facility: NearbyItem }) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/15 border-l-4 border-l-[#0F62FE] bg-white shadow-md shadow-blue-500/10 dark:border-[#0F62FE]/25 dark:bg-slate-900">
       <div className="relative aspect-[16/10] w-full bg-slate-200 dark:bg-slate-700">
-        <Image
+        <CachedMediaImage
           src={imageSrc}
           alt={facility.isim}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover"
-          unoptimized={imageSrc.startsWith("http")}
         />
         <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold tabular-nums text-[#0f766e] shadow-sm dark:bg-slate-900/90 dark:text-teal-300">
           <Navigation className="h-3 w-3" aria-hidden />
