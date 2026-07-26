@@ -69,7 +69,7 @@ export function BelediyeSosyalSection({
         <SectionHeading
           eyebrow="Belediye Sosyal Tesisleri"
           title="Size en yakın belediye sosyal tesisleri"
-          description="Belediye sosyal tesisleri; restoran, kafe, dinlenme ve spor alanları sunan, halka açık kamu işletmeleridir. Konumunuza izin verirseniz bulunduğunuz ildeki en yakın 5 tesisi listeleriz; kalanları tek dokunuşla açabilirsiniz."
+          description="Belediye sosyal tesisleri; restoran, kafe, dinlenme ve spor alanları sunan kamu işletmeleridir. Konum izniyle bulunduğunuz ildeki size en yakın 5 tesisi sıralarız; her tesisin Konum butonu Google Haritalar’da il + tesis adıyla açılır."
         />
 
         <BelediyeSosyalList
