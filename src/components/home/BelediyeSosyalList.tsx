@@ -153,7 +153,7 @@ export function BelediyeSosyalList({ preview, totals, defaultCity }: Props) {
       );
 
       const withDistance: RankedItem[] = pool
-        .map((item) => {
+        .map((item): RankedItem => {
           const point = points.get(itemKey(item));
           if (!point) return { ...item };
           return {
