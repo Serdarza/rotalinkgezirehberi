@@ -199,7 +199,7 @@ export function HeroSection({
 
           <form
             onSubmit={handleSearch}
-            className="mx-auto max-w-3xl rounded-3xl border border-white/20 bg-white/95 p-3 shadow-2xl backdrop-blur-xl dark:bg-slate-900/95 sm:p-4"
+            className="relative z-30 mx-auto max-w-3xl rounded-3xl border border-white/20 bg-white/95 p-3 shadow-2xl backdrop-blur-xl dark:bg-slate-900/95 sm:p-4"
             role="search"
             aria-label="İl veya konaklama tesisi ara"
           >
