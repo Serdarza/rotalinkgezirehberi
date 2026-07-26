@@ -149,6 +149,20 @@ function applyDecoded(root: unknown) {
     belediye: asString(row.belediye) || undefined,
     adres: asString(row.adres) || undefined,
     aciklama: asString(row.aciklama) || undefined,
+    latitude:
+      typeof row.latitude === "number"
+        ? row.latitude
+        : typeof row.lat === "number"
+          ? row.lat
+          : undefined,
+    longitude:
+      typeof row.longitude === "number"
+        ? row.longitude
+        : typeof row.lng === "number"
+          ? row.lng
+          : typeof row.lon === "number"
+            ? row.lon
+            : undefined,
   }));
 
   const citySet = new Set<string>();

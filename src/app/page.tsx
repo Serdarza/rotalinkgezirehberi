@@ -1,7 +1,6 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { NearbyFacilities } from "@/components/home/NearbyFacilities";
-import { StatsSection } from "@/components/home/StatsSection";
 import { PopularCitiesSection } from "@/components/home/PopularCitiesSection";
 import {
   FeaturedFacilitiesSection,
@@ -9,6 +8,7 @@ import {
 } from "@/components/home/FacilitySections";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { BelediyeSosyalSection } from "@/components/home/BelediyeSosyalSection";
 import { CampaignsSection } from "@/components/home/CampaignsSection";
 import { BlogSection } from "@/components/home/BlogSection";
 import { FAQSection } from "@/components/home/FAQSection";
@@ -28,12 +28,13 @@ import { FAQ_ITEMS } from "@/config/site";
 import { Fragment } from "react";
 
 export default async function HomePage() {
-  const [stats, featured, { cities, tesis }, campaigns] = await Promise.all([
-    getSiteStats(),
-    getFeaturedFacilities(8),
-    getAllData(),
-    getFeaturedCampaigns(6),
-  ]);
+  const [stats, featured, { cities, tesis, sosyal }, campaigns] =
+    await Promise.all([
+      getSiteStats(),
+      getFeaturedFacilities(8),
+      getAllData(),
+      getFeaturedCampaigns(6),
+    ]);
 
   const categories = await Promise.all(
     FACILITY_CATEGORIES.map(async (cat) => ({
@@ -48,6 +49,7 @@ export default async function HomePage() {
       <HeroSection
         cities={cities}
         facilities={tesis.map(({ isim, il }) => ({ isim, il }))}
+        stats={stats}
       />
       <WeatherWidget />
       <NearbyFacilities
@@ -65,7 +67,6 @@ export default async function HomePage() {
             longitude,
           }))}
       />
-      <StatsSection stats={stats} />
       <PopularCitiesSection />
       <AdSection />
       <FeaturedFacilitiesSection facilities={featured} />
@@ -82,6 +83,7 @@ export default async function HomePage() {
           {(index === 1 || index === 3) && <AdSection />}
         </Fragment>
       ))}
+      <BelediyeSosyalSection facilities={sosyal} />
       <FeaturesSection />
       <TestimonialsSection />
       <CampaignsSection campaigns={campaigns} />

@@ -6,6 +6,8 @@ import { KamiFab } from "@/components/kami/KamiFab";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { FacilityImageBootstrap } from "@/components/providers/FacilityImageBootstrap";
+import { CopyProtection } from "@/components/providers/CopyProtection";
+import { SideRailAds } from "@/components/ads/SideRailAds";
 import { SITE } from "@/config/site";
 import { getAllData } from "@/lib/data";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
@@ -74,11 +76,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
         <ThemeProvider>
           <FacilityImageBootstrap />
+          <CopyProtection />
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <DownloadModal />
           <Header />
-          <main id="main-content">{children}</main>
-          <div className="pb-20 md:pb-0">
+          <SideRailAds />
+          <main id="main-content" className="xl:px-[148px] 2xl:px-[172px]">
+            {children}
+          </main>
+          <div className="pb-20 md:pb-0 xl:px-[148px] 2xl:px-[172px]">
             <Footer />
           </div>
           <MobileBottomNav />

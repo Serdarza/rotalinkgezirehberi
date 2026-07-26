@@ -6,8 +6,10 @@ import { Search, MapPin, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { StatsSection } from "@/components/home/StatsSection";
 import { cn, slugifyCity } from "@/lib/utils";
 import { useMasterData } from "@/hooks/useMasterData";
+import type { SiteStats } from "@/types";
 
 const TIP_OPTIONS = [
   { value: "", label: "Tüm Tesis Türleri" },
@@ -26,13 +28,18 @@ type Suggestion = { kind: "city"; label: string; city: string };
 type Props = {
   cities: string[];
   facilities: FacilitySearchItem[];
+  stats: SiteStats;
 };
 
 function normalize(value: string) {
   return slugifyCity(value).replace(/-/g, " ");
 }
 
-export function HeroSection({ cities: buildCities, facilities: buildFacilities }: Props) {
+export function HeroSection({
+  cities: buildCities,
+  facilities: buildFacilities,
+  stats,
+}: Props) {
   const router = useRouter();
   const master = useMasterData();
   const cities = master.ready && master.cities.length ? master.cities : buildCities;
@@ -288,6 +295,8 @@ export function HeroSection({ cities: buildCities, facilities: buildFacilities }
               )}
             </div>
           </form>
+
+          <StatsSection stats={stats} embedded />
         </motion.div>
       </Container>
     </section>

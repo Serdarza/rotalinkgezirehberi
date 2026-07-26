@@ -63,11 +63,12 @@ export const getAllData = cache(async () => {
 });
 
 export const getSiteStats = cache(async () => {
-  const { tesis, gezi, cities } = await getAllData();
+  const { tesis, gezi, yemek, sosyal } = await getAllData();
   return {
-    cityCount: cities.length || 81,
-    facilityCount: tesis.length,
+    konaklamaCount: tesis.length,
     geziCount: gezi.length,
+    yemekCount: yemek.length,
+    belediyeCount: sosyal.length,
   };
 });
 

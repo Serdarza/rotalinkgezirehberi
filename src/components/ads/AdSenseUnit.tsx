@@ -11,7 +11,7 @@ declare global {
 }
 
 type Props = {
-  variant?: "banner" | "inFeed";
+  variant?: "banner" | "inFeed" | "sidebar";
   className?: string;
 };
 
@@ -30,11 +30,13 @@ export function AdSenseUnit({ variant = "banner", className }: Props) {
   }, []);
 
   const isFeed = variant === "inFeed";
+  const isSidebar = variant === "sidebar";
 
   return (
     <aside
       className={cn(
         "w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-slate-50/70 px-2 py-3 dark:border-slate-800 dark:bg-slate-900/50",
+        isSidebar && "rounded-xl px-1 py-2",
         className
       )}
       aria-label="Reklam"
@@ -43,15 +45,17 @@ export function AdSenseUnit({ variant = "banner", className }: Props) {
         Reklam
       </p>
       <ins
-        className="adsbygoogle block min-h-[100px] w-full"
+        className={cn(
+          "adsbygoogle block w-full",
+          isSidebar ? "min-h-[600px]" : "min-h-[100px]"
+        )}
         style={{ display: "block" }}
         data-ad-client={ADSENSE.client}
         data-ad-slot={isFeed ? ADSENSE.slots.inFeed : ADSENSE.slots.banner}
-        data-ad-format={isFeed ? "fluid" : "auto"}
+        data-ad-format={isFeed ? "fluid" : isSidebar ? "auto" : "auto"}
         data-ad-layout-key={isFeed ? ADSENSE.inFeedLayoutKey : undefined}
-        data-full-width-responsive="true"
+        data-full-width-responsive={isSidebar ? "false" : "true"}
       />
     </aside>
   );
 }
-

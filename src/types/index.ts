@@ -38,12 +38,15 @@ export interface SosyalTesis {
   belediye?: string;
   adres?: string;
   aciklama?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface SiteStats {
-  cityCount: number;
-  facilityCount: number;
+  konaklamaCount: number;
   geziCount: number;
+  yemekCount: number;
+  belediyeCount: number;
 }
 
 /** Flutter Campaign — GitHub kampanya.json */
