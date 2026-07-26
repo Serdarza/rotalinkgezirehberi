@@ -199,7 +199,7 @@ export function HeroSection({
 
           <form
             onSubmit={handleSearch}
-            className="relative z-30 mx-auto max-w-3xl rounded-3xl border border-white/20 bg-white/95 p-3 shadow-2xl backdrop-blur-xl dark:bg-slate-900/95 sm:p-4"
+            className="relative z-50 mx-auto max-w-3xl rounded-3xl border border-white/20 bg-white/95 p-3 shadow-2xl backdrop-blur-xl dark:bg-slate-900/95 sm:p-4"
             role="search"
             aria-label="İl veya konaklama tesisi ara"
           >
@@ -236,7 +236,7 @@ export function HeroSection({
                   <div
                     id="search-suggestion-list"
                     role="listbox"
-                    className="absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+                    className="absolute left-0 right-0 top-[calc(100%+6px)] z-[60] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
                   >
                     <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                       İller
@@ -297,7 +297,8 @@ export function HeroSection({
             </div>
           </form>
 
-          <HomeHolidayChip />
+          {/* Öneri listesi açıkken tatil kartı gizlenir — üst üste binmeyi engeller */}
+          {!showDropdown && <HomeHolidayChip />}
 
           <StatsSection stats={stats} embedded />
         </motion.div>

@@ -56,7 +56,7 @@ export function HomeHolidayChip() {
   return (
     <Link
       href="/resmi-tatiller"
-      className="mx-auto mt-5 flex max-w-3xl flex-col gap-2 rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-left text-white backdrop-blur-md transition hover:bg-white/15 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5"
+      className="relative z-0 mx-auto mt-5 flex max-w-3xl flex-col gap-2 rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-left text-white backdrop-blur-md transition hover:bg-white/15 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5"
       aria-label={`${holiday.name}, ${dateShort}, ${countdownLabel(days)}. Resmi tatil takvimine git.`}
     >
       <div className="flex min-w-0 items-start gap-3">
