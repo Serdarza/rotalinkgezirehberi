@@ -4,12 +4,9 @@ import { Container } from "@/components/ui/Section";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { FOOTER_LINKS, SITE } from "@/config/site";
-import { getYourGuideHomeUrl } from "@/config/affiliate";
 import { PLAY_STORE_URL, APP_STORE_URL } from "@/config/downloads";
 
 export function Footer() {
-  const toursUrl = getYourGuideHomeUrl();
-
   return (
     <footer className="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
       <Container className="py-16">
@@ -46,16 +43,6 @@ export function Footer() {
                   <Link href={l.href} className="text-sm text-slate-600 hover:text-[#0F62FE] dark:text-slate-400">{l.label}</Link>
                 </li>
               ))}
-              <li>
-                <a
-                  href={toursUrl}
-                  target="_blank"
-                  rel="noopener noreferrer sponsored"
-                  className="text-sm text-slate-600 hover:text-[#0F62FE] dark:text-slate-400"
-                >
-                  Turlar (GetYourGuide)
-                </a>
-              </li>
             </ul>
           </div>
 

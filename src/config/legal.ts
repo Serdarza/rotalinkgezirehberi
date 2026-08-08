@@ -148,13 +148,7 @@ export const LEGAL_PAGES: LegalPageConfig[] = [
         ],
       },
       {
-        heading: "7. Ortaklık bağlantıları",
-        paragraphs: [
-          "Sitede GetYourGuide gibi üçüncü taraf seyahat ortaklarının bağlantıları yer alabilir. Bu bağlantılar üzerinden yapılan rezervasyonlar ilgili platformun kendi koşullarına tabidir; Rotalink doğrudan satış yapmaz.",
-        ],
-      },
-      {
-        heading: "8. Değişiklikler ve yürürlük",
+        heading: "7. Değişiklikler ve yürürlük",
         paragraphs: [
           `Bu şartlar güncellenebilir; değişiklikler bu sayfada yayınlandığı anda yürürlüğe girer. Son güncelleme: ${LEGAL_UPDATED_AT}.`,
         ],

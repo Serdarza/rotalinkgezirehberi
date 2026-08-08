@@ -7,7 +7,6 @@ import {
 } from "@/lib/cityGuide";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
-import { GetYourGuideCta } from "@/components/affiliate/GetYourGuideCta";
 
 type Props = {
   city: string;
@@ -95,8 +94,6 @@ export function CityGuideSection({ city, data }: Props) {
         </Link>{" "}
         göz atabilirsiniz.
       </p>
-
-      <GetYourGuideCta city={city} className="mt-5" compact />
 
       <SourceDisclaimer className="mt-5" />
     </article>
