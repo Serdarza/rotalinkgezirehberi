@@ -24,6 +24,7 @@ import { ShareButton } from "@/components/share/ShareButton";
 import { SearchAppPromo } from "@/components/search/SearchAppPromo";
 import { Breadcrumb } from "@/components/layout/PageHeader";
 import { CityGuideSection } from "@/components/search/CityGuideSection";
+import { GetYourGuideCta } from "@/components/affiliate/GetYourGuideCta";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn, slugifyCity } from "@/lib/utils";
 import { POPULAR_CITIES } from "@/config/site";
@@ -770,33 +771,36 @@ function CityResultsInner({ city, data: buildData }: Props) {
       )}
 
       {tab === "gezi" && (
-        <ul className="grid gap-4 sm:grid-cols-2">
-          {data.gezi.length ? (
-            data.gezi.map((g, index) => (
-              <Fragment key={g.isim + index}>
-                <PlaceCard
-                  title={g.isim}
-                  description={g.aciklama}
-                  variant="gezi"
-                  action={
-                    <SearchLinkButton
-                      href={googleMapsUrl(`${g.isim} ${city}`)}
-                      label="İncele"
-                      tone="gezi"
-                    />
-                  }
-                />
-                {(index + 1) % 6 === 0 && index < data.gezi.length - 1 && (
-                  <li className="col-span-full list-none">
-                    <AdSenseUnit variant="inFeed" />
-                  </li>
-                )}
-              </Fragment>
-            ))
-          ) : (
-            <EmptyState label="gezi yeri" city={city} suggestions={data.tesis.slice(0, 4)} />
-          )}
-        </ul>
+        <>
+          <GetYourGuideCta city={city} className="mb-4" />
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {data.gezi.length ? (
+              data.gezi.map((g, index) => (
+                <Fragment key={g.isim + index}>
+                  <PlaceCard
+                    title={g.isim}
+                    description={g.aciklama}
+                    variant="gezi"
+                    action={
+                      <SearchLinkButton
+                        href={googleMapsUrl(`${g.isim} ${city}`)}
+                        label="İncele"
+                        tone="gezi"
+                      />
+                    }
+                  />
+                  {(index + 1) % 6 === 0 && index < data.gezi.length - 1 && (
+                    <li className="col-span-full list-none">
+                      <AdSenseUnit variant="inFeed" />
+                    </li>
+                  )}
+                </Fragment>
+              ))
+            ) : (
+              <EmptyState label="gezi yeri" city={city} suggestions={data.tesis.slice(0, 4)} />
+            )}
+          </ul>
+        </>
       )}
 
       {tab === "yemek" && (

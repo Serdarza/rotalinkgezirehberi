@@ -7,6 +7,7 @@ import {
   CategoryFacilitiesSection,
 } from "@/components/home/FacilitySections";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
+import { ToursAffiliateSection } from "@/components/home/ToursAffiliateSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { BelediyeSosyalSection } from "@/components/home/BelediyeSosyalSection";
 import { CampaignsSection } from "@/components/home/CampaignsSection";
@@ -84,6 +85,7 @@ export default async function HomePage() {
         </Fragment>
       ))}
       <BelediyeSosyalSection facilities={sosyal} />
+      <ToursAffiliateSection />
       <FeaturesSection />
       <TestimonialsSection />
       <CampaignsSection campaigns={campaigns} />
