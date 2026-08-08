@@ -1,8 +1,6 @@
-import { Fragment } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container, Section, SectionHeading } from "@/components/ui/Section";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
 import { campaignAccent, campaignSmartIcon } from "@/lib/campaignSmartIcon";
 import type { Campaign } from "@/types";
@@ -99,23 +97,12 @@ export function CampaignCard({
   );
 }
 
-/** Kampanya listesi — her 3 kartta bir içerik arası reklam. */
-export function CampaignGrid({
-  campaigns,
-  adEvery = 3,
-}: {
-  campaigns: Campaign[];
-  adEvery?: number;
-}) {
+/** Kampanya listesi. */
+export function CampaignGrid({ campaigns }: { campaigns: Campaign[] }) {
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {campaigns.map((c, index) => (
-        <Fragment key={c.slug}>
-          <CampaignCard campaign={c} featured />
-          {(index + 1) % adEvery === 0 && index < campaigns.length - 1 && (
-            <AdSenseUnit variant="inFeed" className="col-span-full" />
-          )}
-        </Fragment>
+      {campaigns.map((c) => (
+        <CampaignCard key={c.slug} campaign={c} featured />
       ))}
     </div>
   );

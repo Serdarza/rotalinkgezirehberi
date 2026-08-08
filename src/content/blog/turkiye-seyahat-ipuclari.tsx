@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { InArticleAd } from "@/components/ads/InArticleAd";
 
 export function TurkiyeSeyahatIpuclariContent() {
   return (
@@ -49,8 +48,6 @@ export function TurkiyeSeyahatIpuclariContent() {
           ))}
         </div>
       </section>
-
-      <InArticleAd />
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { InArticleAd } from "@/components/ads/InArticleAd";
 
 export function OgretmeneviKonaklamaContent() {
   return (
@@ -60,8 +59,6 @@ export function OgretmeneviKonaklamaContent() {
           öğretmenevinden güncel bilgi alınması tavsiye edilir.
         </p>
       </section>
-
-      <InArticleAd />
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">

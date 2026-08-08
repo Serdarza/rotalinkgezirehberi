@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Fragment } from "react";
 import { ArrowLeft, CalendarDays, ExternalLink, Building2 } from "lucide-react";
 import { Container } from "@/components/ui/Section";
 import { Breadcrumb } from "@/components/layout/PageHeader";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
-import { InArticleAd } from "@/components/ads/InArticleAd";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
 import {
   CampaignCard,
@@ -65,9 +62,6 @@ export default async function CampaignDetailPage({
   const accent = campaignAccent(campaign.title, campaign.summary);
   const dateLabel = formatCampaignDate(campaign.createdAt);
 
-  /** Uzun madde listelerinde okumayı bölmeden reklam yerleştir. */
-  const adAfter = campaign.paragraphs.length > 6 ? 4 : 0;
-
   return (
     <Container className="max-w-3xl py-8 sm:py-14">
       <Breadcrumb
@@ -120,22 +114,18 @@ export default async function CampaignDetailPage({
         )}
       </header>
 
-      <AdSenseUnit variant="banner" className="mb-8" />
-
       <section className="space-y-3">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">
           Kampanya detayları
         </h2>
         <div className="space-y-3">
           {campaign.paragraphs.map((line, index) => (
-            <Fragment key={`${index}-${line.slice(0, 24)}`}>
-              <p className="rounded-2xl bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700 dark:bg-slate-900/60 dark:text-slate-300 sm:text-base">
-                {line}
-              </p>
-              {adAfter > 0 && index + 1 === adAfter && (
-                <InArticleAd className="my-6" />
-              )}
-            </Fragment>
+            <p
+              key={`${index}-${line.slice(0, 24)}`}
+              className="rounded-2xl bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700 dark:bg-slate-900/60 dark:text-slate-300 sm:text-base"
+            >
+              {line}
+            </p>
           ))}
         </div>
       </section>
@@ -173,8 +163,6 @@ export default async function CampaignDetailPage({
       </section>
 
       <SourceDisclaimer className="mt-8" />
-
-      <AdSenseUnit variant="banner" className="mt-8" />
 
       {related.length > 0 && (
         <section className="mt-12">

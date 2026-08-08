@@ -4,7 +4,6 @@ import { Container } from "@/components/ui/Section";
 import { PageHero, Breadcrumb } from "@/components/layout/PageHeader";
 import { CampaignGrid } from "@/components/home/CampaignsSection";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { getCampaigns } from "@/lib/kampanyaRepo";
 import { SITE } from "@/config/site";
 
@@ -69,8 +68,6 @@ export default async function KampanyalarPage() {
             </li>
           </ul>
         </article>
-
-        <AdSenseUnit variant="banner" className="mb-8" />
 
         {campaigns.length ? (
           <>

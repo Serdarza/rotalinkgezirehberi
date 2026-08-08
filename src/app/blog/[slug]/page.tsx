@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Section";
 import { PageHero } from "@/components/layout/PageHeader";
 import { ShareButton } from "@/components/share/ShareButton";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { BLOG_POSTS } from "@/config/site";
 import { getBlogContentComponent } from "@/content/blog";
 import { buildMetadata } from "@/lib/seo";
@@ -44,7 +43,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             detaylı içerikler için bizi takip etmeye devam edin.
           </p>
         )}
-        <AdSenseUnit variant="banner" className="mt-12" />
       </Container>
     </>
   );

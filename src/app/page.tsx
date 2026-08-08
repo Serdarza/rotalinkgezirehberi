@@ -14,7 +14,6 @@ import { CampaignsSection } from "@/components/home/CampaignsSection";
 import { BlogSection } from "@/components/home/BlogSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { AppDownloadSection } from "@/components/home/AppDownloadSection";
-import { AdSection } from "@/components/ads/AdSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FACILITY_CATEGORIES } from "@/config/site";
 import {
@@ -26,7 +25,6 @@ import {
 import { getFeaturedCampaigns } from "@/lib/kampanyaRepo";
 import { faqJsonLd } from "@/lib/seo";
 import { FAQ_ITEMS } from "@/config/site";
-import { Fragment } from "react";
 
 export default async function HomePage() {
   const [stats, featured, { cities, tesis, sosyal }, campaigns] =
@@ -69,20 +67,16 @@ export default async function HomePage() {
           }))}
       />
       <PopularCitiesSection />
-      <AdSection />
       <FeaturedFacilitiesSection facilities={featured} />
-      <AdSection />
-      {categories.map((cat, index) => (
-        <Fragment key={cat.key}>
-          <CategoryFacilitiesSection
-            id={cat.key}
-            title={cat.title}
-            description={cat.description}
-            tips={cat.tips}
-            facilities={cat.facilities}
-          />
-          {(index === 1 || index === 3) && <AdSection />}
-        </Fragment>
+      {categories.map((cat) => (
+        <CategoryFacilitiesSection
+          key={cat.key}
+          id={cat.key}
+          title={cat.title}
+          description={cat.description}
+          tips={cat.tips}
+          facilities={cat.facilities}
+        />
       ))}
       <BelediyeSosyalSection facilities={sosyal} />
       <ToursAffiliateSection />
@@ -90,7 +84,6 @@ export default async function HomePage() {
       <TestimonialsSection />
       <CampaignsSection campaigns={campaigns} />
       <BlogSection />
-      <AdSection />
       <FAQSection />
       <AppDownloadSection />
     </>

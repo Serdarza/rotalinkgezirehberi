@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BedDouble,
@@ -18,8 +18,6 @@ import { Container } from "@/components/ui/Section";
 import { FacilityCard } from "@/components/home/FacilitySections";
 import { CityMap } from "@/components/map/CityMap";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
-import { StickyAdBanner } from "@/components/ads/StickyAdBanner";
 import { ShareButton } from "@/components/share/ShareButton";
 import { SearchAppPromo } from "@/components/search/SearchAppPromo";
 import { Breadcrumb } from "@/components/layout/PageHeader";
@@ -488,7 +486,6 @@ function CityResultsInner({ city, data: buildData }: Props) {
   return (
     <Container className="py-5 sm:py-12">
       <SearchAppPromo city={city} />
-      <StickyAdBanner storageKey={`rotalink_sticky_ad_${cityPath}`} />
       <Breadcrumb
         items={[
           { label: "Anasayfa", href: "/" },
@@ -526,8 +523,6 @@ function CityResultsInner({ city, data: buildData }: Props) {
       <div className="mb-3 hidden sm:mb-8 sm:block">
         <WeatherWidget city={city} withContainer={false} />
       </div>
-
-      <AdSenseUnit variant="banner" className="mb-3 sm:mb-8" />
 
       <div className="sticky top-16 z-40 -mx-4 mb-3 border-b border-slate-200/80 bg-white/95 px-3 py-2 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95 sm:-mx-6 sm:mb-6 sm:space-y-3 sm:px-6 sm:py-3 lg:top-[72px]">
         {/* Mobil: tek satır kompakt sekmeler */}
@@ -737,12 +732,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tesis.length ? (
             tesis.map((f, index) => (
-              <Fragment key={f.isim + f.il + f.tip + index}>
-                <FacilityCard facility={f} />
-                {(index + 1) % 6 === 0 && index < tesis.length - 1 && (
-                  <AdSenseUnit variant="inFeed" className="col-span-full" />
-                )}
-              </Fragment>
+              <FacilityCard key={f.isim + f.il + f.tip + index} facility={f} />
             ))
           ) : (
             <EmptyState
@@ -776,25 +766,19 @@ function CityResultsInner({ city, data: buildData }: Props) {
           <ul className="grid gap-4 sm:grid-cols-2">
             {data.gezi.length ? (
               data.gezi.map((g, index) => (
-                <Fragment key={g.isim + index}>
-                  <PlaceCard
-                    title={g.isim}
-                    description={g.aciklama}
-                    variant="gezi"
-                    action={
-                      <SearchLinkButton
-                        href={googleMapsUrl(`${g.isim} ${city}`)}
-                        label="İncele"
-                        tone="gezi"
-                      />
-                    }
-                  />
-                  {(index + 1) % 6 === 0 && index < data.gezi.length - 1 && (
-                    <li className="col-span-full list-none">
-                      <AdSenseUnit variant="inFeed" />
-                    </li>
-                  )}
-                </Fragment>
+                <PlaceCard
+                  key={g.isim + index}
+                  title={g.isim}
+                  description={g.aciklama}
+                  variant="gezi"
+                  action={
+                    <SearchLinkButton
+                      href={googleMapsUrl(`${g.isim} ${city}`)}
+                      label="İncele"
+                      tone="gezi"
+                    />
+                  }
+                />
               ))
             ) : (
               <EmptyState label="gezi yeri" city={city} suggestions={data.tesis.slice(0, 4)} />
@@ -807,25 +791,19 @@ function CityResultsInner({ city, data: buildData }: Props) {
         <ul className="grid gap-4 sm:grid-cols-2">
           {data.yemek.length ? (
             data.yemek.map((y, index) => (
-              <Fragment key={y.isim + index}>
-                <PlaceCard
-                  title={y.isim}
-                  description={y.aciklama}
-                  variant="yemek"
-                  action={
-                    <SearchLinkButton
-                      href={googleImagesUrl(`${y.isim} ${city}`)}
-                      label="İncele"
-                      tone="yemek"
-                    />
-                  }
-                />
-                {(index + 1) % 6 === 0 && index < data.yemek.length - 1 && (
-                  <li className="col-span-full list-none">
-                    <AdSenseUnit variant="inFeed" />
-                  </li>
-                )}
-              </Fragment>
+              <PlaceCard
+                key={y.isim + index}
+                title={y.isim}
+                description={y.aciklama}
+                variant="yemek"
+                action={
+                  <SearchLinkButton
+                    href={googleImagesUrl(`${y.isim} ${city}`)}
+                    label="İncele"
+                    tone="yemek"
+                  />
+                }
+              />
             ))
           ) : (
             <EmptyState label="yemek mekanı" city={city} suggestions={data.tesis.slice(0, 4)} />
@@ -837,25 +815,19 @@ function CityResultsInner({ city, data: buildData }: Props) {
         <ul className="grid gap-4 sm:grid-cols-2">
           {data.sosyal.length ? (
             data.sosyal.map((s, index) => (
-              <Fragment key={s.isim + index}>
-                <PlaceCard
-                  title={s.isim}
-                  description={s.aciklama}
-                  variant="sosyal"
-                  action={
-                    <SearchLinkButton
-                      href={googleMapsUrl(`${s.isim} ${city}`)}
-                      label="İncele"
-                      tone="sosyal"
-                    />
-                  }
-                />
-                {(index + 1) % 6 === 0 && index < data.sosyal.length - 1 && (
-                  <li className="col-span-full list-none">
-                    <AdSenseUnit variant="inFeed" />
-                  </li>
-                )}
-              </Fragment>
+              <PlaceCard
+                key={s.isim + index}
+                title={s.isim}
+                description={s.aciklama}
+                variant="sosyal"
+                action={
+                  <SearchLinkButton
+                    href={googleMapsUrl(`${s.isim} ${city}`)}
+                    label="İncele"
+                    tone="sosyal"
+                  />
+                }
+              />
             ))
           ) : (
             <EmptyState label="belediye tesisi" city={city} suggestions={data.tesis.slice(0, 4)} />

@@ -1,11 +1,4 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { Fragment } from "react";
-import { Flag, Moon, Briefcase } from "lucide-react";
-import { Container } from "@/components/ui/Section";
 import { PageHero, Breadcrumb } from "@/components/layout/PageHeader";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
-import { InArticleAd } from "@/components/ads/InArticleAd";
 import { NextHolidayCountdown } from "@/components/holidays/NextHolidayCountdown";
 import {
   HOLIDAY_KIND_LABEL,
@@ -19,6 +12,10 @@ import {
 } from "@/config/holidays";
 import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Flag, Moon, Briefcase } from "lucide-react";
+import { Container } from "@/components/ui/Section";
 
 export const metadata: Metadata = {
   title: "2026 - 2027 Resmi Tatiller Takvimi (Türkiye)",
@@ -170,9 +167,7 @@ export default function ResmiTatillerPage() {
           </div>
         </article>
 
-        <AdSenseUnit variant="banner" className="mb-10" />
-
-        {HOLIDAY_YEARS.map(({ year, holidays }, yearIndex) => (
+        {HOLIDAY_YEARS.map(({ year, holidays }) => (
           <section key={year} className="mb-12">
             <div className="mb-5 flex items-end justify-between gap-3">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
@@ -184,15 +179,10 @@ export default function ResmiTatillerPage() {
             </div>
 
             <ul className="space-y-3">
-              {holidays.map((holiday, index) => (
-                <Fragment key={holiday.id}>
-                  <HolidayRow holiday={holiday} />
-                  {index === 5 && <InArticleAd className="my-6" />}
-                </Fragment>
+              {holidays.map((holiday) => (
+                <HolidayRow key={holiday.id} holiday={holiday} />
               ))}
             </ul>
-
-            {yearIndex === 0 && <AdSenseUnit variant="banner" className="mt-10" />}
           </section>
         ))}
 
