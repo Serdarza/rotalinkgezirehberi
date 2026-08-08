@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CityResults } from "@/components/search/CityResults";
+import { AffiliateInFeed } from "@/components/affiliate/AffiliateAdCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getAllData, getFacilitiesByCity } from "@/lib/data";
 import { buildCityGuide, countFacilityTips } from "@/lib/cityGuide";
@@ -57,6 +58,9 @@ export default async function CityPage({ params }: Props) {
         ])}
       />
       <CityResults city={displayCity} data={data} />
+      <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
+        <AffiliateInFeed slot={`city-${slug}`} />
+      </div>
     </>
   );
 }

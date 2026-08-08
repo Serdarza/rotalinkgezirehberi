@@ -13,6 +13,7 @@ import { CampaignsSection } from "@/components/home/CampaignsSection";
 import { BlogSection } from "@/components/home/BlogSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { AppDownloadSection } from "@/components/home/AppDownloadSection";
+import { AffiliateInFeed } from "@/components/affiliate/AffiliateAdCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FACILITY_CATEGORIES } from "@/config/site";
 import {
@@ -66,20 +67,32 @@ export default async function HomePage() {
           }))}
       />
       <PopularCitiesSection />
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+        <AffiliateInFeed slot="home-after-cities" />
+      </div>
       <FeaturedFacilitiesSection facilities={featured} />
-      {categories.map((cat) => (
-        <CategoryFacilitiesSection
-          key={cat.key}
-          id={cat.key}
-          title={cat.title}
-          description={cat.description}
-          tips={cat.tips}
-          facilities={cat.facilities}
-        />
+      {categories.map((cat, i) => (
+        <div key={cat.key}>
+          <CategoryFacilitiesSection
+            id={cat.key}
+            title={cat.title}
+            description={cat.description}
+            tips={cat.tips}
+            facilities={cat.facilities}
+          />
+          {i === 1 && (
+            <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+              <AffiliateInFeed slot="home-mid-categories" salt={1} />
+            </div>
+          )}
+        </div>
       ))}
       <BelediyeSosyalSection facilities={sosyal} />
       <FeaturesSection />
       <TestimonialsSection />
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+        <AffiliateInFeed slot="home-before-campaigns" salt={2} />
+      </div>
       <CampaignsSection campaigns={campaigns} />
       <BlogSection />
       <FAQSection />
