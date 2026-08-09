@@ -5,6 +5,7 @@ import { ExternalLink, Tag } from "lucide-react";
 import {
   getAffiliateAds,
   pickAffiliateAdStable,
+  TRENDYOL_LOGO,
   type AffiliateAd,
 } from "@/lib/affiliateAdsRepo";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,23 @@ function useAd(slot: string, salt: number) {
   return ad;
 }
 
+function BrandBadge({ brand }: { brand: AffiliateAd["brand"] }) {
+  if (brand !== "trendyol") return null;
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F27A1A]/10 px-2 py-0.5 ring-1 ring-[#F27A1A]/25">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={TRENDYOL_LOGO}
+        alt="Trendyol"
+        className="h-4 w-4 rounded-sm object-cover"
+      />
+      <span className="text-[10px] font-bold tracking-wide text-[#F27A1A]">
+        Trendyol
+      </span>
+    </span>
+  );
+}
+
 export function AffiliateAdCard({
   slot,
   variant = "feed",
@@ -48,6 +66,7 @@ export function AffiliateAdCard({
   const isRail = variant === "rail";
   const isSheet = variant === "sheet";
   const isPopup = variant === "popup";
+  const isTrendyolLogo = ad.imageUrl === TRENDYOL_LOGO;
 
   return (
     <a
@@ -68,9 +87,10 @@ export function AffiliateAdCard({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={ad.imageUrl}
-            alt=""
+            alt={ad.brand === "trendyol" ? "Trendyol" : ""}
             className={cn(
-              "shrink-0 rounded-xl object-cover bg-slate-100 dark:bg-slate-800",
+              "shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800",
+              isTrendyolLogo ? "object-cover" : "object-cover",
               isRail ? "h-28 w-full" : "h-20 w-20 sm:h-24 sm:w-24"
             )}
             loading="lazy"
@@ -88,9 +108,12 @@ export function AffiliateAdCard({
         )}
 
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700/80 dark:text-amber-400/80">
-            Sponsorlu
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700/80 dark:text-amber-400/80">
+              Sponsorlu
+            </p>
+            <BrandBadge brand={ad.brand} />
+          </div>
           <p
             className={cn(
               "mt-1 font-bold leading-snug text-slate-900 group-hover:text-[#0F62FE] dark:text-white",

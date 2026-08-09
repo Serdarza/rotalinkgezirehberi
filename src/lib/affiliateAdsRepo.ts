@@ -7,7 +7,7 @@
  * Alanlar:
  *   id, title, subtitle?, imageUrl?, url, active
  *
- * imageUrl: gerçek görsel adresi olmalı (cdn.dsmcdn.com vb.).
+ * imageUrl: gerçek görsel veya yerel yol (/images/trendyol.png).
  * ty.gl kısa linkini imageUrl olarak kullanmayın — o alan ürün sayfasına gider.
  */
 
@@ -18,7 +18,11 @@ export type AffiliateAd = {
   imageUrl: string | null;
   url: string;
   active: boolean;
+  /** Gösterilecek mağaza rozeti (trendyol, hepsiburada...). */
+  brand: "trendyol" | "other";
 };
+
+export const TRENDYOL_LOGO = "/images/trendyol.png";
 
 const LOCAL_URL = "/data/affiliate_ads.json";
 
@@ -26,12 +30,20 @@ let cache: AffiliateAd[] | null = null;
 let loadPromise: Promise<AffiliateAd[]> | null = null;
 
 function looksLikeImageUrl(url: string): boolean {
+  if (url.startsWith("/") && !url.startsWith("//")) {
+    return /\.(jpe?g|png|webp|gif|avif|svg)(\?|$)/i.test(url);
+  }
   if (!/^https?:\/\//i.test(url)) return false;
   if (/ty\.gl\//i.test(url) || /trendyol\.com\/s\//i.test(url)) return false;
   return (
     /\.(jpe?g|png|webp|gif|avif)(\?|$)/i.test(url) ||
     /cdn\.dsmcdn\.com|images\.|img\./i.test(url)
   );
+}
+
+function detectBrand(url: string): AffiliateAd["brand"] {
+  if (/ty\.gl\//i.test(url) || /trendyol\.com/i.test(url)) return "trendyol";
+  return "other";
 }
 
 function parseAds(root: unknown): AffiliateAd[] {
@@ -49,14 +61,21 @@ function parseAds(root: unknown): AffiliateAd[] {
     if (!id || !title || !url) continue;
     if (row.active === false) continue;
 
+    const brand = detectBrand(url);
     const rawImage = String(row.imageUrl ?? "").trim();
+    let imageUrl =
+      rawImage && looksLikeImageUrl(rawImage) ? rawImage : null;
+    // Trendyol linklerinde ürün görseli yoksa resmi logo kullan
+    if (!imageUrl && brand === "trendyol") imageUrl = TRENDYOL_LOGO;
+
     out.push({
       id,
       title,
       subtitle: String(row.subtitle ?? "").trim(),
-      imageUrl: rawImage && looksLikeImageUrl(rawImage) ? rawImage : null,
+      imageUrl,
       url,
       active: true,
+      brand,
     });
   }
   return out;
