@@ -61,7 +61,6 @@ export const LEGAL_PAGES: LegalPageConfig[] = [
           "Hizmetin sunulması ve iyileştirilmesi (meşru menfaat).",
           "Talep ve şikâyetlerin yanıtlanması (sözleşmenin kurulması / meşru menfaat).",
           "Konum tabanlı özelliklerin çalıştırılması (açık rıza).",
-          "Reklam gösterimi ve ölçümü (açık rıza / meşru menfaat).",
           "Hukuki yükümlülüklerin yerine getirilmesi.",
         ],
       },

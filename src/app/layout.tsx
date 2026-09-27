@@ -3,9 +3,6 @@ import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { DownloadModal } from "@/components/layout/DownloadModal";
 import { KamiFab } from "@/components/kami/KamiFab";
-import { AffiliateSideRails } from "@/components/affiliate/AffiliateSideRails";
-import { AffiliateBottomSheet } from "@/components/affiliate/AffiliateBottomSheet";
-import { AffiliatePopup } from "@/components/affiliate/AffiliatePopup";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { FacilityImageBootstrap } from "@/components/providers/FacilityImageBootstrap";
@@ -70,17 +67,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <DownloadModal />
           <Header />
-          <AffiliateSideRails />
-          <main id="main-content" className="xl:px-[168px] 2xl:px-[196px]">
-            {children}
-          </main>
-          <div className="pb-20 md:pb-0 xl:px-[168px] 2xl:px-[196px]">
+          <main id="main-content">{children}</main>
+          <div className="pb-20 md:pb-0">
             <Footer />
           </div>
           <MobileBottomNav />
           <KamiFab cities={cities} />
-          <AffiliateBottomSheet />
-          <AffiliatePopup />
         </ThemeProvider>
       </body>
     </html>

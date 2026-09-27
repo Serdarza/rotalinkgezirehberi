@@ -158,10 +158,9 @@ export default async function HakkimizdaPage() {
             Platform nasıl finanse ediliyor?
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-            Rotalink kullanıcılardan ücret almaz. Sunucu ve geliştirme
-            maliyetleri sitede gösterilen reklamlarla karşılanır. Reklam
-            içerikleri Rotalink tarafından seçilmez ve editoryal içeriğimizi
-            etkilemez.
+            Rotalink kullanıcılardan ücret almaz ve sitede reklam
+            gösterilmez. Sunucu ve geliştirme maliyetleri Rotalink tarafından
+            karşılanır.
           </p>
           <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
             İletişim:{" "}
