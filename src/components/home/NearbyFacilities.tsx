@@ -7,9 +7,7 @@ import { LocateFixed, MapPin, Navigation, Phone } from "lucide-react";
 import { Container, GlassCard, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { FacilityPriceBox } from "@/components/facility/FacilityPriceBox";
-import { CachedMediaImage } from "@/components/media/CachedMediaImage";
 import { handleFacilityContact } from "@/lib/facilityContact";
-import { useFacilityCardImage } from "@/hooks/useFacilityCardImage";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
@@ -29,25 +27,17 @@ type Props = {
 function NearbyFacilityCard({ facility }: { facility: NearbyItem }) {
   const cityPath = `/sehir/${slugifyCity(facility.il)}`;
   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
-  const imageSrc = useFacilityCardImage(facility);
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/15 border-l-4 border-l-[#0F62FE] bg-white shadow-md shadow-blue-500/10 dark:border-[#0F62FE]/25 dark:bg-slate-900">
-      <div className="relative aspect-[16/10] w-full bg-slate-200 dark:bg-slate-700">
-        <CachedMediaImage
-          src={imageSrc}
-          alt={facility.isim}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover"
-        />
-        <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold tabular-nums text-[#0f766e] shadow-sm dark:bg-slate-900/90 dark:text-teal-300">
-          <Navigation className="h-3 w-3" aria-hidden />
-          {formatDistance(facility.distance)}
-        </span>
-      </div>
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-teal-50 px-2.5 py-1 text-xs font-bold tabular-nums text-[#0f766e] dark:bg-teal-950/60 dark:text-teal-300">
+            <Navigation className="h-3 w-3" aria-hidden />
+            {formatDistance(facility.distance)}
+          </span>
+        </div>
         <p className="mt-1.5 mb-0 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
           <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
           {facility.il}

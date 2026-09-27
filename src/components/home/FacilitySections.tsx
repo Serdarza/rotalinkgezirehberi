@@ -7,9 +7,7 @@ import { ShareButton } from "@/components/share/ShareButton";
 import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { FacilityPriceBox } from "@/components/facility/FacilityPriceBox";
 import { CityMap } from "@/components/map/CityMap";
-import { CachedMediaImage } from "@/components/media/CachedMediaImage";
 import { handleFacilityContact } from "@/lib/facilityContact";
-import { useFacilityCardImage } from "@/hooks/useFacilityCardImage";
 import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 import { useMasterData } from "@/hooks/useMasterData";
@@ -26,27 +24,16 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   const displayType = getDisplayFacilityType(facility.tip);
   const cityPath = `/sehir/${slugifyCity(facility.il)}`;
   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
-  const imageSrc = useFacilityCardImage(facility);
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/20 border-l-4 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-200 dark:bg-slate-700">
-        <CachedMediaImage
-          src={imageSrc}
-          alt={facility.isim}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition duration-500 hover:scale-[1.03]"
-        />
-        <div className="absolute right-3 top-3">
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-2 flex items-start justify-between gap-3">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
           <FavoriteButton
             facility={{ isim: facility.isim, tip: String(facility.tip ?? ""), il: facility.il }}
           />
         </div>
-      </div>
-
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
         <p className="mb-3 flex items-center gap-1 text-sm font-medium text-[#0F62FE] dark:text-sky-300">
           <MapPin className="h-4 w-4 shrink-0" aria-hidden />
           {facility.il}
