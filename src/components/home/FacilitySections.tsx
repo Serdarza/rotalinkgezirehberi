@@ -38,7 +38,7 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
           <MapPin className="h-4 w-4 shrink-0" aria-hidden />
           {facility.il}
         </p>
-        <FacilityPriceBox il={facility.il} isim={facility.isim} />
+        <FacilityPriceBox />
         <div className="mt-auto flex flex-wrap gap-2">
           <button
             type="button"

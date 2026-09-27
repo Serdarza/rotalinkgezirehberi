@@ -42,11 +42,7 @@ function NearbyFacilityCard({ facility }: { facility: NearbyItem }) {
           <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
           {facility.il}
         </p>
-        <FacilityPriceBox
-          il={facility.il}
-          isim={facility.isim}
-          className="mt-3 mb-0"
-        />
+        <FacilityPriceBox className="mt-3 mb-0" />
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
           <button
             type="button"
