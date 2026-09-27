@@ -27,10 +27,13 @@ export function redirectToAppStore() {
 }
 
 const ANDROID_PACKAGE = "com.serdarza.rotalink";
+/** iOS Info.plist `CFBundleURLSchemes` ile aynı olmalı. */
+const IOS_APP_URL = "rotalink://open";
+const IOS_STORE_FALLBACK_MS = 1500;
 
 /**
  * Android: uygulama yüklüyse açar, değilse Chrome fallback ile Play Store'a gider.
- * iOS: uygulamada URL şeması olmadığından App Store sayfası (yüklüyse "Aç" gösterir).
+ * iOS: `rotalink://` ile açmayı dener; sayfa görünür kalırsa (uygulama yok / eski sürüm) App Store.
  * Masaüstü: indirme sayfası.
  */
 export function openAppOrStore() {
@@ -45,7 +48,15 @@ export function openAppOrStore() {
     return;
   }
   if (device === "ios") {
-    window.location.href = APP_STORE_URL;
+    const fallback = window.setTimeout(() => {
+      if (document.visibilityState === "visible") window.location.href = APP_STORE_URL;
+    }, IOS_STORE_FALLBACK_MS);
+    const cancelIfAppOpened = () => {
+      if (document.visibilityState === "hidden") window.clearTimeout(fallback);
+    };
+    document.addEventListener("visibilitychange", cancelIfAppOpened, { once: true });
+    window.addEventListener("pagehide", () => window.clearTimeout(fallback), { once: true });
+    window.location.href = IOS_APP_URL;
     return;
   }
   window.location.href = DOWNLOAD_PAGE_PATH;
