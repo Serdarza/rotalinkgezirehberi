@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { X, MapPin, Phone, Search } from "lucide-react";
-import { PLAY_STORE_URL, APP_STORE_URL } from "@/config/downloads";
+import { StorePromoActions } from "@/components/layout/StorePromoActions";
 import {
   dismissDownloadPrompt,
   markAppDownloadClicked,
@@ -87,26 +87,7 @@ export function DownloadModal() {
             </span>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <a
-              href={PLAY_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={onStoreClick}
-              className="flex items-center justify-center gap-3 rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
-            >
-              Google Play&apos;den İndir
-            </a>
-            <a
-              href={APP_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={onStoreClick}
-              className="flex items-center justify-center gap-3 rounded-2xl border-2 border-slate-200 px-5 py-3.5 text-sm font-semibold text-slate-900 transition hover:border-[#0F62FE] hover:text-[#0F62FE] dark:border-slate-700 dark:text-white"
-            >
-              App Store&apos;dan İndir
-            </a>
-          </div>
+          <StorePromoActions onStoreClick={onStoreClick} />
 
           <button
             type="button"

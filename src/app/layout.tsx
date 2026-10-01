@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   title: { default: SITE.title, template: `%s | ${SITE.name}` },
   description: SITE.description,
   keywords: ["rotalink", "kamu misafirhanesi", "polisevi", "öğretmenevi", "orduevi", "seyahat rehberi"],
+  itunes: { appId: "6764678799" },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],
     apple: [{ url: "/apple-touch-icon.png" }],

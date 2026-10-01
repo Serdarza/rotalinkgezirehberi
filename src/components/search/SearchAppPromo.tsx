@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Download, MapPinned, Search, X } from "lucide-react";
-import { APP_STORE_URL, PLAY_STORE_URL } from "@/config/downloads";
+import { MapPinned, Search, X } from "lucide-react";
+import { StorePromoActions } from "@/components/layout/StorePromoActions";
 import {
   dismissDownloadPrompt,
   markAppDownloadClicked,
@@ -91,28 +91,7 @@ export function SearchAppPromo({ city }: { city: string }) {
             </span>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <a
-              href={PLAY_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={onStoreClick}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900"
-            >
-              <Download className="h-4 w-4" />
-              Google Play
-            </a>
-            <a
-              href={APP_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={onStoreClick}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-[#0F62FE] hover:text-[#0F62FE] dark:border-slate-700 dark:text-white"
-            >
-              <Download className="h-4 w-4" />
-              App Store
-            </a>
-          </div>
+          <StorePromoActions onStoreClick={onStoreClick} />
 
           <button
             type="button"
