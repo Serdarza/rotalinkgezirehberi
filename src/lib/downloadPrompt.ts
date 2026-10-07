@@ -5,7 +5,7 @@
  * - “Şimdi değil” dediyse: 2 gün sessiz kal.
  */
 
-const DOWNLOADED_KEY = "rotalink_app_download_clicked";
+export const DOWNLOADED_KEY = "rotalink_app_download_clicked";
 const DISMISSED_KEY = "rotalink_download_prompt_dismissed_at";
 const DISMISS_DAYS = 2;
 

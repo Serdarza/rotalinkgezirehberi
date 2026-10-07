@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { MOBILE_REDIRECT_DELAY_MS } from "@/config/downloads";
-import { markAppDownloadClicked } from "@/lib/downloadPrompt";
+import { hasAppDownloadClicked, markAppDownloadClicked } from "@/lib/downloadPrompt";
+import { openAppOrStore } from "@/lib/facilityContact";
 
 type MobileRedirectProps = {
   /** Yönlendirilecek mağaza URL'si */
@@ -20,8 +21,18 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
   const [secondsLeft, setSecondsLeft] = useState(
     Math.ceil(MOBILE_REDIRECT_DELAY_MS / 1000)
   );
+  const [autoRedirect, setAutoRedirect] = useState(true);
+  const [returnPath, setReturnPath] = useState("/");
 
   useEffect(() => {
+    const from = new URLSearchParams(window.location.search).get("from");
+    if (from && from.startsWith("/") && !from.startsWith("//")) setReturnPath(from);
+
+    // Mağazadan geri dönen kullanıcıyı tekrar mağazaya atma.
+    if (hasAppDownloadClicked()) {
+      setAutoRedirect(false);
+      return;
+    }
     markAppDownloadClicked();
 
     const redirectTimer = setTimeout(() => {
@@ -58,19 +69,25 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
           priority
         />
 
-        <div
-          className="mb-6 h-14 w-14 animate-spin rounded-full border-4 border-sky-200 border-t-sky-500 dark:border-sky-800 dark:border-t-sky-400"
-          role="status"
-          aria-label="Yükleniyor"
-        />
+        {autoRedirect && (
+          <div
+            className="mb-6 h-14 w-14 animate-spin rounded-full border-4 border-sky-200 border-t-sky-500 dark:border-sky-800 dark:border-t-sky-400"
+            role="status"
+            aria-label="Yükleniyor"
+          />
+        )}
 
         <h1 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">
-          {storeName}&apos;a yönlendiriliyorsunuz
+          {autoRedirect
+            ? `${storeName}'a yönlendiriliyorsunuz`
+            : "Rotalink uygulamasını indirin"}
         </h1>
         <p className="mb-8 text-sm text-slate-500 dark:text-slate-400">
-          {secondsLeft > 0
-            ? `${secondsLeft} saniye içinde otomatik yönlendirileceksiniz`
-            : "Yönlendiriliyor..."}
+          {!autoRedirect
+            ? "Kamu tesisleri, fiyatlar ve gezi rehberi uygulamada."
+            : secondsLeft > 0
+              ? `${secondsLeft} saniye içinde otomatik yönlendirileceksiniz`
+              : "Yönlendiriliyor..."}
         </p>
 
         <a
@@ -80,6 +97,21 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
         >
           Hemen {storeName}&apos;a git
           <span aria-hidden="true">→</span>
+        </a>
+
+        <button
+          type="button"
+          onClick={openAppOrStore}
+          className="mt-3 rounded-2xl px-6 py-3 text-sm font-semibold text-sky-600 transition hover:bg-sky-50 dark:text-sky-400 dark:hover:bg-slate-800"
+        >
+          Uygulamam var, aç
+        </button>
+
+        <a
+          href={returnPath}
+          className="mt-1 text-xs text-slate-400 underline-offset-2 hover:underline dark:text-slate-500"
+        >
+          Web sitesinde devam et
         </a>
       </div>
     </main>
