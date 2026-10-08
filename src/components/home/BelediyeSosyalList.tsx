@@ -15,7 +15,7 @@ import { useMasterData } from "@/hooks/useMasterData";
 import { ensureMasterDataLoaded, getMasterSnapshot } from "@/lib/masterDataRepo";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
-import { redirectMobileToStore } from "@/lib/facilityContact";
+import { facilityActionPath, openInAppOrStore } from "@/lib/facilityContact";
 import {
   geocodeMany,
   mapsSearchUrl,
@@ -215,7 +215,8 @@ export function BelediyeSosyalList({ preview, totals, defaultCity }: Props) {
           <button
             type="button"
             onClick={() => {
-              if (redirectMobileToStore()) return;
+              const path = `${window.location.pathname}${window.location.search}`;
+              if (openInAppOrStore(path)) return;
               void detectLocation();
             }}
             disabled={loading}
@@ -332,6 +333,7 @@ export function BelediyeSosyalList({ preview, totals, defaultCity }: Props) {
                   <div className="mt-3 flex flex-wrap gap-2">
                     <a
                       href={mapsUrl}
+                      data-rl-path={facilityActionPath(item.il, item.isim, "konum")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 rounded-xl bg-[#0F62FE] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-[#0043ce]"

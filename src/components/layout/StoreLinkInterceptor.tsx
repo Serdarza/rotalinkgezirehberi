@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 import { isPhoneOrMapLink } from "@/lib/appLink";
-import { redirectMobileToStore } from "@/lib/facilityContact";
+import { openInAppOrStore, redirectMobileToStore } from "@/lib/facilityContact";
 
 /**
- * Telefonda indirme ve tesis bilgisi tıklamaları doğrudan mağazayı açar:
- * `/indir`, `tel:` ve Google Haritalar / konum bağlantıları.
- * Masaüstünde bu bağlantılar normal çalışır.
+ * Telefonda `/indir` doğrudan mağazayı açar.
+ * Telefon ve konum bağlantıları önce uygulamada o işlemi açar (`data-rl-path`);
+ * uygulama yoksa mağazaya düşer. Masaüstünde bağlantılar normal çalışır.
  */
 export function StoreLinkInterceptor() {
   useEffect(() => {
@@ -24,8 +24,16 @@ export function StoreLinkInterceptor() {
       }
       const downloadPage =
         url.origin === window.location.origin && /^\/indir\/?$/.test(url.pathname);
-      if (!downloadPage && !isPhoneOrMapLink(url)) return;
-      if (!redirectMobileToStore()) return;
+      if (downloadPage) {
+        if (!redirectMobileToStore()) return;
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (!isPhoneOrMapLink(url)) return;
+      const appPath =
+        anchor.dataset.rlPath || `${window.location.pathname}${window.location.search}`;
+      if (!openInAppOrStore(appPath)) return;
       e.preventDefault();
       e.stopPropagation();
     }

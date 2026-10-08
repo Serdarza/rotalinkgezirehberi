@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap, LayerGroup } from "leaflet";
+import { facilityActionPath } from "@/lib/facilityContact";
 import { cn } from "@/lib/utils";
 import type { Tesis } from "@/types";
 
@@ -92,6 +93,8 @@ export function CityMap({ facilities, className }: Props) {
         const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
           `${f.isim} ${f.il}`
         )}`;
+        const callPath = escapeHtml(facilityActionPath(f.il, f.isim, "ara"));
+        const mapPath = escapeHtml(facilityActionPath(f.il, f.isim, "konum"));
 
         const popupHtml = `
           <div style="min-width:190px;font-family:inherit;">
@@ -99,10 +102,10 @@ export function CityMap({ facilities, className }: Props) {
             <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#0f172a;">${name}</p>
             ${
               phone
-                ? `<p style="margin:0 0 8px;font-size:12px;color:#475569;">☎ <a href="tel:${phoneDigits}" style="color:#0F62FE;text-decoration:none;font-weight:600;">${phone}</a></p>`
+                ? `<p style="margin:0 0 8px;font-size:12px;color:#475569;">☎ <a href="tel:${phoneDigits}" data-rl-path="${callPath}" style="color:#0F62FE;text-decoration:none;font-weight:600;">${phone}</a></p>`
                 : ""
             }
-            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#0F62FE;color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:10px;text-decoration:none;">Yol Tarifi</a>
+            <a href="${mapsUrl}" data-rl-path="${mapPath}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#0F62FE;color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:10px;text-decoration:none;">Yol Tarifi</a>
           </div>`;
 
         L.marker([f.latitude, f.longitude], { icon })

@@ -243,15 +243,18 @@ function SearchLinkButton({
   href,
   label,
   tone = "gezi",
+  appPath,
 }: {
   href: string;
   label: string;
   tone?: "gezi" | "yemek" | "sosyal";
+  appPath?: string;
 }) {
   const Icon = tone === "yemek" ? ImageIcon : MapPinned;
   return (
     <a
       href={href}
+      data-rl-path={appPath}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
@@ -774,6 +777,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
                     href={googleMapsUrl(`${g.isim} ${city}`)}
                     label="İncele"
                     tone="gezi"
+                    appPath={`/sehir/${slugifyCity(city)}/?eylem=konum&q=${encodeURIComponent(`${g.isim} ${city}`)}`}
                   />
                 }
               />
@@ -822,6 +826,7 @@ function CityResultsInner({ city, data: buildData }: Props) {
                     href={googleMapsUrl(`${s.isim} ${city}`)}
                     label="İncele"
                     tone="sosyal"
+                    appPath={`/sehir/${slugifyCity(city)}/?eylem=konum&q=${encodeURIComponent(`${s.isim} ${city}`)}`}
                   />
                 }
               />

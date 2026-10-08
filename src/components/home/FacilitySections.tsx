@@ -7,7 +7,7 @@ import { ShareButton } from "@/components/share/ShareButton";
 import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 import { FacilityPriceBox } from "@/components/facility/FacilityPriceBox";
 import { CityMap } from "@/components/map/CityMap";
-import { handleFacilityContact } from "@/lib/facilityContact";
+import { facilityActionPath, handleFacilityContact } from "@/lib/facilityContact";
 import { slugifyCity } from "@/lib/utils";
 import type { Tesis } from "@/types";
 import { useMasterData } from "@/hooks/useMasterData";
@@ -42,13 +42,16 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
         <div className="mt-auto flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => handleFacilityContact(facility.telefon)}
+            onClick={() =>
+              handleFacilityContact(facility.telefon, { il: facility.il, isim: facility.isim })
+            }
             className="inline-flex items-center gap-1 rounded-xl bg-[#14B8A6] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#0d9488]"
           >
             <Phone className="h-3.5 w-3.5" aria-hidden /> İletişim
           </button>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.isim + " " + facility.il)}`}
+            data-rl-path={facilityActionPath(facility.il, facility.isim, "konum")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:ring-slate-700"

@@ -27,7 +27,7 @@ import {
   type WeatherIconKey,
 } from "@/lib/weather";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
-import { redirectMobileToStore } from "@/lib/facilityContact";
+import { openInAppOrStore } from "@/lib/facilityContact";
 import { cn } from "@/lib/utils";
 
 const WEATHER_ICONS: Record<WeatherIconKey, LucideIcon> = {
@@ -231,7 +231,7 @@ export function WeatherWidget({ city, withContainer = true, className }: Props) 
             <button
               type="button"
               onClick={() => {
-                if (!isCityMode && redirectMobileToStore()) return;
+                if (!isCityMode && openInAppOrStore(`${window.location.pathname}${window.location.search}`)) return;
                 if (isCityMode && city) void loadByCity(city.trim());
                 else requestLocation();
               }}
