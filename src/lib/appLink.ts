@@ -63,6 +63,17 @@ export function appSchemeUrl(pathWithQuery: string): string {
   return `${APP_SCHEME}://open${pathWithQuery}`;
 }
 
+/** Tesis telefonu veya harita/konum bağlantısı (telefonda mağazaya alınır). */
+export function isPhoneOrMapLink(url: URL): boolean {
+  if (url.protocol === "tel:" || url.protocol === "geo:") return true;
+  const host = url.hostname.toLowerCase().replace(/^www\./, "");
+  if (host === "maps.google.com" || host === "maps.app.goo.gl") return true;
+  if (host === "google.com" || host.endsWith(".google.com")) {
+    return url.pathname === "/maps" || url.pathname.startsWith("/maps/");
+  }
+  return false;
+}
+
 /** iPadOS 13+ masaüstü UA'sı da iOS sayılır. */
 export function mobilePlatform(): "android" | "ios" | null {
   if (typeof navigator === "undefined") return null;

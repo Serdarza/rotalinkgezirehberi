@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { openStoreDirect } from "@/lib/appLink";
-import { markAppDownloadClicked } from "@/lib/downloadPrompt";
+import { isPhoneOrMapLink } from "@/lib/appLink";
+import { redirectMobileToStore } from "@/lib/facilityContact";
 
 /**
- * Telefonda sitedeki tüm "İndir" bağlantıları (`/indir`) ara sayfa olmadan
- * doğrudan cihazın mağazasını açar. Masaüstünde `/indir` (QR + iki mağaza) kalır.
+ * Telefonda indirme ve tesis bilgisi tıklamaları doğrudan mağazayı açar:
+ * `/indir`, `tel:` ve Google Haritalar / konum bağlantıları.
+ * Masaüstünde bu bağlantılar normal çalışır.
  */
 export function StoreLinkInterceptor() {
   useEffect(() => {
@@ -21,17 +22,14 @@ export function StoreLinkInterceptor() {
       } catch {
         return;
       }
-      if (url.origin !== window.location.origin) return;
-      if (!/^\/indir\/?$/.test(url.pathname)) return;
-
-      const { pathname, search } = window.location;
-      const source = pathname.startsWith("/indir") ? "/" : pathname + search;
-      if (!openStoreDirect(source, pathname)) return;
+      const downloadPage =
+        url.origin === window.location.origin && /^\/indir\/?$/.test(url.pathname);
+      if (!downloadPage && !isPhoneOrMapLink(url)) return;
+      if (!redirectMobileToStore()) return;
       e.preventDefault();
       e.stopPropagation();
-      markAppDownloadClicked();
     }
-    // Capture: Next.js <Link> istemci geçişinden önce yakalanır.
+    // Capture: Next.js <Link> ve harita popup'ındaki bağlantılardan önce yakalanır.
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
   }, []);

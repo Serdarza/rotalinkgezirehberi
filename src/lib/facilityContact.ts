@@ -1,7 +1,7 @@
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import { hasAppDownloadClicked, markAppDownloadClicked } from "@/lib/downloadPrompt";
-import { androidIntentUrl, appSchemeUrl, trackRedirect } from "@/lib/appLink";
+import { androidIntentUrl, appSchemeUrl, openStoreDirect, trackRedirect } from "@/lib/appLink";
 
 function toTelHref(telefon: string) {
   const digits = telefon.replace(/[^\d+]/g, "");
@@ -25,6 +25,18 @@ function goToStore() {
 /** Fiyat kilidi / iletişim: mağazaya yönlendir. */
 export function redirectToAppStore() {
   goToStore();
+}
+
+/**
+ * Mobil ziyaretçiyi bulunduğu sayfayı kaydederek doğrudan mağazaya gönderir.
+ * Masaüstünde false döner.
+ */
+export function redirectMobileToStore(): boolean {
+  const { pathname, search } = window.location;
+  const source = pathname.startsWith("/indir") ? "/" : pathname + search;
+  if (!openStoreDirect(source, pathname)) return false;
+  markAppDownloadClicked();
+  return true;
 }
 
 const IOS_STORE_FALLBACK_MS = 1500;
@@ -62,11 +74,13 @@ export function openAppOrStore() {
 
 /**
  * İletişim butonu:
- * - Uygulama henüz indirilmediyse → her zaman mağazaya yönlendir
- * - İndirme tıklanmışsa ve telefon varsa → ara
- * - İndirme tıklanmışsa ama telefon yoksa → mağaza
+ * - Mobilde her zaman mağaza (telefon numarası uygulamada)
+ * - Masaüstünde indirme tıklanmışsa ve telefon varsa ara, yoksa indirme sayfası
  */
 export function handleFacilityContact(telefon?: string | null) {
+  // Mobilde telefon bilgisi uygulamada; tıklama indirmeye gider.
+  if (redirectMobileToStore()) return;
+
   if (!hasAppDownloadClicked()) {
     goToStore();
     return;

@@ -15,6 +15,7 @@ import { useMasterData } from "@/hooks/useMasterData";
 import { ensureMasterDataLoaded, getMasterSnapshot } from "@/lib/masterDataRepo";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
+import { redirectMobileToStore } from "@/lib/facilityContact";
 import {
   geocodeMany,
   mapsSearchUrl,
@@ -213,7 +214,10 @@ export function BelediyeSosyalList({ preview, totals, defaultCity }: Props) {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <button
             type="button"
-            onClick={detectLocation}
+            onClick={() => {
+              if (redirectMobileToStore()) return;
+              void detectLocation();
+            }}
             disabled={loading}
             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#0F62FE] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-[#0043ce] disabled:opacity-60"
           >

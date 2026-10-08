@@ -7,7 +7,7 @@ import { LocateFixed, MapPin, Navigation, Phone } from "lucide-react";
 import { Container, GlassCard, SectionHeading } from "@/components/ui/Section";
 import { ShareButton } from "@/components/share/ShareButton";
 import { FacilityPriceBox } from "@/components/facility/FacilityPriceBox";
-import { handleFacilityContact } from "@/lib/facilityContact";
+import { handleFacilityContact, redirectMobileToStore } from "@/lib/facilityContact";
 import { distanceKm, formatDistance } from "@/lib/geo";
 import { getCurrentPositionRobust, GeoError } from "@/lib/location";
 import { cn, slugifyCity } from "@/lib/utils";
@@ -185,7 +185,10 @@ export function NearbyFacilities({ facilities: buildFacilities, limit = 6, class
                 </div>
                 <button
                   type="button"
-                  onClick={requestLocation}
+                  onClick={() => {
+                    if (redirectMobileToStore()) return;
+                    requestLocation();
+                  }}
                   className="inline-flex items-center gap-2 rounded-2xl bg-[#0F62FE] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:scale-[1.02]"
                 >
                   <MapPin className="h-4 w-4" />
