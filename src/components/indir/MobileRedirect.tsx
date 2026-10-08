@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { MOBILE_REDIRECT_DELAY_MS } from "@/config/downloads";
-import { hasAppDownloadClicked, markAppDownloadClicked } from "@/lib/downloadPrompt";
+import { markAppDownloadClicked } from "@/lib/downloadPrompt";
 import { openAppOrStore } from "@/lib/facilityContact";
 import { STAY_ON_WEB_PARAM } from "@/lib/appLink";
+
+const INDIR_SESSION_KEY = "rotalink_indir_redirected";
 
 type MobileRedirectProps = {
   /** Yönlendirilecek mağaza URL'si */
@@ -19,9 +20,6 @@ type MobileRedirectProps = {
  * 2 saniye spinner gösterir, ardından otomatik yönlendirir.
  */
 export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
-  const [secondsLeft, setSecondsLeft] = useState(
-    Math.ceil(MOBILE_REDIRECT_DELAY_MS / 1000)
-  );
   const [autoRedirect, setAutoRedirect] = useState(true);
   const [returnPath, setReturnPath] = useState("/");
 
@@ -30,25 +28,19 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
     const back = from && from.startsWith("/") && !from.startsWith("//") ? from : "/";
     setReturnPath(`${back}${back.includes("?") ? "&" : "?"}${STAY_ON_WEB_PARAM}=1`);
 
-    // Mağazadan geri dönen kullanıcıyı tekrar mağazaya atma.
-    if (hasAppDownloadClicked()) {
-      setAutoRedirect(false);
-      return;
+    // Aynı oturumda mağazadan geri dönen kullanıcıyı tekrar mağazaya atma.
+    try {
+      if (sessionStorage.getItem(INDIR_SESSION_KEY)) {
+        setAutoRedirect(false);
+        return;
+      }
+      sessionStorage.setItem(INDIR_SESSION_KEY, "1");
+    } catch {
+      // storage kapalıysa yine yönlendir
     }
     markAppDownloadClicked();
-
-    const redirectTimer = setTimeout(() => {
-      window.location.href = url;
-    }, MOBILE_REDIRECT_DELAY_MS);
-
-    const countdownInterval = setInterval(() => {
-      setSecondsLeft((prev) => Math.max(0, prev - 1));
-    }, 1000);
-
-    return () => {
-      clearTimeout(redirectTimer);
-      clearInterval(countdownInterval);
-    };
+    // replace: geri tuşu /indir'e dönüp tekrar mağazaya atmasın.
+    window.location.replace(url);
   }, [url]);
 
   return (
@@ -87,9 +79,7 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
         <p className="mb-8 text-sm text-slate-500 dark:text-slate-400">
           {!autoRedirect
             ? "Kamu tesisleri, fiyatlar ve gezi rehberi uygulamada."
-            : secondsLeft > 0
-              ? `${secondsLeft} saniye içinde otomatik yönlendirileceksiniz`
-              : "Yönlendiriliyor..."}
+            : "Yönlendiriliyor..."}
         </p>
 
         <a

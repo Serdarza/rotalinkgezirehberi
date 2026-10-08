@@ -63,6 +63,33 @@ export function appSchemeUrl(pathWithQuery: string): string {
   return `${APP_SCHEME}://open${pathWithQuery}`;
 }
 
+/** iPadOS 13+ masaüstü UA'sı da iOS sayılır. */
+export function mobilePlatform(): "android" | "ios" | null {
+  if (typeof navigator === "undefined") return null;
+  const ua = navigator.userAgent || "";
+  if (/android/i.test(ua)) return "android";
+  if (/iphone|ipad|ipod/i.test(ua)) return "ios";
+  if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return "ios";
+  return null;
+}
+
+/**
+ * Telefonda mağazayı doğrudan açar (Android'de kaynak sayfa referrer ile taşınır).
+ * Masaüstünde `false` döner; çağıran normal davranışa devam eder.
+ */
+export function openStoreDirect(pathWithQuery: string, pathname: string): boolean {
+  const platform = mobilePlatform();
+  if (!platform) return false;
+  if (platform === "android") {
+    trackRedirect("android_store_redirect", pathname);
+    window.location.href = playStoreUrlFor(pathWithQuery, pathname);
+  } else {
+    trackRedirect("ios_store_redirect", pathname);
+    window.location.href = APP_STORE_REDIRECT_URL;
+  }
+  return true;
+}
+
 export function trackRedirect(event: string, pathname: string) {
   const tag = campaignTag(pathname);
   for (const name of [event, `${event}__${tag}`]) {
