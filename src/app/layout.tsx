@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { DownloadModal } from "@/components/layout/DownloadModal";
+import { DesktopAppStrip } from "@/components/layout/DesktopAppStrip";
 import { KamiFab } from "@/components/kami/KamiFab";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
@@ -73,6 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <DownloadModal />
           <Header />
           <main id="main-content">{children}</main>
+          <DesktopAppStrip />
           <div className="pb-20 md:pb-0">
             <Footer />
           </div>

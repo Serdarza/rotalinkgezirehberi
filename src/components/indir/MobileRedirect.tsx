@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MOBILE_REDIRECT_DELAY_MS } from "@/config/downloads";
 import { hasAppDownloadClicked, markAppDownloadClicked } from "@/lib/downloadPrompt";
 import { openAppOrStore } from "@/lib/facilityContact";
+import { STAY_ON_WEB_PARAM } from "@/lib/appLink";
 
 type MobileRedirectProps = {
   /** Yönlendirilecek mağaza URL'si */
@@ -26,7 +27,8 @@ export function MobileRedirect({ url, storeName }: MobileRedirectProps) {
 
   useEffect(() => {
     const from = new URLSearchParams(window.location.search).get("from");
-    if (from && from.startsWith("/") && !from.startsWith("//")) setReturnPath(from);
+    const back = from && from.startsWith("/") && !from.startsWith("//") ? from : "/";
+    setReturnPath(`${back}${back.includes("?") ? "&" : "?"}${STAY_ON_WEB_PARAM}=1`);
 
     // Mağazadan geri dönen kullanıcıyı tekrar mağazaya atma.
     if (hasAppDownloadClicked()) {

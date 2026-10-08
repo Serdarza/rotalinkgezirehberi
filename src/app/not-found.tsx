@@ -3,10 +3,14 @@ import { Home, Search, Download } from "lucide-react";
 import { Container } from "@/components/ui/Section";
 import { POPULAR_CITIES } from "@/config/site";
 import { slugifyCity } from "@/lib/utils";
+import { getAllData } from "@/lib/data";
+import { AppPathRedirect } from "@/components/seo/AppPathRedirect";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const { cities } = await getAllData();
   return (
     <Container className="flex min-h-[70vh] flex-col items-center justify-center py-20 text-center">
+      <AppPathRedirect citySlugs={cities.map(slugifyCity)} />
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#0F62FE]">404</p>
       <h1 className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
         Sayfa bulunamadı

@@ -9,6 +9,7 @@ import {
   markAppDownloadClicked,
   shouldShowDownloadPrompt,
 } from "@/lib/downloadPrompt";
+import { detectDevice } from "@/lib/device";
 
 export function DownloadModal() {
   const [open, setOpen] = useState(false);
@@ -17,6 +18,8 @@ export function DownloadModal() {
     if (typeof window === "undefined") return;
     if (window.location.pathname.includes("/indir")) return;
     if (window.location.pathname.includes("/sehir/")) return;
+    // Telefonda <head> betiği zaten uygulamaya / mağazaya yönlendirir; ek popup yok.
+    if (detectDevice(navigator.userAgent) !== "desktop") return;
     if (!shouldShowDownloadPrompt()) return;
 
     const timer = setTimeout(() => setOpen(true), 1200);

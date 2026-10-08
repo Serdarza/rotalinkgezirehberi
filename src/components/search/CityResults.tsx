@@ -440,7 +440,8 @@ function CityResultsInner({ city, data: buildData }: Props) {
           : matchesFacilityTip(facility.tip, konaklamaFilter);
         const matchesName =
           !nameFilter ||
-          facility.isim.toLocaleLowerCase("tr").includes(nameFilter.toLocaleLowerCase("tr"));
+          facility.isim.toLocaleLowerCase("tr").includes(nameFilter.toLocaleLowerCase("tr")) ||
+          slugifyCity(facility.isim).includes(slugifyCity(nameFilter));
         return matchesType && matchesName;
       }),
     [data.tesis, konaklamaFilter, nameFilter, customTip]
