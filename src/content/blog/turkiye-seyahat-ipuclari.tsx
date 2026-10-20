@@ -7,7 +7,7 @@ export function TurkiyeSeyahatIpuclariContent() {
         <strong className="font-semibold text-slate-900 dark:text-white">
           Rotalink Kamu Seyahat Rehberiniz
         </strong>{" "}
-        ile Türkiye&apos;nin 81 ilindeki kamu tesislerini en kolay ve ekonomik şekilde
+        ile Türkiye&apos;nin 81 ilindeki kamu tesislerini en kolay şekilde
         keşfedin.{" "}
         <Link href="/" className="font-semibold text-[#0F62FE] hover:underline">
           rotalink.tr
@@ -22,8 +22,8 @@ export function TurkiyeSeyahatIpuclariContent() {
         </h2>
         <p className="leading-relaxed text-slate-600 dark:text-slate-400">
           Öğretmenevleri, polisevleri, orduevleri, DSİ, Karayolları, Orman
-          misafirhaneleri ve belediye sosyal tesisleri ile uygun fiyatlı, güvenli ve
-          konforlu bir Türkiye turu artık mümkün.
+          misafirhaneleri ve belediye sosyal tesisleri ile planlı ve güvenli bir
+          Türkiye turu yapabilirsiniz.
         </p>
       </section>
 
@@ -33,10 +33,10 @@ export function TurkiyeSeyahatIpuclariContent() {
         </h2>
         <div className="grid gap-2 sm:grid-cols-2">
           {[
-            "81 ilde 1.200’den fazla kamu tesisi tek platformda",
-            "Güncel telefon ve adres bilgileri",
+            "Yüzlerce kamu tesisi il il tek platformda",
+            "Adres ve konum bilgileri",
             "Rota planlamaya özel pratik öneriler",
-            "Bütçe dostu seyahat rehberi",
+            "Haritadan yol tarifi",
           ].map((item) => (
             <div
               key={item}
@@ -51,35 +51,12 @@ export function TurkiyeSeyahatIpuclariContent() {
 
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-          2026 Güncel Fiyat Aralığı (Yaklaşık)
+          Konaklama Ücretleri Hakkında
         </h2>
         <p className="leading-relaxed text-slate-600 dark:text-slate-400">
-          Fiyatlar tesise, şehre, sezona ve misafir statüsüne göre değişebilir. Aşağıdaki
-          aralıklar yaklaşık bilgilendirme amaçlıdır:
-        </p>
-        <ul className="space-y-3">
-          {[
-            { label: "Polisevleri", value: "848 TL – 2.200 TL" },
-            { label: "Öğretmenevleri", value: "750 TL – 2.650 TL" },
-            {
-              label: "DSİ / Karayolları Misafirhaneleri",
-              value: "180 TL – 1.350 TL (sivil misafirler)",
-            },
-          ].map((item) => (
-            <li
-              key={item.label}
-              className="flex flex-col gap-1 rounded-xl bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:bg-slate-800/60"
-            >
-              <span className="font-semibold text-slate-900 dark:text-white">
-                {item.label}
-              </span>
-              <span className="text-sm text-[#0F62FE] dark:text-sky-300">{item.value}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="text-sm text-slate-500 dark:text-slate-500">
-          Diğer tesisler de benzer ekonomik aralıkta hizmet verebilir. Güncel ücret için
-          ilgili tesisle iletişime geçmenizi öneririz.
+          Ücretler tesise, şehre, sezona ve misafirin statüsüne göre değişir ve zamanla
+          güncellenir. Bu nedenle Rotalink web sitesinde ücret bilgisi yayımlanmaz; güncel
+          tarife için ilgili tesisle doğrudan iletişime geçmenizi öneririz.
         </p>
       </section>
 
@@ -196,13 +173,13 @@ export function TurkiyeSeyahatIpuclariContent() {
           <strong className="font-semibold text-slate-900 dark:text-white">
             Rotalink Kamu Seyahat Rehberiniz
           </strong>{" "}
-          ile tasarruflu ve keyifli yolculuklar dileriz.
+          ile keyifli yolculuklar dileriz.
         </p>
         <p className="leading-relaxed text-slate-600 dark:text-slate-400">
           Deneyimlerinizi bizimle paylaşın; birlikte daha güzel rotalar oluşturalım.
         </p>
         <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-          Not: Fiyat ve müsaitlik bilgileri değişkenlik gösterebilir. Güncel durum için
+          Not: Müsaitlik ve kabul koşulları değişkenlik gösterebilir. Güncel durum için
           tesisleri doğrudan aramanızı öneririz.
         </p>
       </section>

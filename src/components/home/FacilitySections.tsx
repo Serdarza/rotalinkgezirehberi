@@ -24,12 +24,17 @@ export function FacilityCard({ facility }: { facility: Tesis }) {
   const displayType = getDisplayFacilityType(facility.tip);
   const cityPath = `/sehir/${slugifyCity(facility.il)}`;
   const sharePath = `${cityPath}?q=${encodeURIComponent(facility.isim)}`;
+  const detailPath = `/tesis/${slugifyCity(facility.il)}/${slugifyCity(facility.isim)}/`;
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#0F62FE]/20 border-l-4 border-l-[#0F62FE] bg-gradient-to-br from-sky-50 via-white to-blue-50/60 shadow-md shadow-blue-500/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 dark:border-[#0F62FE]/30 dark:border-l-[#0F62FE] dark:from-slate-800 dark:via-slate-800/80 dark:to-sky-950/50">
       <div className="flex flex-1 flex-col p-5">
         <div className="mb-2 flex items-start justify-between gap-3">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">{facility.isim}</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <Link href={detailPath} className="hover:text-[#0F62FE] hover:underline">
+              {facility.isim}
+            </Link>
+          </h3>
           <FavoriteButton
             facility={{ isim: facility.isim, tip: String(facility.tip ?? ""), il: facility.il }}
           />

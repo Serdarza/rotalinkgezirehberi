@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/", label: "Ana Sayfa" },
   { href: "/#sehirler", label: "Şehirler" },
-  { href: "/#tesisler", label: "Tesisler" },
+  { href: "/kamu-sosyal-tesisleri/", label: "Tesisler" },
   { href: "/kampanyalar", label: "Kampanyalar" },
   { href: "/resmi-tatiller", label: "Tatiller" },
   { href: "/blog", label: "Blog" },

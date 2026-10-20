@@ -20,8 +20,6 @@ import { CityMap } from "@/components/map/CityMap";
 import { WeatherWidget } from "@/components/home/WeatherWidget";
 import { ShareButton } from "@/components/share/ShareButton";
 import { SearchAppPromo } from "@/components/search/SearchAppPromo";
-import { Breadcrumb } from "@/components/layout/PageHeader";
-import { CityGuideSection } from "@/components/search/CityGuideSection";
 import type { GeziYeri, SosyalTesis, Tesis, YemekMekani } from "@/types";
 import { cn, slugifyCity } from "@/lib/utils";
 import { POPULAR_CITIES } from "@/config/site";
@@ -487,41 +485,17 @@ function CityResultsInner({ city, data: buildData }: Props) {
     konaklamaFilter !== "all" ? konaklamaFilter : customTip;
 
   return (
-    <Container className="py-5 sm:py-12">
+    <Container className="pb-5 pt-3 sm:pb-12 sm:pt-6">
       <SearchAppPromo city={city} />
-      <Breadcrumb
-        items={[
-          { label: "Anasayfa", href: "/" },
-          { label: city },
-        ]}
-      />
-      <div className="mb-3 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-        <div>
-          <h1 className="mb-1 text-2xl font-extrabold text-slate-900 dark:text-white sm:mb-2 sm:text-3xl">
-            {city}
-          </h1>
-          <p className="hidden text-slate-600 dark:text-slate-400 sm:block">
-            {city} ilindeki{" "}
-            {tab === "gezi"
-              ? "gezi yerleri"
-              : tab === "yemek"
-                ? "yemek mekanları"
-                : tab === "sosyal"
-                  ? "belediye tesisleri"
-                  : "konaklama, gezi, yemek ve belediye tesisleri"}
-            {filterLabel && tab === "tesis" ? ` · ${filterLabel}` : ""}
-            {nameFilter ? ` · “${nameFilter}”` : ""}
-          </p>
-          <p className="text-sm text-slate-500 sm:hidden">
-            {tab === "tesis" ? tesis.length : counts[tab]} sonuç
-            {filterLabel && tab === "tesis" ? ` · ${filterLabel}` : ""}
-            {nameFilter ? ` · “${nameFilter}”` : ""}
-          </p>
-        </div>
+      {/* H1, breadcrumb ve il rehberi sunucuda (sehir/[city]/page.tsx) üretilir. */}
+      <div className="mb-3 flex items-center justify-between gap-3 sm:mb-6">
+        <p className="text-sm text-slate-600 dark:text-slate-400">
+          {tab === "tesis" ? tesis.length : counts[tab]} sonuç
+          {filterLabel && tab === "tesis" ? ` · ${filterLabel}` : ""}
+          {nameFilter ? ` · “${nameFilter}”` : ""}
+        </p>
         <ShareButton title={share.title} text={share.text} path={sharePath} />
       </div>
-
-      <CityGuideSection city={city} data={data} />
 
       <div className="mb-3 hidden sm:mb-8 sm:block">
         <WeatherWidget city={city} withContainer={false} />
@@ -844,7 +818,9 @@ export function CityResults(props: Props) {
   return (
     <Suspense
       fallback={
-        <Container className="py-12 text-center text-slate-500">Yükleniyor...</Container>
+        <Container className="min-h-[60vh] py-12 text-center text-slate-500">
+          Yükleniyor...
+        </Container>
       }
     >
       <CityResultsInner {...props} />

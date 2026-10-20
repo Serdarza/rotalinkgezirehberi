@@ -10,24 +10,19 @@ import {
   type HolidayKind,
   type PublicHoliday,
 } from "@/config/holidays";
-import { SITE } from "@/config/site";
+import { buildMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Flag, Moon, Briefcase } from "lucide-react";
 import { Container } from "@/components/ui/Section";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "2026 - 2027 Resmi Tatiller Takvimi (Türkiye)",
   description:
     "Türkiye 2026 ve 2027 resmi tatil takvimi: Ramazan Bayramı, Kurban Bayramı, 23 Nisan, 19 Mayıs, 30 Ağustos, 29 Ekim ve kamu idari izin günleri tam liste.",
-  openGraph: {
-    title: "2026 - 2027 Resmi Tatiller Takvimi | Rotalink",
-    description:
-      "Türkiye'nin 2026 ve 2027 milli bayramları, dini bayramları ve kamu idari izin günleri tek takvimde.",
-    url: `${SITE.url}/resmi-tatiller`,
-  },
-};
+  path: "/resmi-tatiller/",
+});
 
 const KIND_STYLE: Record<
   HolidayKind,

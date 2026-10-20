@@ -41,8 +41,46 @@ export function SearchAppPromo({ city }: { city: string }) {
   if (!open) return null;
 
   return (
+    <>
+    {/* Telefon: içeriği kapatmayan alt şerit (Google "müdahaleci geçiş" politikası). */}
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
+      className="fixed inset-x-0 bottom-16 z-[60] px-3 sm:hidden"
+      role="complementary"
+      aria-label="Uygulama önerisi"
+    >
+      <div className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-2xl ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+        <Image
+          src="/logo.png"
+          alt=""
+          width={40}
+          height={40}
+          className="h-10 w-10 shrink-0 rounded-full object-cover"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-bold text-slate-900 dark:text-white">
+            {city} rehberi uygulamada
+          </p>
+          <p className="truncate text-xs text-slate-500">Harita, telefon ve yol tarifi</p>
+        </div>
+        <a
+          href="/indir/"
+          onClick={onStoreClick}
+          className="shrink-0 rounded-xl bg-[#0F62FE] px-3.5 py-2 text-xs font-semibold text-white"
+        >
+          İndir
+        </a>
+        <button
+          type="button"
+          onClick={dismiss}
+          className="shrink-0 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+          aria-label="Kapat"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+    <div
+      className="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm sm:flex"
       role="dialog"
       aria-modal="true"
       aria-labelledby="search-app-promo-title"
@@ -103,5 +141,6 @@ export function SearchAppPromo({ city }: { city: string }) {
         </div>
       </div>
     </div>
+    </>
   );
 }

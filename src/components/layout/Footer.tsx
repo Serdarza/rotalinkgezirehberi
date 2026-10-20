@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
       <Container className="py-16">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <div className="mb-4 flex items-center gap-3">
               <Image src="/logo.png" alt="" width={32} height={32} className="h-8 w-8 rounded-full object-cover" />
@@ -33,6 +33,17 @@ export function Footer() {
                 App Store
               </a>
             </div>
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">Tesis Rehberi</h3>
+            <ul className="space-y-3">
+              {FOOTER_LINKS.rehber.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-sm text-slate-600 hover:text-[#0F62FE] dark:text-slate-400">{l.label}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>

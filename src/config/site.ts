@@ -136,29 +136,17 @@ export const FAQ_ITEMS = [
   },
 ] as const;
 
-export const BLOG_POSTS = [
-  {
-    slug: "kamu-misafirhanesi-rehberi",
-    title: "Kamu Misafirhaneleri: Bilmeniz Gerekenler",
-    excerpt: "Kamu misafirhanelerine nasıl erişilir, nelere dikkat edilmeli?",
-    date: "2026-07-18",
-  },
-  {
-    slug: "ogretmenevi-konaklama",
-    title: "Öğretmenevi ile Ekonomik Konaklama",
-    excerpt: "Öğretmenevlerinin avantajları ve kullanım koşulları.",
-    date: "2026-07-18",
-  },
-  {
-    slug: "turkiye-seyahat-ipuclari",
-    title: "Türkiye'de Kamu Tesisleriyle Seyahat",
-    excerpt:
-      "81 ilde kamu tesisleriyle pratik keşif rehberi: fiyat aralıkları, rezervasyon ipuçları ve önerilen rotalar.",
-    date: "2026-07-18",
-  },
-] as const;
+export { BLOG_POSTS } from "@/config/blog";
 
 export const FOOTER_LINKS = {
+  rehber: [
+    { href: "/kamu-sosyal-tesisleri/", label: "Kamu Sosyal Tesisleri" },
+    { href: "/kamu-misafirhaneleri/", label: "Kamu Misafirhaneleri" },
+    { href: "/ogretmenevleri/", label: "Öğretmenevleri" },
+    { href: "/polisevleri/", label: "Polisevleri" },
+    { href: "/orduevleri/", label: "Orduevleri" },
+    { href: "/belediye-sosyal-tesisleri/", label: "Belediye Sosyal Tesisleri" },
+  ],
   kurumsal: [
     { href: "/hakkimizda", label: "Hakkımızda" },
     { href: "/iletisim", label: "İletişim" },

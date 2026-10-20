@@ -19,6 +19,10 @@ import {
  * - iOS: doğrudan App Store. (Uygulama yüklüyse iOS, Universal Link ile
  *   sayfayı hiç yüklemeden uygulamayı açar.)
  * Masaüstü ve botlar etkilenmez; arama motorları normal içeriği görür.
+ * Arama motorundan (Google, Bing, Yandex vb.) gelen ziyaretçi otomatik
+ * yönlendirilmez: botun gördüğü sayfayı kullanıcıya göstermek Google'ın
+ * "sneaky redirect" politikası gereğidir. Bu ziyaretçide İndir / İletişim /
+ * Konum gibi açık tıklamalar yine uygulamaya veya mağazaya gider.
  *
  * Olaylar (CounterAPI): web_to_app, android_store_redirect, ios_store_redirect
  * ve sayfa bazlı `<olay>__<sayfa>` (ör. ios_store_redirect__sehir_kayseri).
@@ -35,6 +39,8 @@ for(var i=0;i<ex.length;i++){if(p.indexOf(ex[i])===0)return;}
 var ss=null;try{ss=window.sessionStorage;}catch(e){}
 var key=${JSON.stringify(APP_GATE_SESSION_KEY)};
 if(new RegExp("[?&]${STAY_ON_WEB_PARAM}=1(&|$)").test(q)){if(ss)ss.setItem(key,"1");return;}
+var rf=document.referrer||"";
+if(/^https?:[/][/]([a-z0-9-]+[.])*(google|bing|yandex|duckduckgo|yahoo|ecosia|brave|startpage|baidu|qwant|naver|seznam)[.][a-z.]+([/]|$|[?])/i.test(rf)||rf.indexOf("android-app://com.google.android.googlequicksearchbox")===0){if(ss)ss.setItem(key,"1");return;}
 if(ss){if(ss.getItem(key))return;ss.setItem(key,"1");}
 var path=p+q;
 var tag=p.split("/").filter(Boolean).join("_").toLowerCase().replace(/[^a-z0-9_-]/g,"").slice(0,48)||"home";

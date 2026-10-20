@@ -3,6 +3,7 @@ import { KamuMisafirhanesiRehberiContent } from "./kamu-misafirhanesi-rehberi";
 import { OgretmeneviKonaklamaContent } from "./ogretmenevi-konaklama";
 import { TurkiyeSeyahatIpuclariContent } from "./turkiye-seyahat-ipuclari";
 
+/** Elle yazılmış (özel düzenli) yazılar */
 export const BLOG_CONTENT: Record<string, ComponentType> = {
   "kamu-misafirhanesi-rehberi": KamuMisafirhanesiRehberiContent,
   "ogretmenevi-konaklama": OgretmeneviKonaklamaContent,

@@ -13,7 +13,6 @@ import { CampaignsSection } from "@/components/home/CampaignsSection";
 import { BlogSection } from "@/components/home/BlogSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { AppDownloadSection } from "@/components/home/AppDownloadSection";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { FACILITY_CATEGORIES } from "@/config/site";
 import {
   getAllData,
@@ -22,8 +21,15 @@ import {
   getSiteStats,
 } from "@/lib/data";
 import { getFeaturedCampaigns } from "@/lib/kampanyaRepo";
-import { faqJsonLd } from "@/lib/seo";
-import { FAQ_ITEMS } from "@/config/site";
+import { buildMetadata } from "@/lib/seo";
+import { HubLinksSection } from "@/components/home/HubLinksSection";
+
+export const metadata = buildMetadata({
+  title: "Kamu Misafirhanesi, Öğretmenevi, Polisevi ve Orduevi Rehberi | Rotalink",
+  description:
+    "Kamu misafirhaneleri, öğretmenevleri, polisevleri, orduevleri ve belediye sosyal tesislerini il il keşfedin. Adres, harita konumu ve iletişim yolları tek rehberde.",
+  path: "/",
+});
 
 export default async function HomePage() {
   const [stats, featured, { cities, tesis, sosyal }, campaigns] =
@@ -43,7 +49,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <JsonLd data={faqJsonLd(FAQ_ITEMS)} />
       <HeroSection
         cities={cities}
         facilities={tesis.map(({ isim, il }) => ({ isim, il }))}
@@ -66,6 +71,7 @@ export default async function HomePage() {
           }))}
       />
       <PopularCitiesSection />
+      <HubLinksSection />
       <FeaturedFacilitiesSection facilities={featured} />
       {categories.map((cat) => (
         <CategoryFacilitiesSection

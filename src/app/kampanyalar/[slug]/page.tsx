@@ -15,7 +15,7 @@ import {
   getRelatedCampaigns,
 } from "@/lib/kampanyaRepo";
 import { campaignAccent, campaignSmartIcon } from "@/lib/campaignSmartIcon";
-import { SITE } from "@/config/site";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const campaigns = await getCampaigns();
@@ -36,16 +36,13 @@ export async function generateMetadata({
     .trim()
     .slice(0, 155);
 
-  return {
+  return buildMetadata({
     title: campaign.title,
     description,
-    openGraph: {
-      title: `${campaign.title} | Rotalink Kampanyalar`,
-      description,
-      url: `${SITE.url}/kampanyalar/${campaign.slug}`,
-      type: "article",
-    },
-  };
+    path: `/kampanyalar/${campaign.slug}/`,
+    type: "article",
+    publishedTime: campaign.createdAt ?? undefined,
+  });
 }
 
 export default async function CampaignDetailPage({

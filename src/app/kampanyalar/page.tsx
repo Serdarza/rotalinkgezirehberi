@@ -5,19 +5,14 @@ import { PageHero, Breadcrumb } from "@/components/layout/PageHeader";
 import { CampaignGrid } from "@/components/home/CampaignsSection";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
 import { getCampaigns } from "@/lib/kampanyaRepo";
-import { SITE } from "@/config/site";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Kampanyalar — Kamu Personeline Özel İndirimler",
   description:
     "Öğretmen, TSK, emniyet, jandarma ve kamu çalışanlarına özel güncel indirim ve kampanyalar. Kampanya detaylarını Rotalink'te okuyun.",
-  openGraph: {
-    title: "Kampanyalar — Kamu Personeline Özel İndirimler | Rotalink",
-    description:
-      "Kamu personeline özel indirimler, protokoller ve fırsatlar tek sayfada.",
-    url: `${SITE.url}/kampanyalar`,
-  },
-};
+  path: "/kampanyalar/",
+});
 
 export default async function KampanyalarPage() {
   const campaigns = await getCampaigns();
