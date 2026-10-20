@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Section";
 import { PageHero, Breadcrumb } from "@/components/layout/PageHeader";
-import { CampaignGrid } from "@/components/home/CampaignsSection";
+import { LiveCampaignCount, LiveCampaignGrid } from "@/components/home/LiveCampaigns";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
 import { getCampaigns } from "@/lib/kampanyaRepo";
 import { buildMetadata } from "@/lib/seo";
@@ -71,9 +71,7 @@ export default async function KampanyalarPage() {
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                   Güncel kampanyalar
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  {campaigns.length} kampanya · en yeniden eskiye
-                </p>
+                <LiveCampaignCount initialCount={campaigns.length} />
               </div>
               <Link
                 href="/indir"
@@ -83,7 +81,10 @@ export default async function KampanyalarPage() {
               </Link>
             </div>
 
-            <CampaignGrid campaigns={campaigns} />
+            <LiveCampaignGrid
+              initial={campaigns}
+              knownSlugs={campaigns.map((c) => c.slug)}
+            />
           </>
         ) : (
           <div className="rounded-3xl border border-dashed border-slate-300 px-6 py-12 text-center dark:border-slate-700">

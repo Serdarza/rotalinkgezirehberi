@@ -1,6 +1,6 @@
 import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
-import { hasAppDownloadClicked, markAppDownloadClicked } from "@/lib/downloadPrompt";
+import { markAppDownloadClicked } from "@/lib/downloadPrompt";
 import {
   androidIntentUrl,
   appSchemeUrl,
@@ -10,11 +10,6 @@ import {
   trackRedirect,
 } from "@/lib/appLink";
 import { slugifyCity } from "@/lib/utils";
-
-function toTelHref(telefon: string) {
-  const digits = telefon.replace(/[^\d+]/g, "");
-  return digits ? `tel:${digits}` : null;
-}
 
 function goToStore() {
   markAppDownloadClicked();
@@ -130,10 +125,18 @@ export function openAppOrStore() {
   window.location.href = DOWNLOAD_PAGE_PATH;
 }
 
+export const CONTACT_PHONE_EVENT = "rotalink-contact-phone";
+
+export type ContactPhoneDetail = {
+  telefon?: string | null;
+  isim?: string;
+  il?: string;
+};
+
 /**
  * İletişim butonu:
  * - Mobilde uygulamada o tesisin aramasını açar; uygulama yoksa mağaza
- * - Masaüstünde indirme tıklanmışsa ve telefon varsa ara, yoksa indirme sayfası
+ * - Masaüstünde telefon numarasını popup olarak gösterir
  */
 export function handleFacilityContact(
   telefon?: string | null,
@@ -145,16 +148,10 @@ export function handleFacilityContact(
       : `${window.location.pathname}${window.location.search}`;
   if (openInAppOrStore(appPath)) return;
 
-  if (!hasAppDownloadClicked()) {
-    goToStore();
-    return;
-  }
-
-  const tel = telefon?.trim() ? toTelHref(telefon.trim()) : null;
-  if (tel) {
-    window.location.href = tel;
-    return;
-  }
-
-  goToStore();
+  const detail: ContactPhoneDetail = {
+    telefon: telefon == null ? "" : String(telefon),
+    isim: place?.isim,
+    il: place?.il,
+  };
+  window.dispatchEvent(new CustomEvent(CONTACT_PHONE_EVENT, { detail }));
 }

@@ -5,10 +5,7 @@ import { ArrowLeft, CalendarDays, ExternalLink, Building2 } from "lucide-react";
 import { Container } from "@/components/ui/Section";
 import { Breadcrumb } from "@/components/layout/PageHeader";
 import { SourceDisclaimer } from "@/components/campaign/SourceDisclaimer";
-import {
-  CampaignCard,
-  formatCampaignDate,
-} from "@/components/home/CampaignsSection";
+import { CampaignCard, formatCampaignDate } from "@/components/home/CampaignCard";
 import {
   getCampaignBySlug,
   getCampaigns,

@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 
 /** Yalnızca kullanıcının kendi yazdığı alanlar düzenlenebilir kalır. */
-const EDITABLE_SELECTOR = "input, textarea, select, [contenteditable='true']";
+const EDITABLE_SELECTOR =
+  "input, textarea, select, [contenteditable='true'], [data-allow-copy]";
 
 function isEditable(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) return false;
@@ -31,6 +32,9 @@ export function CopyProtection() {
       const selection = window.getSelection();
       if (!selection || selection.isCollapsed) return;
       if (isEditable(document.activeElement)) return;
+      const node = selection.anchorNode;
+      const el = node instanceof Element ? node : node?.parentElement;
+      if (el?.closest("[data-allow-copy]")) return;
       selection.removeAllRanges();
     };
 

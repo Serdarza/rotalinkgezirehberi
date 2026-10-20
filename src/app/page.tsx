@@ -20,7 +20,7 @@ import {
   getFacilitiesByCategory,
   getSiteStats,
 } from "@/lib/data";
-import { getFeaturedCampaigns } from "@/lib/kampanyaRepo";
+import { getCampaigns } from "@/lib/kampanyaRepo";
 import { buildMetadata } from "@/lib/seo";
 import { HubLinksSection } from "@/components/home/HubLinksSection";
 
@@ -37,7 +37,7 @@ export default async function HomePage() {
       getSiteStats(),
       getFeaturedFacilities(8),
       getAllData(),
-      getFeaturedCampaigns(6),
+      getCampaigns(),
     ]);
 
   const categories = await Promise.all(
@@ -86,7 +86,10 @@ export default async function HomePage() {
       <BelediyeSosyalSection facilities={sosyal} />
       <FeaturesSection />
       <TestimonialsSection />
-      <CampaignsSection campaigns={campaigns} />
+      <CampaignsSection
+        campaigns={campaigns.slice(0, 6)}
+        knownSlugs={campaigns.map((c) => c.slug)}
+      />
       <BlogSection />
       <FAQSection />
       <AppDownloadSection />

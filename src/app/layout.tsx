@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { DownloadModal } from "@/components/layout/DownloadModal";
+import { ContactPhoneModal } from "@/components/facility/ContactPhoneModal";
 import { DesktopAppStrip } from "@/components/layout/DesktopAppStrip";
 import { StoreLinkInterceptor } from "@/components/layout/StoreLinkInterceptor";
 import { KamiFab } from "@/components/kami/KamiFab";
@@ -73,6 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <CopyProtection />
           <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <DownloadModal />
+          <ContactPhoneModal />
           <Header />
           <main id="main-content">{children}</main>
           <DesktopAppStrip />
