@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.serdarza.rotalink",
+      "sha256_cert_fingerprints": [
+        "DC:E7:74:79:DD:63:2C:97:D7:DB:63:07:66:80:A5:E2:BB:A1:4E:1A:C9:12:5E:CC:EA:08:25:9F:48:BD:33:25"
+      ]
+    }
+  }
+]

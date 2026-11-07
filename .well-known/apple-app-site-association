@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "NMC23VWYR2.com.serdarza.rotalink",
+        "appIDs": ["NMC23VWYR2.com.serdarza.rotalink"],
+        "paths": ["/sehir/*", "/tesis/*"],
+        "components": [
+          { "/": "/sehir/*", "comment": "Şehir sayfası" },
+          { "/": "/tesis/*", "comment": "Tesis detayı" }
+        ]
+      }
+    ]
+  }
+}
