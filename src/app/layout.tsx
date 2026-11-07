@@ -14,6 +14,7 @@ import { SITE } from "@/config/site";
 import { getAllData } from "@/lib/data";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { MOBILE_APP_GATE_SCRIPT } from "@/lib/mobileAppGate";
+import { WEB_VISIT_COLLECT_SCRIPT } from "@/lib/webAnalytics";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -67,6 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="tr" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: MOBILE_APP_GATE_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: WEB_VISIT_COLLECT_SCRIPT }} />
       </head>
       <body className={`${inter.variable} min-h-dvh bg-white font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}>
         <ThemeProvider>

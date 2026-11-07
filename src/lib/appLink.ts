@@ -1,5 +1,6 @@
 import { APP_STORE_URL } from "@/config/downloads";
 import { LEGAL_PAGES } from "@/config/legal";
+import { storeGoUrl } from "@/lib/webAnalytics";
 
 /**
  * Web → uygulama yönlendirme kuralları (tek merkez).
@@ -30,9 +31,6 @@ export const APP_GATE_SESSION_KEY = "rotalink_app_gate_v2";
 export const PLAY_STORE_BASE_URL = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`;
 export const APP_STORE_REDIRECT_URL = APP_STORE_URL;
 
-/** Ücretsiz sayaç (VisitorCounter ile aynı servis). */
-export const REDIRECT_COUNTER_BASE = "https://api.counterapi.dev/v1/rotalink/";
-
 /** `/sehir/kayseri/` → `sehir_kayseri`; kök → `home`. Sayaç ve UTM kampanyası adı. */
 export function campaignTag(pathname: string): string {
   const tag = pathname
@@ -46,10 +44,10 @@ export function campaignTag(pathname: string): string {
 }
 
 export function playStoreUrlFor(pathWithQuery: string, pathname: string): string {
-  const referrer =
-    `utm_source=rotalink_web&utm_medium=web_redirect&utm_campaign=${campaignTag(pathname)}` +
-    `&rl_path=${encodeURIComponent(pathWithQuery)}`;
-  return `${PLAY_STORE_BASE_URL}&referrer=${encodeURIComponent(referrer)}`;
+  return storeGoUrl("play", {
+    path: pathWithQuery,
+    tag: campaignTag(pathname),
+  });
 }
 
 export function androidIntentUrl(pathWithQuery: string, pathname: string): string {
@@ -57,6 +55,13 @@ export function androidIntentUrl(pathWithQuery: string, pathname: string): strin
     `intent://open${pathWithQuery}#Intent;scheme=${APP_SCHEME};package=${ANDROID_PACKAGE};` +
     `S.browser_fallback_url=${encodeURIComponent(playStoreUrlFor(pathWithQuery, pathname))};end`
   );
+}
+
+export function appStoreGoUrl(pathWithQuery: string, pathname: string): string {
+  return storeGoUrl("app", {
+    path: pathWithQuery,
+    tag: campaignTag(pathname),
+  });
 }
 
 export function appSchemeUrl(pathWithQuery: string): string {
@@ -91,23 +96,11 @@ export function mobilePlatform(): "android" | "ios" | null {
 export function openStoreDirect(pathWithQuery: string, pathname: string): boolean {
   const platform = mobilePlatform();
   if (!platform) return false;
-  if (platform === "android") {
-    trackRedirect("android_store_redirect", pathname);
-    window.location.href = playStoreUrlFor(pathWithQuery, pathname);
-  } else {
-    trackRedirect("ios_store_redirect", pathname);
-    window.location.href = APP_STORE_REDIRECT_URL;
-  }
-  return true;
-}
-
-export function trackRedirect(event: string, pathname: string) {
   const tag = campaignTag(pathname);
-  for (const name of [event, `${event}__${tag}`]) {
-    try {
-      void fetch(`${REDIRECT_COUNTER_BASE}${name}/up`, { keepalive: true, mode: "no-cors" });
-    } catch {
-      // sayaç ulaşılamazsa yönlendirme yine çalışsın
-    }
-  }
+  window.location.href = storeGoUrl(platform === "android" ? "play" : "app", {
+    path: pathWithQuery,
+    tag,
+    alsoVisit: false,
+  });
+  return true;
 }

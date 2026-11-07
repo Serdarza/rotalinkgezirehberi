@@ -1,13 +1,13 @@
-import { PLAY_STORE_URL, APP_STORE_URL, DOWNLOAD_PAGE_PATH } from "@/config/downloads";
+import { DOWNLOAD_PAGE_PATH } from "@/config/downloads";
 import { detectDevice } from "@/lib/device";
 import { markAppDownloadClicked } from "@/lib/downloadPrompt";
 import {
   androidIntentUrl,
   appSchemeUrl,
+  appStoreGoUrl,
   mobilePlatform,
   openStoreDirect,
   playStoreUrlFor,
-  trackRedirect,
 } from "@/lib/appLink";
 import { slugifyCity } from "@/lib/utils";
 
@@ -15,11 +15,11 @@ function goToStore() {
   markAppDownloadClicked();
   const device = detectDevice(navigator.userAgent);
   if (device === "android") {
-    window.location.href = PLAY_STORE_URL;
+    window.location.href = playStoreUrlFor("/", "/");
     return;
   }
   if (device === "ios") {
-    window.location.href = APP_STORE_URL;
+    window.location.href = appStoreGoUrl("/", "/");
     return;
   }
   window.location.href = DOWNLOAD_PAGE_PATH;
@@ -46,8 +46,8 @@ export function facilityActionPath(
 
 /**
  * Telefonda önce uygulamayı bu yolda açar.
- * Android: yüklüyse uygulama, değilse Play Store.
- * iOS: yüklüyse uygulama, açılmazsa App Store.
+ * Android: yüklüyse uygulama, değilse Play Store (ölçümlü 302).
+ * iOS: yüklüyse uygulama, açılmazsa App Store (ölçümlü 302).
  * Masaüstünde false döner.
  */
 export function openInAppOrStore(pathWithQuery: string): boolean {
@@ -55,18 +55,15 @@ export function openInAppOrStore(pathWithQuery: string): boolean {
   if (!platform) return false;
   const pathOnly = pathWithQuery.split("?")[0] || "/";
   markAppDownloadClicked();
-  trackRedirect("web_to_app", pathOnly);
   const android = platform === "android";
   // Uygulama içi tarayıcılar (Instagram vb.) intent fallback'ini atlayabilir.
   const fallback = window.setTimeout(
     () => {
       if (document.visibilityState !== "visible") return;
       if (android) {
-        trackRedirect("android_store_redirect", pathOnly);
         window.location.href = playStoreUrlFor(pathWithQuery, pathOnly);
       } else {
-        trackRedirect("ios_store_redirect", pathOnly);
-        window.location.replace(APP_STORE_URL);
+        window.location.replace(appStoreGoUrl(pathWithQuery, pathOnly));
       }
     },
     android ? ANDROID_STORE_FALLBACK_MS : IOS_STORE_FALLBACK_MS
@@ -105,14 +102,14 @@ export function openAppOrStore() {
   const device = detectDevice(navigator.userAgent);
   const { pathname, search } = window.location;
   if (device === "android") {
-    trackRedirect("android_store_redirect", pathname);
     window.location.href = androidIntentUrl(pathname + search, pathname);
     return;
   }
   if (device === "ios") {
-    trackRedirect("web_to_app", pathname);
     const fallback = window.setTimeout(() => {
-      if (document.visibilityState === "visible") window.location.href = APP_STORE_URL;
+      if (document.visibilityState === "visible") {
+        window.location.href = appStoreGoUrl(pathname + search, pathname);
+      }
     }, IOS_STORE_FALLBACK_MS);
     const cancelIfAppOpened = () => {
       if (document.visibilityState === "hidden") window.clearTimeout(fallback);
